@@ -119,6 +119,39 @@ textarea{resize:vertical;min-height:90px}
       <input type="password" id="login-pass" placeholder="Password">
     </div>
     <button class="btn-primary" style="width:100%;margin-top:8px" onclick="handleLogin()">Sign In</button>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:#94a3b8">
+      Don't have an account? <a href="#" onclick="showSignup();return false;" style="color:#60a5fa;text-decoration:none">Create new account</a>
+    </div>
+  </div>
+
+  <div class="login-card" id="signup-card" style="display:none">
+    <div class="login-title">Create Account</div>
+    <div class="login-sub">New accounts are created with Guest access</div>
+    <div class="login-error" id="signup-error">Something went wrong.</div>
+    <div class="field-group">
+      <div class="field-label">Username <span class="req">*</span></div>
+      <input type="text" id="signup-username" placeholder="Username">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Full Name <span class="req">*</span></div>
+      <input type="text" id="signup-name" placeholder="Full Name">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Email</div>
+      <input type="email" id="signup-email" placeholder="Email (optional)">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Password <span class="req">*</span></div>
+      <input type="password" id="signup-pass" placeholder="Password">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Confirm Password <span class="req">*</span></div>
+      <input type="password" id="signup-pass-confirm" placeholder="Confirm Password">
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:8px" onclick="submitSignup()">Create Account</button>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:#94a3b8">
+      Already have an account? <a href="#" onclick="showLogin();return false;" style="color:#60a5fa;text-decoration:none">Back to Sign In</a>
+    </div>
   </div>
 </div>
 
@@ -825,6 +858,62 @@ function handleLogin() {
   setupUserSession(foundUser);
 }
 
+function showSignup() {
+  document.getElementById('login-screen').querySelector('.login-card').style.display = 'none';
+  document.getElementById('signup-card').style.display = 'block';
+  document.getElementById('signup-error').style.display = 'none';
+}
+
+function showLogin() {
+  document.getElementById('signup-card').style.display = 'none';
+  document.getElementById('login-screen').querySelector('.login-card').style.display = 'block';
+  document.getElementById('signup-username').value = '';
+  document.getElementById('signup-name').value = '';
+  document.getElementById('signup-email').value = '';
+  document.getElementById('signup-pass').value = '';
+  document.getElementById('signup-pass-confirm').value = '';
+}
+
+function submitSignup() {
+  const username = document.getElementById('signup-username').value.trim();
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-pass').value;
+  const passConfirm = document.getElementById('signup-pass-confirm').value;
+  const errBox = document.getElementById('signup-error');
+
+  function fail(msg) {
+    errBox.innerText = msg;
+    errBox.style.display = 'block';
+  }
+
+  if (!username || !name || !pass) {
+    fail('Username, full name, and password are required.');
+    return;
+  }
+
+  if (pass !== passConfirm) {
+    fail('Passwords do not match.');
+    return;
+  }
+
+  if (users.find(x => x.username === username)) {
+    fail('That username is already taken.');
+    return;
+  }
+
+  const newUser = { username, name, email, pass, role: 'guest' };
+  users.push(newUser);
+  saveUsers();
+
+  errBox.style.display = 'none';
+  showLogin();
+
+  currentUser = newUser.name;
+  logActivity("Account Created", newUser.name + " created a new account (guest)");
+  setupUserSession(newUser);
+}
+
 function loginAsUser(username) {
   const foundUser = users.find(x => x.username === username);
   if (!foundUser) return;
@@ -913,6 +1002,8 @@ function handleLogout() {
   document.getElementById('login-user').value = '';
   document.getElementById('login-pass').value = '';
   document.getElementById('login-error').style.display = 'none';
+  document.getElementById('signup-card').style.display = 'none';
+  document.getElementById('login-screen').querySelector('.login-card').style.display = 'block';
 }
 
 function formatStatusLabel(statusValue) {
