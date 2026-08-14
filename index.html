@@ -944,6 +944,7 @@ function setupUserSession(foundUser) {
   renderUsers();
   renderIssues();
   renderServerChangelog();
+  showPage('dashboard', document.querySelector('.sidebar-nav a'));
 
   if (userRole === 'suspect') {
     document.getElementById('alert-title').innerText = 'Account Suspended Notice';
