@@ -260,11 +260,12 @@ textarea{resize:vertical;min-height:90px}
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">
             Input and track modifications and changes you have performed directly on the server.
           </div>
-          <div class="field-group">
+          <div class="field-group" id="changelog-form-group">
             <div class="field-label">Server Change Description <span class="req">*</span></div>
             <textarea id="changelog-input" placeholder="Describe the server modification or update..."></textarea>
           </div>
-          <button class="btn-primary" onclick="submitServerChangelog()">Add Change Log Entry</button>
+          <button class="btn-primary" id="changelog-submit-btn" onclick="submitServerChangelog()">Add Change Log Entry</button>
+          <div id="changelog-restricted-note" style="display:none;font-size:13px;color:var(--text-muted)">You don't have permission to add change log entries.</div>
           <div style="margin-top:24px" id="changelog-history-list"></div>
         </div>
       </div>
@@ -983,13 +984,22 @@ function applyRoleUIRestrictions() {
   const newCrBtn = document.getElementById('new-cr-top-btn');
   const newIssueBtn = document.getElementById('new-issue-btn');
   const selectAllRow = document.getElementById('bulk-select-all-row');
+  const changelogFormGroup = document.getElementById('changelog-form-group');
+  const changelogSubmitBtn = document.getElementById('changelog-submit-btn');
+  const changelogRestrictedNote = document.getElementById('changelog-restricted-note');
   const restricted = (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled');
   if (restricted) {
     if (newCrBtn) newCrBtn.style.display = 'none';
     if (newIssueBtn) newIssueBtn.style.display = 'none';
+    if (changelogFormGroup) changelogFormGroup.style.display = 'none';
+    if (changelogSubmitBtn) changelogSubmitBtn.style.display = 'none';
+    if (changelogRestrictedNote) changelogRestrictedNote.style.display = 'block';
   } else {
     if (newCrBtn) newCrBtn.style.display = 'inline-block';
     if (newIssueBtn) newIssueBtn.style.display = 'inline-block';
+    if (changelogFormGroup) changelogFormGroup.style.display = 'block';
+    if (changelogSubmitBtn) changelogSubmitBtn.style.display = 'inline-block';
+    if (changelogRestrictedNote) changelogRestrictedNote.style.display = 'none';
   }
   if (userRole === 'admin') {
     if (selectAllRow) selectAllRow.style.display = 'flex';
@@ -1258,13 +1268,17 @@ function renderServerChangelog() {
       <div class="cr-list-title">${c.desc}</div>
       <div class="cr-list-right">
         <span style="font-size:12px;color:var(--text-secondary)">By ${c.author}</span>
-        ${(userRole === 'admin' || c.author === currentUser) ? `<button class="btn-secondary" onclick="openEditChangelogModal(${idx})">Edit</button>` : ''}
+        ${(userRole === 'admin' || (c.author === currentUser && userRole !== 'guest' && userRole !== 'suspect' && userRole !== 'disabled')) ? `<button class="btn-secondary" onclick="openEditChangelogModal(${idx})">Edit</button>` : ''}
       </div>
     </div>
   `).join('') : '<div class="empty-state">No server changes logged yet.</div>';
 }
 
 function submitServerChangelog() {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
   const text = document.getElementById('changelog-input').value.trim();
   if (!text) {
     showPopup('Error', 'Change description is required.');
@@ -1294,6 +1308,10 @@ function closeEditChangelogModal() {
 }
 
 function submitEditChangelog() {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
   const idx = parseInt(document.getElementById('ecl-index').value);
   const text = document.getElementById('ecl-desc').value.trim();
   if (!text) {
