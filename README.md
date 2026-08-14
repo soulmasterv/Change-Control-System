@@ -1,5 +1,7 @@
 # Change Control System
 
+(**[README](README.md) | [Changelog](CHANGELOG.md)**)
+
 A web-based change control system for tracking small-project change requests, issues, and approvals — with email and Discord notifications.
 
 ## Stack
