@@ -1,5 +1,7 @@
 # Change Control System
 
+**[README](README.md) | [Changelog](CHANGELOG.md)**
+
 A web-based change control system for tracking small-project change requests, issues, and approvals — with email and Discord notifications.
 
 ## Stack
@@ -41,87 +43,4 @@ cp .env.example .env
 
 Edit `.env`:
 
-```
-PORT=3000
-GMAIL_USER=your-email@gmail.com
-GMAIL_APP_PASSWORD=your-16-char-app-password
-```
 
-`GMAIL_APP_PASSWORD` is a Gmail **App Password**, not your regular account password. Generate one at [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords) (requires 2-Step Verification enabled).
-
-## Running
-
-```bash
-pm2 start server.js --name change-control-system
-```
-
-Or for local dev without PM2:
-
-```bash
-node server.js
-```
-
-The app runs at `http://localhost:3000` (or your configured `PORT`).
-
-### Common PM2 commands
-
-```bash
-pm2 restart change-control-system
-pm2 logs change-control-system --lines 20
-pm2 stop change-control-system
-```
-
-## API Endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/api/data` | Load all app data |
-| `POST` | `/api/data` | Save all app data |
-| `POST` | `/api/notify` | Send an email notification |
-| `POST` | `/api/discord` | Relay a message to a Discord webhook |
-
-## Data model
-
-All data lives in `data/app_state.json`:
-
-```json
-{
-  "changeRequests": [],
-  "issues": [],
-  "users": [],
-  "settings": {}
-}
-```
-
-This file is git-ignored — it's your live, local data and never gets pushed.
-
-## Notifications
-
-In **Settings**, configure your Discord webhook URL. Each place you can trigger a notification (new CR, editing a CR, changing status) has:
-
-- A main **Send notifications** checkbox (default on) that sends via both channels
-- If unchecked, two sub-checkboxes appear to choose **Email** and/or **Discord** individually
-
-## Default login
-
-On first run (empty `data/app_state.json`), a default admin user is created:
-
-- Username: `admin`
-- Password: `admin1`
-
-**Change this immediately**, especially before exposing the app beyond your local network.
-
-## Security notes
-
-- Never commit `.env` — it's already in `.gitignore`
-- Rotate the Gmail app password if it's ever been shared in plaintext (chat, screenshot, committed file, etc.)
-- Change the default admin password before exposing this publicly
-- If exposing beyond your LAN, prefer a mechanism like [Tailscale Funnel](https://tailscale.com/kb/1223/funnel) over raw port-forwarding — it gives you a public HTTPS URL without opening your router or exposing your home IP
-
-## Known issues
-
-- Email formatting could be improved (plain HTML strings currently)
-
-## License
-
-Private project — not licensed for external use.

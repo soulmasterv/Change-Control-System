@@ -246,7 +246,7 @@ textarea{resize:vertical;min-height:90px}
       <div class="page" id="page-issues">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
           <div class="section-title" style="margin-bottom:0">Issues, Fixes & Troubleshooting Log</div>
-          <button class="btn-primary" onclick="openNewIssueModal()">+ Log New Issue</button>
+          <button class="btn-primary" id="new-issue-btn" onclick="openNewIssueModal()">+ Log New Issue</button>
         </div>
         <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">
           Document active problems, troubleshooting steps, and implemented fixes. Click any issue to view details, comment, edit, resolve, or pin.
@@ -981,11 +981,15 @@ function toggleAccountStatus(username) {
 
 function applyRoleUIRestrictions() {
   const newCrBtn = document.getElementById('new-cr-top-btn');
+  const newIssueBtn = document.getElementById('new-issue-btn');
   const selectAllRow = document.getElementById('bulk-select-all-row');
-  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+  const restricted = (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled');
+  if (restricted) {
     if (newCrBtn) newCrBtn.style.display = 'none';
+    if (newIssueBtn) newIssueBtn.style.display = 'none';
   } else {
     if (newCrBtn) newCrBtn.style.display = 'inline-block';
+    if (newIssueBtn) newIssueBtn.style.display = 'inline-block';
   }
   if (userRole === 'admin') {
     if (selectAllRow) selectAllRow.style.display = 'flex';
@@ -1337,6 +1341,7 @@ function deleteUser(username) {
 }
 
 function deleteIssue(id) {
+  if (userRole !== 'admin') return;
   showConfirm('Confirm Deletion', 'Are you sure you want to delete this issue log?', true, () => {
     issues = issues.filter(i => i.id !== id);
     saveIssues();
@@ -1514,10 +1519,11 @@ function viewIssue(id) {
         <div class="cr-side-card">
           <div class="field-label" style="margin-bottom:12px">Issue Actions & Status</div>
           <div style="display:flex;flex-direction:column;gap:8px">
+            ${userRole !== 'guest' && userRole !== 'suspect' && userRole !== 'disabled' ? `
             ${currentStatus !== 'Resolved' ? `<button class="btn-success" onclick="setIssueStatus('${i.id}', 'Resolved')">Mark as Resolved</button>` : `<button class="btn-warning" onclick="setIssueStatus('${i.id}', 'Active')">Re-open Issue</button>`}
             ${currentStatus !== 'Closed' ? `<button class="btn-secondary" onclick="setIssueStatus('${i.id}', 'Closed')">Close Issue</button>` : `<button class="btn-warning" onclick="setIssueStatus('${i.id}', 'Active')">Re-open Issue</button>`}
             <button class="btn-secondary" onclick="setIssueStatus('${i.id}', 'Archived')">Archive Issue</button>
-            <button class="btn-secondary" onclick="togglePinIssue('${i.id}')">${i.pinned ? 'Unpin Issue' : 'Pin Issue'}</button>
+            <button class="btn-secondary" onclick="togglePinIssue('${i.id}')">${i.pinned ? 'Unpin Issue' : 'Pin Issue'}</button>` : `<div style="font-size:13px;color:var(--text-muted)">You don't have permission to modify this issue.</div>`}
             ${userRole === 'admin' ? `<button class="btn-danger" onclick="deleteIssue('${i.id}')">Delete Issue</button>` : ''}
           </div>
         </div>
@@ -1526,6 +1532,10 @@ function viewIssue(id) {
 }
 
 function setIssueStatus(id, status) {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
   const i = issues.find(x => x.id === id);
   if (!i) return;
   const oldStatus = i.status || 'Active';
@@ -1542,6 +1552,10 @@ function setIssueStatus(id, status) {
 }
 
 function togglePinIssue(id) {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
   const i = issues.find(x => x.id === id);
   if (!i) return;
   i.pinned = !i.pinned;
@@ -1785,6 +1799,10 @@ function closeNewIssueModal() {
 }
 
 function submitNewIssue() {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
   const title = document.getElementById('ni-title').value.trim();
   const severity = document.getElementById('ni-severity').value;
   const desc = document.getElementById('ni-desc').value.trim();
