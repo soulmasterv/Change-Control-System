@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Change Control System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--surface-0:#121212;--surface-1:#1e1e1e;--surface-2:#252525;--border:#333333;--border-strong:#4d4d4d;--text-primary:#e0e0e0;--text-secondary:#a0a0a0;--text-muted:#707070;--radius:6px}
+body{font-family:var(--font-sans);background:var(--surface-1);color:var(--text-primary)}
+.login-screen{position:fixed;inset:0;background:#0f172a;display:flex;align-items:center;justify-content:center;z-index:1000}
+.login-card{background:#1e293b;padding:32px;border-radius:12px;width:380px;box-shadow:0 10px 25px rgba(0,0,0,0.5);border:1px solid #334155}
+.login-title{font-size:20px;font-weight:600;margin-bottom:8px;color:#f8fafc}
+.login-sub{font-size:13px;color:#94a3b8;margin-bottom:20px}
+.login-error{font-size:12px;color:#f87171;margin-bottom:12px;display:none}
+.app{display:flex;min-height:100vh;background:var(--surface-0)}
+.sidebar{width:220px;background:#0f172a;color:#fff;padding:0;flex-shrink:0;border-right:1px solid var(--border)}
+.sidebar-logo{padding:16px;font-size:14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:8px}
+.sidebar-nav a{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:13px;color:rgba(255,255,255,0.75);cursor:pointer;text-decoration:none}
+.sidebar-nav a:hover,.sidebar-nav a.active{background:rgba(255,255,255,0.1);color:#fff}
+.sidebar-section{padding:16px 16px 6px;font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--surface-0)}
+.topbar{background:var(--surface-1);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{font-size:14px;color:var(--text-secondary)}
+.topbar-left span{color:var(--text-primary);font-weight:600}
+.user-menu{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text-secondary)}
+.btn-primary{background:#2563eb;color:#fff;border:none;padding:8px 16px;border-radius:var(--radius);font-size:13px;cursor:pointer;font-weight:500}
+.btn-primary:hover{background:#1d4ed8}
+.btn-secondary{background:#334155;color:#fff;border:none;padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer}
+.btn-secondary:hover{background:#475569}
+.btn-warning{background:#d97706;color:#fff;border:none;padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer}
+.btn-warning:hover{background:#b45309}
+.btn-success{background:#059669;color:#fff;border:none;padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer}
+.btn-success:hover{background:#047857}
+.btn-danger{background:#dc2626;color:#fff;border:none;padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer}
+.btn-danger:hover{background:#b91c1c}
+.btn-ghost{background:transparent;border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 16px;border-radius:var(--radius);font-size:13px;cursor:pointer}
+.btn-ghost:hover{background:var(--surface-2)}
+.content{padding:24px;flex:1;overflow-y:auto;background:var(--surface-0)}
+.page{display:none}
+.page.active{display:block}
+.cr-detail{display:grid;grid-template-columns:1fr 300px;gap:24px}
+.cr-detail.staff-view{display:block}
+.cr-form-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.cr-side-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.2);margin-bottom:16px}
+.cr-title{font-size:22px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.cr-meta{font-size:12px;color:var(--text-secondary);margin-bottom:20px}
+.field-group{margin-bottom:16px}
+.field-label{font-size:12px;color:var(--text-secondary);margin-bottom:6px;font-weight:600}
+.field-label .req{color:#f87171}
+input[type=text],input[type=password],input[type=datetime-local],input[type=email],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border-strong);border-radius:var(--radius);font-size:13px;background:var(--surface-2);color:var(--text-primary);font-family:var(--font-sans)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,0.2)}
+textarea{resize:vertical;min-height:90px}
+.status-badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.status-draft{background:#27272a;color:#a1a1aa}
+.status-review{background:#422006;color:#fde047}
+.status-cab{background:#1e3a8a;color:#93c5fd}
+.status-approved{background:#064e3b;color:#6ee7b7}
+.status-rejected{background:#7f1d1d;color:#fca5a5}
+.status-implementing{background:#3f3f46;color:#e4e4e7}
+.status-done{background:#064e3b;color:#6ee7b7}
+.status-resolved{background:#064e3b;color:#6ee7b7}
+.status-closed{background:#27272a;color:#a1a1aa}
+.status-archived{background:#334155;color:#94a3b8}
+.pinned-tag{background:#d97706;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:6px;vertical-align:middle}
+.priority-critical{color:#f87171;font-weight:600}
+.priority-high{color:#fb923c;font-weight:600}
+.priority-medium{color:#60a5fa;font-weight:600}
+.priority-low{color:#94a3b8;font-weight:600}
+.cr-list-item{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+.cr-list-item:hover{border-color:#2563eb;background:var(--surface-2)}
+.cr-list-id{font-size:13px;color:#60a5fa;font-weight:600;min-width:70px}
+.cr-list-title{flex:1;font-size:13px;color:var(--text-primary);font-weight:500}
+.cr-list-right{display:flex;align-items:center;gap:12px}
+.section-title{font-size:18px;font-weight:600;margin-bottom:16px;color:var(--text-primary)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.stat-num{font-size:26px;font-weight:600;color:var(--text-primary)}
+.stat-label{font-size:12px;color:var(--text-secondary);margin-top:4px;font-weight:500}
+.system-status-banner{background:var(--surface-1);border:1px solid var(--border);border-left:4px solid #2563eb;border-radius:8px;padding:16px 20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center}
+.system-status-text{font-size:14px;font-weight:600;color:var(--text-primary)}
+.comment-box{border-top:1px solid var(--border);padding-top:16px;margin-top:20px}
+.comment-item{display:flex;gap:12px;margin-bottom:14px}
+.avatar{width:32px;height:32px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.comment-body{flex:1}
+.comment-author{font-size:12px;font-weight:600;color:var(--text-primary)}
+.comment-time{font-size:11px;color:var(--text-muted);margin-left:8px}
+.comment-text{font-size:13px;color:var(--text-secondary);margin-top:4px}
+.new-cr-overlay,.new-user-overlay,.edit-user-overlay,.new-issue-overlay,.edit-issue-overlay,.edit-cr-overlay,.edit-changelog-overlay,.alert-overlay,.confirm-overlay,.popup-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center}
+.new-cr-overlay.open,.new-user-overlay.open,.edit-user-overlay.open,.new-issue-overlay.open,.edit-issue-overlay.open,.edit-cr-overlay.open,.edit-changelog-overlay.open,.alert-overlay.open,.confirm-overlay.open,.popup-modal-overlay.open{display:flex}
+.new-cr-modal,.new-user-modal,.edit-user-modal,.new-issue-modal,.edit-issue-modal,.edit-cr-modal,.edit-changelog-modal,.alert-modal,.confirm-modal,.popup-modal-box{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;width:420px;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:0 20px 32px -8px rgba(0,0,0,0.5)}
+.modal-title{font-size:18px;font-weight:600;margin-bottom:20px;color:var(--text-primary)}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:24px;padding-top:16px;border-top:1px solid var(--border)}
+.filter-row{display:flex;gap:12px;margin-bottom:20px;align-items:center}
+.filter-row select{width:auto;min-width:160px}
+.empty-state{text-align:center;padding:40px;color:var(--text-secondary);font-size:13px;background:var(--surface-1);border:1px solid var(--border);border-radius:8px}
+.user-table{width:100%;border-collapse:collapse;margin-top:10px}
+.user-table th,.user-table td{padding:12px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+.user-table th{color:var(--text-secondary);font-weight:600}
+.pass-toggle{cursor:pointer;color:#60a5fa;font-size:12px;margin-left:6px;user-select:none}
+.action-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.discord-badge{background:#ed4245;color:#fff;font-size:11px;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center;display:inline-block}
+.issue-card{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,0.1);cursor:pointer}
+.issue-card:hover{border-color:#2563eb;background:var(--surface-2)}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-title">Change Control System</div>
+    <div class="login-sub">Sign in to your account</div>
+    <div class="login-error" id="login-error">Invalid username or password.</div>
+    <div class="field-group">
+      <div class="field-label">Username</div>
+      <input type="text" id="login-user" placeholder="Username">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Password</div>
+      <input type="password" id="login-pass" placeholder="Password">
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:8px" onclick="handleLogin()">Sign In</button>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none">
+  <div class="sidebar">
+    <div class="sidebar-logo" onclick="showPage('dashboard',null)" style="cursor:pointer">Change Control</div>
+    <div class="sidebar-nav" id="sidebar-nav"></div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left" id="breadcrumb">Dashboard</div>
+      <div class="user-menu">
+        <span id="logged-user-display">Admin</span>
+        <button class="btn-ghost" onclick="handleLogout()" style="padding:5px 10px;font-size:12px">Logout</button>
+        <button class="btn-primary" id="new-cr-top-btn" onclick="openNewCR()">+ New change request</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page active" id="page-dashboard">
+        <div class="system-status-banner" id="system-status-banner">
+          <div class="system-status-text" id="system-status-text">Loading system status...</div>
+          <div id="system-status-action"></div>
+        </div>
+        <div class="stats-row" id="stats-row"></div>
+        <div class="section-title" id="recent-title">Recent requests</div>
+        <div id="recent-list"></div>
+      </div>
+
+      <div class="page" id="page-requests">
+        <div class="filter-row">
+          <input type="text" id="search-keyword" placeholder="Search requests by ID or title..." oninput="renderList()" style="padding:6px 12px;background:#1e1e1e;border:1px solid #333;color:#fff;border-radius:4px;font-size:14px;outline:none;flex:1">
+          <select id="filter-status" onchange="renderList()">
+            <option value="">All statuses</option>
+            <option value="pending-review">Pending review</option>
+            <option value="in-progress">In progress</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+            <option value="implemented">Implemented</option>
+          </select>
+          <select id="filter-priority" onchange="renderList()">
+            <option value="">All priorities</option>
+            <option>Critical</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+        <div id="bulk-toolbar" style="display:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:12px;align-items:center;gap:12px;flex-wrap:wrap">
+          <span id="bulk-count" style="font-size:13px;color:var(--text-secondary)">0 selected</span>
+          <select id="bulk-status-select" style="width:auto;min-width:160px">
+            <option value="pending-review">Pending review</option>
+            <option value="in-progress">In progress</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+            <option value="implemented">Implemented</option>
+          </select>
+          <button class="btn-primary" onclick="applyBulkStatus()">Apply to selected</button>
+          <button class="btn-ghost" onclick="clearBulkSelection()">Clear selection</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <input type="checkbox" id="bulk-select-all" onclick="toggleSelectAll()" style="width:16px;height:16px;cursor:pointer">
+          <label for="bulk-select-all" style="font-size:13px;color:var(--text-secondary);cursor:pointer">Select all</label>
+        </div>
+        <div id="cr-total" style="font-size:13px;color:var(--text-secondary);margin-bottom:12px"></div>
+        <div id="cr-list"></div>
+      </div>
+
+      <div class="page" id="page-users">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="section-title" style="margin-bottom:0">User Management</div>
+          <button class="btn-primary" onclick="openNewUserModal()">+ Add New User</button>
+        </div>
+        <div class="cr-form-card" style="padding:0">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Display Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Role / Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="user-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="page" id="page-issues">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="section-title" style="margin-bottom:0">Issues, Fixes & Troubleshooting Log</div>
+          <button class="btn-primary" onclick="openNewIssueModal()">+ Log New Issue</button>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">
+          Document active problems, troubleshooting steps, and implemented fixes. Click any issue to view details, comment, edit, resolve, or pin.
+        </div>
+        <div id="issues-list"></div>
+      </div>
+
+      <div class="page" id="page-changelog">
+        <div class="section-title">Change Log</div>
+        <div class="cr-form-card">
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">
+            Input and track modifications and changes you have performed directly on the server.
+          </div>
+          <div class="field-group">
+            <div class="field-label">Server Change Description <span class="req">*</span></div>
+            <textarea id="changelog-input" placeholder="Describe the server modification or update..."></textarea>
+          </div>
+          <button class="btn-primary" onclick="submitServerChangelog()">Add Change Log Entry</button>
+          <div style="margin-top:24px" id="changelog-history-list"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-settings">
+        <div class="section-title">Mail Services & Discord Integration</div>
+        <div class="cr-form-card">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:20px">
+            Configure mail services, automated cron dispatch jobs, and Discord webhooks for notifications. Requests are rate-limited with a 15-second cooldown to prevent flooding.
+          </div>
+          <div class="field-group">
+            <div class="field-label">SMTP / Mail Command Integration Path</div>
+            <input type="text" id="cfg-mailcmd" value="/usr/sbin/sendmail -t -i" placeholder="/usr/sbin/sendmail -t -i">
+          </div>
+          <div class="field-group">
+            <div class="field-label">System Notification Email Address</div>
+            <input type="email" id="cfg-email" value="notifications@yourdomain.com" placeholder="notifications@yourdomain.com">
+          </div>
+          <div class="field-group">
+            <div class="field-label">Discord Webhook URL</div>
+            <input type="text" id="cfg-discord-webhook" placeholder="https://discord.com/api/webhooks/...">
+          </div>
+          <div class="field-group" style="display:flex;align-items:center;gap:10px;margin-top:16px">
+            <input type="checkbox" id="cfg-cron-enabled" checked style="width:auto">
+            <label for="cfg-cron-enabled" style="font-size:13px;color:var(--text-primary);cursor:pointer">Enable automated cron dispatch jobs for pending items</label>
+          </div>
+          <div style="margin-top:20px; display:flex; gap:12px; align-items:center;">
+            <button class="btn-primary" id="save-settings-btn" onclick="saveNotificationSettings()">Save Configuration</button>
+            <span id="cooldown-timer" style="font-size:12px;color:#f87171;"></span>
+          </div>
+
+          <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
+          <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)">
+            <div class="field-label" style="margin-bottom:8px">Backup & Restore</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Export all data as JSON or restore from a previous backup.</div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn-primary" onclick="exportBackup()">Export Backup</button>
+              <label class="btn-ghost" style="cursor:pointer">Import Backup<input type="file" id="import-file" accept=".json" onchange="importBackup(event)" style="display:none"></label>
+            </div>
+          </div>
+            <div class="field-label" style="color:#f87171;margin-bottom:8px">Danger Zone</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Permanently delete all change request records or issue logs from the system.</div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn-danger" onclick="deleteAllRequests()">Delete All Requests</button>
+              <button class="btn-danger" onclick="deleteAllIssues()">Delete All Issues</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="page-activity">
+        <div class="section-title">Activity Log</div>
+        <div id="activity-log-list"></div>
+      </div>
+
+      <div class="page" id="page-detail">
+        <div id="detail-content"></div>
+      </div>
+
+      <div class="page" id="page-issue-detail">
+        <div id="issue-detail-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="new-cr-overlay" id="new-cr-overlay">
+    <div class="new-cr-modal">
+      <div class="modal-title">New change request</div>
+      <div class="field-group">
+        <div class="field-label">Summary <span class="req">*</span></div>
+        <input type="text" id="nc-summary" placeholder="CR: describe the change">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field-group">
+          <div class="field-label">Planned start <span class="req">*</span></div>
+          <input type="datetime-local" id="nc-date">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Priority <span class="req">*</span></div>
+          <select id="nc-priority">
+            <option>Medium</option>
+            <option>Low</option>
+            <option>High</option>
+            <option>Critical</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field-group">
+          <div class="field-label">Impact</div>
+          <select id="nc-impact">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Service outage</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Device / system</div>
+          <input type="text" id="nc-device" placeholder="e.g. Ubuntu server">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Description</div>
+        <textarea id="nc-desc" placeholder="What are you changing and why?"></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Rollback plan <span class="req">*</span></div>
+        <textarea id="nc-rollback" placeholder="How will you revert if something goes wrong?"></textarea>
+      <div class="field-group" style="margin-top:12px">
+        <div class="field-label">Tags <span style="color:var(--text-muted);font-weight:400">(comma separated)</span></div>
+        <input type="text" id="nc-tags" placeholder="e.g. docker, network, urgent">
+      </div>
+      </div>
+      <div class="field-group" style="margin-top:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <input type="checkbox" id="nc-notify-toggle" checked style="width:auto" onchange="toggleNotifySubs('nc')">
+          <label for="nc-notify-toggle" style="font-size:13px;color:var(--text-primary);cursor:pointer">Send notifications</label>
+        </div>
+        <div id="nc-notify-subs" style="display:none;flex-direction:column;gap:8px;margin-left:26px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="checkbox" id="nc-send-mail" checked style="width:auto">
+            <label for="nc-send-mail" style="font-size:13px;color:var(--text-secondary);cursor:pointer">Email</label>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="checkbox" id="nc-send-discord" checked style="width:auto">
+            <label for="nc-send-discord" style="font-size:13px;color:var(--text-secondary);cursor:pointer">Discord</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Initial Status <span class="req">*</span></div>
+        <select id="nc-status">
+          <option value="pending-review" selected>Pending review</option>
+          <option value="in-progress">In progress</option>
+          <option value="accepted">Accepted</option>
+          <option value="rejected">Rejected</option>
+          <option value="implemented">Implemented</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeNewCR()">Cancel</button>
+        <button class="btn-primary" onclick="submitNewCR()">Submit for review</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="edit-cr-overlay" id="edit-cr-overlay">
+    <div class="new-cr-modal">
+      <div class="modal-title">Edit Change Request</div>
+      <input type="hidden" id="ecr-id">
+      <div class="field-group">
+        <div class="field-label">Summary <span class="req">*</span></div>
+        <input type="text" id="ecr-summary">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field-group">
+          <div class="field-label">Planned start</div>
+          <input type="datetime-local" id="ecr-date">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Priority</div>
+          <select id="ecr-priority">
+            <option>Medium</option>
+            <option>Low</option>
+            <option>High</option>
+            <option>Critical</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field-group">
+          <div class="field-label">Impact</div>
+          <select id="ecr-impact">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Service outage</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Device / system</div>
+          <input type="text" id="ecr-device">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Description</div>
+        <textarea id="ecr-desc"></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Rollback plan</div>
+        <textarea id="ecr-rollback"></textarea>
+      </div>
+      <div class="field-group" style="margin-top:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <input type="checkbox" id="ecr-notify-toggle" checked style="width:auto" onchange="toggleNotifySubs('ecr')">
+          <label for="ecr-notify-toggle" style="font-size:13px;color:var(--text-primary);cursor:pointer">Send notifications on update</label>
+        </div>
+        <div id="ecr-notify-subs" style="display:none;flex-direction:column;gap:8px;margin-left:26px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="checkbox" id="ecr-send-mail" checked style="width:auto">
+            <label for="ecr-send-mail" style="font-size:13px;color:var(--text-secondary);cursor:pointer">Email</label>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="checkbox" id="ecr-send-discord" checked style="width:auto">
+            <label for="ecr-send-discord" style="font-size:13px;color:var(--text-secondary);cursor:pointer">Discord</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Status</div>
+        <select id="ecr-status">
+          <option value="pending-review">Pending review</option>
+          <option value="in-progress">In progress</option>
+          <option value="accepted">Accepted</option>
+          <option value="rejected">Rejected</option>
+          <option value="implemented">Implemented</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeEditCRModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitEditCR()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="edit-changelog-overlay" id="edit-changelog-overlay">
+    <div class="new-cr-modal">
+      <div class="modal-title">Edit Server Change Log</div>
+      <input type="hidden" id="ecl-index">
+      <div class="field-group">
+        <div class="field-label">Server Change Description <span class="req">*</span></div>
+        <textarea id="ecl-desc"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeEditChangelogModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitEditChangelog()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="new-issue-overlay" id="new-issue-overlay">
+    <div class="new-issue-modal">
+      <div class="modal-title">Log System Issue & Fix</div>
+      <div class="field-group">
+        <div class="field-label">Issue Title <span class="req">*</span></div>
+        <input type="text" id="ni-title" placeholder="e.g. Nginx 502 Bad Gateway">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Severity</div>
+        <select id="ni-severity">
+          <option>Medium</option>
+          <option>Low</option>
+          <option>High</option>
+          <option>Critical</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Problem / Symptom Description <span class="req">*</span></div>
+        <textarea id="ni-desc" placeholder="What went wrong? Symptoms and error logs..."></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Resolution / Fix Implemented</div>
+        <textarea id="ni-fix" placeholder="Steps taken to resolve or configure the fix..."></textarea>
+      <div class="field-group" style="margin-top:12px">
+        <div class="field-label">Linked Change Request</div>
+        <select id="ni-linked-cr">
+          <option value="">None</option>
+        </select>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeNewIssueModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitNewIssue()">Save Issue Log</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="edit-issue-overlay" id="edit-issue-overlay">
+    <div class="new-issue-modal">
+      <div class="modal-title">Edit Issue & Fix</div>
+      <input type="hidden" id="ei-id">
+      <div class="field-group">
+        <div class="field-label">Issue Title <span class="req">*</span></div>
+        <input type="text" id="ei-title">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Severity</div>
+        <select id="ei-severity">
+          <option>Medium</option>
+          <option>Low</option>
+          <option>High</option>
+          <option>Critical</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Problem / Symptom Description <span class="req">*</span></div>
+        <textarea id="ei-desc"></textarea>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Resolution / Fix Implemented</div>
+        <textarea id="ei-fix"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeEditIssueModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitEditIssue()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="new-user-overlay" id="new-user-overlay">
+    <div class="new-user-modal">
+      <div class="modal-title">Add New User</div>
+      <div class="field-group">
+        <div class="field-label">Username (login handle) <span class="req">*</span></div>
+        <input type="text" id="nu-username" placeholder="e.g. jdoe">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Display Name <span class="req">*</span></div>
+        <input type="text" id="nu-name" placeholder="e.g. John Doe">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Email Address</div>
+        <input type="email" id="nu-email" placeholder="john@example.com">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Password <span class="req">*</span></div>
+        <input type="password" id="nu-pass" placeholder="Password">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Role & Status <span class="req">*</span></div>
+        <select id="nu-role">
+          <option value="staff">Staff (Can only see own requests)</option>
+          <option value="guest">Guest (View-only permissions)</option>
+          <option value="suspect">Suspect / Suspended</option>
+          <option value="disabled">Disabled</option>
+          <option value="admin">Admin (Full administrative permissions)</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeNewUserModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitNewUser()">Create User</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="edit-user-overlay" id="edit-user-overlay">
+    <div class="edit-user-modal">
+      <div class="modal-title">Edit User Profile</div>
+      <input type="hidden" id="eu-original-username">
+      <div class="field-group">
+        <div class="field-label">Username <span class="req">*</span></div>
+        <input type="text" id="eu-username">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Display Name <span class="req">*</span></div>
+        <input type="text" id="eu-name">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Email Address</div>
+        <input type="email" id="eu-email">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Password <span class="req">*</span></div>
+        <input type="password" id="eu-pass" placeholder="Password">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Role & Status <span class="req">*</span></div>
+        <select id="eu-role">
+          <option value="staff">Staff</option>
+          <option value="guest">Guest</option>
+          <option value="suspect">Suspect / Suspended</option>
+          <option value="disabled">Disabled</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="closeEditUserModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitEditUser()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-modal">
+      <div class="modal-title" id="confirm-title" style="color:var(--text-primary)">Notice</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:20px" id="confirm-msg">
+        Message goes here.
+      </div>
+      <div class="modal-footer" style="margin-top:0;padding-top:0;border-top:none" id="confirm-footer">
+        <button class="btn-ghost" id="confirm-cancel-btn" onclick="closeConfirmModal()">Cancel</button>
+        <button class="btn-primary" id="confirm-ok-btn" onclick="executeConfirmAction()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-modal-overlay" id="popup-modal-overlay">
+    <div class="popup-modal-box">
+      <div class="modal-title" id="popup-modal-title" style="color:var(--text-primary)">System Notice</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:20px" id="popup-modal-msg">
+        Notification text here.
+      </div>
+      <div class="modal-footer" style="margin-top:0;padding-top:0;border-top:none">
+        <button class="btn-primary" onclick="closePopupModal()" style="width:100%">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-overlay" id="alert-overlay">
+    <div class="alert-modal">
+      <div class="modal-title" style="color:#f87171" id="alert-title">Account Notice</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:20px" id="alert-msg">
+        Your account is flagged or restricted.
+      </div>
+      <div class="modal-footer" style="margin-top:0;padding-top:0;border-top:none">
+        <button class="btn-primary" onclick="closeAlertModal()">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let requests = [];
+let users = [];
+let issues = [];
+let serverChanges = [];
+let activityLog = [];
+let currentFilter = '';
+let viewingId = null;
+let viewingIssueId = null;
+let currentUser = 'Admin';
+let userRole = 'admin';
+let currentUsernameHandle = 'admin';
+let pendingConfirmCallback = null;
+let lastSettingsSaveTime = 0;
+let systemSettings = { mailCmd: '/usr/sbin/sendmail -t -i', notifyEmail: 'notifications@yourdomain.com', discordWebhook: '', cronEnabled: true };
+let cooldownTimerInterval = null;
+
+function showPopup(title, msg) {
+  document.getElementById('popup-modal-title').innerText = title;
+  document.getElementById('popup-modal-msg').innerText = msg;
+  document.getElementById('popup-modal-overlay').classList.add('open');
+}
+
+function closePopupModal() {
+  document.getElementById('popup-modal-overlay').classList.remove('open');
+}
+
+function showConfirm(title, msg, isDestructive, callback) {
+  document.getElementById('confirm-title').innerText = title;
+  document.getElementById('confirm-msg').innerText = msg;
+  const okBtn = document.getElementById('confirm-ok-btn');
+  if (isDestructive) {
+    okBtn.className = 'btn-danger';
+  } else {
+    okBtn.className = 'btn-primary';
+  }
+  document.getElementById('confirm-cancel-btn').style.display = 'inline-block';
+  pendingConfirmCallback = callback;
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  pendingConfirmCallback = null;
+}
+
+function executeConfirmAction() {
+  const cb = pendingConfirmCallback;
+  closeConfirmModal();
+  if (cb) cb();
+}
+
+function load() {
+  try {
+    const saved = localStorage.getItem('ccms-requests');
+    if (saved) requests = JSON.parse(saved);
+  } catch(e) { requests = []; }
+  if (requests.length === 0) seedData();
+
+  try {
+    const savedUsers = localStorage.getItem('ccms-users-list');
+    if (savedUsers) users = JSON.parse(savedUsers);
+  } catch(e) { users = []; }
+  if (users.length === 0) seedUsers();
+
+  try {
+    const savedIssues = localStorage.getItem('ccms-issues-list');
+    if (savedIssues) issues = JSON.parse(savedIssues);
+  } catch(e) { issues = []; }
+  if (issues.length === 0) seedIssues();
+
+  try {
+    const savedChanges = localStorage.getItem('ccms-server-changes');
+    if (savedChanges) serverChanges = JSON.parse(savedChanges);
+  } catch(e) { serverChanges = []; }
+
+  const savedUser = localStorage.getItem('ccms-user');
+  const savedRole = localStorage.getItem('ccms-role');
+  const savedHandle = localStorage.getItem('ccms-handle');
+  if (savedUser && savedRole) {
+    currentUser = savedUser;
+    userRole = savedRole;
+    currentUsernameHandle = savedHandle || 'admin';
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('logged-user-display').innerText = currentUser;
+    applyRoleUIRestrictions();
+    setupNav();
+  }
+  renderDashboard();
+  renderList();
+  renderUsers();
+  renderIssues();
+  renderServerChangelog();
+}
+
+function seedData() {
+  requests = [
+    {id:'CR-001',summary:'Upgrade Pi-hole to latest version',date:'2026-08-10T22:00',priority:'Medium',impact:'Low',device:'Ubuntu server',desc:'Pi-hole gravity update failed.',rollback:'Restore backup.',status:'implemented',author:'Admin',comments:[],created:'2026-08-09'},
+    {id:'CR-002',summary:'Extend Ubuntu root partition to 120GB',date:'2026-08-15T03:00',priority:'High',impact:'High',device:'Ubuntu server',desc:'Partition resizing.',rollback:'Restore snapshot.',status:'in-progress',author:'Staff Member',comments:[],created:'2026-08-12'}
+  ];
+  saveRequests();
+}
+
+function seedUsers() {
+  users = [
+    {username:'admin', name:'Admin', email:'notifications@yourdomain.com', pass:'admin1', role:'admin'},
+    {username:'staff', name:'Staff Member', email:'staff@server.local', pass:'staff1', role:'staff'}
+  ];
+  saveUsers();
+}
+
+function seedIssues() {
+  issues = [];
+  saveIssues();
+}
+
+function logActivity(action, detail) {
+  activityLog.unshift({
+    time: new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}),
+    user: currentUser,
+    action,
+    detail
+  });
+  if (activityLog.length > 200) activityLog = activityLog.slice(0, 200);
+  try { localStorage.setItem("ccms-activity-log", JSON.stringify(activityLog)); } catch(e){}
+}
+
+function saveRequests() {
+    try { localStorage.setItem('ccms-requests', JSON.stringify(requests)); } catch(e){}
+    if (userRole === 'admin') setupNav();
+    saveAppData();
+}
+
+function saveUsers() {
+    try { localStorage.setItem('ccms-users-list', JSON.stringify(users)); } catch(e){}
+    saveAppData();
+}
+
+function saveIssues() {
+    try { localStorage.setItem('ccms-issues-list', JSON.stringify(issues)); } catch(e){}
+    saveAppData();
+}
+function saveServerChanges() {
+  try { localStorage.setItem('ccms-server-changes', JSON.stringify(serverChanges)); } catch(e){}
+}
+
+function handleLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const errBox = document.getElementById('login-error');
+
+  const foundUser = users.find(x => x.username === u && x.pass === p);
+
+  if (!foundUser) {
+    errBox.innerText = 'Invalid username or password.';
+    errBox.style.display = 'block';
+    showPopup('Authentication Error', 'Invalid username or password.');
+    return;
+  }
+
+  if (foundUser.role === 'disabled') {
+    errBox.innerText = 'Your account has been disabled.';
+    errBox.style.display = 'block';
+    showPopup('Authentication Error', 'Your account has been disabled.');
+    return;
+  }
+
+  errBox.style.display = 'none';
+  setupUserSession(foundUser);
+}
+
+function loginAsUser(username) {
+  const foundUser = users.find(x => x.username === username);
+  if (!foundUser) return;
+  if (foundUser.role === 'disabled') {
+    showPopup('Access Restricted', 'Cannot log in: This account is disabled.');
+    return;
+  }
+  setupUserSession(foundUser);
+}
+
+function setupUserSession(foundUser) {
+  currentUser = foundUser.name;
+  userRole = foundUser.role;
+  currentUsernameHandle = foundUser.username;
+
+  localStorage.setItem('ccms-user', currentUser);
+  localStorage.setItem('ccms-role', userRole);
+  localStorage.setItem('ccms-handle', currentUsernameHandle);
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('logged-user-display').innerText = currentUser;
+  applyRoleUIRestrictions();
+  logActivity("Login", foundUser.name + " logged in as " + foundUser.role);
+  setupNav();
+  renderDashboard();
+  renderList();
+  renderUsers();
+  renderIssues();
+  renderServerChangelog();
+
+  if (userRole === 'suspect') {
+    document.getElementById('alert-title').innerText = 'Account Suspended Notice';
+    document.getElementById('alert-msg').innerText = 'Your account has been flagged or suspended.';
+    document.getElementById('alert-overlay').classList.add('open');
+  }
+}
+
+function toggleAccountStatus(username) {
+  if (userRole !== 'admin') return;
+
+  if (username === currentUsernameHandle) {
+    showPopup('Action Denied', 'You cannot change the status of the account you are currently logged in with.');
+    return;
+  }
+
+  const u = users.find(x => x.username === username);
+  if (!u) return;
+
+  if (u.role === 'disabled' || u.role === 'suspect') {
+    showConfirm('Confirm Enable', `Are you sure you want to enable account "${u.name}"?`, false, () => {
+      u.role = 'staff';
+      saveUsers();
+      renderUsers();
+      showPopup('Success', `User "${u.name}" has been enabled.`);
+    });
+  } else {
+    showConfirm('Confirm Disable', `Are you sure you want to disable account "${u.name}"?`, true, () => {
+      u.role = 'disabled';
+      saveUsers();
+      renderUsers();
+      showPopup('Success', `User "${u.name}" has been disabled.`);
+    });
+  }
+}
+
+function applyRoleUIRestrictions() {
+  const newCrBtn = document.getElementById('new-cr-top-btn');
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    if (newCrBtn) newCrBtn.style.display = 'none';
+  } else {
+    if (newCrBtn) newCrBtn.style.display = 'inline-block';
+  }
+}
+
+function closeAlertModal() {
+  document.getElementById('alert-overlay').classList.remove('open');
+}
+
+function handleLogout() {
+  logActivity("Logout", currentUser + " logged out");
+  localStorage.removeItem('ccms-user');
+  localStorage.removeItem('ccms-role');
+  localStorage.removeItem('ccms-handle');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function formatStatusLabel(statusValue) {
+  switch(statusValue) {
+    case 'pending-review': return 'Pending review';
+    case 'in-progress': return 'In progress';
+    case 'accepted': return 'Accepted';
+    case 'rejected': return 'Rejected';
+    case 'implemented': return 'Implemented';
+    default: return statusValue;
+  }
+}
+
+function renderActivityLog() {
+  const container = document.getElementById("activity-log-list");
+  if (!container) return;
+  try {
+    const saved = localStorage.getItem("ccms-activity-log");
+    if (saved) activityLog = JSON.parse(saved);
+  } catch(e) {}
+  container.innerHTML = activityLog.length ? activityLog.map(a => `
+    <div class="cr-list-item" style="cursor:default">
+      <div class="cr-list-id" style="min-width:120px">${a.time}</div>
+      <div class="cr-list-title">${a.action}: ${a.detail}</div>
+      <div class="cr-list-right"><span style="font-size:12px;color:var(--text-secondary)">${a.user}</span></div>
+    </div>`).join("") : "<div class=\"empty-state\">No activity recorded yet.</div>";
+}
+
+function setupNav() {
+  const nav = document.getElementById('sidebar-nav');
+  const pendingCount = requests.filter(r => r.status === 'pending-review').length;
+  const pendingBadge = pendingCount > 0 ? `<span class="discord-badge">${pendingCount}</span>` : '';
+
+  if (userRole === 'admin') {
+    nav.innerHTML = `
+      <div class="sidebar-section">Main</div>
+      <a class="active" onclick="showPage('dashboard',this)">Dashboard</a>
+      <a onclick="showPage('requests',this)">Requests</a>
+      <a onclick="showPage('users',this)">User management</a>
+      <a onclick="showPage('issues',this)">Issues & Fixes Log</a>
+      <a onclick="showPage('changelog',this)">Change log</a>
+      <a onclick="showPage('settings',this)">Mail Services</a>
+      <a onclick="showPage('activity',this)">Activity Log</a>
+      <div class="sidebar-section">Views</div>
+      <a onclick="showFiltered('pending-review',this)"><span>Pending review</span> ${pendingBadge}</a>
+      <a onclick="showFiltered('in-progress',this)">In progress</a>
+      <a onclick="showFiltered('accepted',this)">Accepted</a>
+      <a onclick="showFiltered('rejected',this)">Rejected</a>
+      <a onclick="showFiltered('implemented',this)">Implemented</a>
+    `;
+  } else if (userRole === 'guest') {
+    nav.innerHTML = `
+      <div class="sidebar-section">Main (Guest)</div>
+      <a class="active" onclick="showPage('dashboard',this)">Dashboard</a>
+      <a onclick="showPage('requests',this)">Requests</a>
+      <a onclick="showPage('issues',this)">Issues Log</a>
+      <a onclick="showPage('changelog',this)">Change log</a>
+    `;
+  } else {
+    nav.innerHTML = `
+      <div class="sidebar-section">Main</div>
+      <a class="active" onclick="showPage('dashboard',this)">Dashboard</a>
+      <a onclick="showPage('requests',this)">Requests</a>
+      <a onclick="showPage('issues',this)">Issues & Fixes Log</a>
+      <a onclick="showPage('changelog',this)">Change log</a>
+    `;
+  }
+}
+
+function getAccessibleRequests() {
+  if (userRole === 'admin' || userRole === 'guest' || userRole === 'suspect') return requests;
+  return requests.filter(r => r.author === currentUser);
+}
+
+function nextId() {
+  const nums = requests.map(r=>parseInt(r.id.replace('CR-',''))).filter(n=>!isNaN(n));
+  const next = nums.length ? Math.max(...nums)+1 : 1;
+  return 'CR-' + String(next).padStart(3,'0');
+}
+
+function nextIssueId() {
+  const nums = issues.map(i=>parseInt(i.id.replace('ISS-',''))).filter(n=>!isNaN(n));
+  const next = nums.length ? Math.max(...nums)+1 : 1;
+  return 'ISS-' + String(next).padStart(3,'0');
+}
+
+function statusClass(s) {
+  const map = {
+    'pending-review':'badge-pending-review status-review',
+    'in-progress':'badge-in-progress status-cab',
+    'accepted':'badge-accepted status-approved',
+    'rejected':'badge-rejected status-rejected',
+    'implemented':'badge-implemented status-done',
+    'Active':'status-review',
+    'Resolved':'status-resolved',
+    'Closed':'status-closed',
+    'Archived':'status-archived'
+  };
+  return map[s]||'status-draft';
+}
+
+function priorityClass(p) {
+  const map = {'Critical':'priority-critical','High':'priority-high','Medium':'priority-medium','Low':'priority-low'};
+  return map[p]||'';
+}
+
+function renderDashboard() {
+  const accessible = getAccessibleRequests();
+  const total = accessible.length;
+  const pending = accessible.filter(r=>r.status==='pending-review').length;
+  const inProgress = accessible.filter(r=>r.status==='accepted'||r.status==='in-progress').length;
+  const done = accessible.filter(r=>r.status==='implemented').length;
+
+  const activeIssuesCount = issues.filter(i => i.status === 'Active' || !i.status).length;
+  const pendingRequestsCount = requests.filter(r => r.status === 'pending-review').length;
+
+  let statusBannerHtml = '';
+  if (activeIssuesCount === 0) {
+    statusBannerHtml = `No ongoing issues, <span style="color: #fde047;">${pendingRequestsCount} pending review</span>`;
+  } else {
+    statusBannerHtml = `<span style="color: #f87171;">${activeIssuesCount} ongoing issue(s)</span>, <span style="color: #fde047;">${pendingRequestsCount} pending review</span>`;
+  }
+  document.getElementById('system-status-text').innerHTML = statusBannerHtml;
+  document.getElementById('system-status-action').innerHTML = `<button class="btn-secondary" onclick="showPage('issues', null)">View Issues Log</button>`;
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Requests</div></div>
+    <div class="stat-card"><div class="stat-num">${pending}</div><div class="stat-label">Pending review</div></div>
+    <div class="stat-card"><div class="stat-num">${inProgress}</div><div class="stat-label">In progress</div></div>
+    <div class="stat-card"><div class="stat-num">${done}</div><div class="stat-label">Implemented</div></div>
+  `;
+  document.getElementById('recent-title').innerText = 'Recent requests';
+  const recent = [...accessible].slice(-5).reverse();
+  document.getElementById('recent-list').innerHTML = recent.length ? recent.map(r=>crRow(r)).join('') : '<div class="empty-state">No requests found.</div>';
+}
+
+function crRow(r, bulk=false) {
+  const cb = bulk ? `<input type="checkbox" class="bulk-cb" data-id="${r.id}" onchange="updateBulkToolbar()" onclick="event.stopPropagation()" style="width:16px;height:16px;cursor:pointer;flex-shrink:0">` : "";
+  return `<div class="cr-list-item" onclick="if(!event.target.classList.contains('bulk-cb')) viewCR('${r.id}')">
+    ${cb}
+    <div class="cr-list-id">${r.id}</div>
+    <div class="cr-list-title">${r.summary}</div>
+    <div class="cr-list-right">
+      <span class="${priorityClass(r.priority)}" style="font-size:12px">${r.priority}</span>
+      <span class="status-badge ${statusClass(r.status)}">${formatStatusLabel(r.status)}</span>
+    </div>
+  </div>`;
+}
+
+function renderList() {
+  const sf = document.getElementById('filter-status').value;
+  const pf = document.getElementById('filter-priority').value;
+  const accessible = getAccessibleRequests();
+  let filtered = accessible.filter(r=>{
+    const kw = document.getElementById("search-keyword");
+    if (kw && kw.value.trim()) {
+      const keyword = kw.value.trim().toLowerCase();
+      if (!r.id.toLowerCase().includes(keyword) && !r.summary.toLowerCase().includes(keyword)) return false;
+    }
+    if (sf && r.status !== sf) return false;
+    if (pf && r.priority !== pf) return false;
+    return true;
+  });
+
+  document.getElementById('cr-total').innerText = `Total: ${filtered.length} request${filtered.length !== 1 ? 's' : ''}`;
+  document.getElementById('cr-list').innerHTML = filtered.length ? filtered.map(r=>crRow(r, true)).join('') : '<div class="empty-state">No requests match this filter.</div>';
+}
+
+function renderUsers() {
+  const tbody = document.getElementById('user-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = users.map((u, idx) => {
+    const isDisabledOrSuspended = (u.role === 'disabled' || u.role === 'suspect');
+    return `
+      <tr>
+        <td><code>${u.username}</code></td>
+        <td><strong>${u.name}</strong></td>
+        <td>${u.email||'—'}</td>
+        <td>
+          <span id="pass-span-${idx}" style="font-family:monospace">••••••••</span>
+          <span class="pass-toggle" onclick="togglePassword(${idx})">[Show]</span>
+        </td>
+        <td><span class="status-badge ${u.role==='admin'?'status-cab':(isDisabledOrSuspended?'status-rejected':'status-draft')}">${u.role.toUpperCase()}</span></td>
+        <td>
+          <div class="action-group">
+            <button class="btn-secondary" onclick="openEditUserModal('${u.username}')">Edit</button>
+            <button class="btn-primary" onclick="loginAsUser('${u.username}')">Log In</button>
+            ${isDisabledOrSuspended
+              ? `<button class="btn-success" onclick="toggleAccountStatus('${u.username}')">Enable</button>`
+              : `<button class="btn-danger" onclick="toggleAccountStatus('${u.username}')">Disable</button>`}
+            <button class="btn-ghost" onclick="deleteUser('${u.username}')" style="color:#f87171;border-color:#7f1d1d">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderIssues() {
+  const container = document.getElementById('issues-list');
+  if (!container) return;
+
+  let sortedIssues = [...issues].sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
+  });
+
+  container.innerHTML = sortedIssues.length ? sortedIssues.map(i => `
+    <div class="issue-card" onclick="viewIssue('${i.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:600;font-size:14px;color:var(--text-primary)">
+          <span style="color:#60a5fa">${i.id}:</span> ${i.title}
+          ${i.pinned ? '<span class="pinned-tag">PINNED</span>' : ''}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="status-badge ${statusClass(i.status || 'Active')}">${i.status || 'Active'}</span>
+          <span class="${priorityClass(i.severity)}" style="font-size:12px">${i.severity}</span>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">Logged by ${i.author} on ${i.date}</div>
+      <div class="field-group" style="margin-bottom:8px">
+        <div class="field-label">Problem / Symptom</div>
+        <div style="font-size:13px;color:var(--text-primary);background:var(--surface-2);padding:8px;border-radius:4px">${i.desc}</div>
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <div class="field-label" style="color:#34d399">Resolution / Fix</div>
+        <div style="font-size:13px;color:var(--text-primary);background:var(--surface-2);padding:8px;border-radius:4px">${i.fix || 'No fix documented yet.'}</div>
+      </div>
+    </div>
+  `).join('') : '<div class="empty-state">No issues logged yet.</div>';
+}
+
+function renderServerChangelog() {
+  const container = document.getElementById('changelog-history-list');
+  if (!container) return;
+  container.innerHTML = serverChanges.length ? serverChanges.map((c, idx) => `
+    <div class="cr-list-item" style="cursor:default">
+      <div class="cr-list-id">${c.date}</div>
+      <div class="cr-list-title">${c.desc}</div>
+      <div class="cr-list-right">
+        <span style="font-size:12px;color:var(--text-secondary)">By ${c.author}</span>
+        ${(userRole === 'admin' || c.author === currentUser) ? `<button class="btn-secondary" onclick="openEditChangelogModal(${idx})">Edit</button>` : ''}
+      </div>
+    </div>
+  `).join('') : '<div class="empty-state">No server changes logged yet.</div>';
+}
+
+function submitServerChangelog() {
+  const text = document.getElementById('changelog-input').value.trim();
+  if (!text) {
+    showPopup('Error', 'Change description is required.');
+    return;
+  }
+  serverChanges.unshift({
+    date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+    desc: text,
+    author: currentUser
+  });
+  saveServerChanges();
+  document.getElementById('changelog-input').value = '';
+  renderServerChangelog();
+  showPopup('Success', 'Server change logged successfully.');
+}
+
+function openEditChangelogModal(idx) {
+  const c = serverChanges[idx];
+  if (!c) return;
+  document.getElementById('ecl-index').value = idx;
+  document.getElementById('ecl-desc').value = c.desc;
+  document.getElementById('edit-changelog-overlay').classList.add('open');
+}
+
+function closeEditChangelogModal() {
+  document.getElementById('edit-changelog-overlay').classList.remove('open');
+}
+
+function submitEditChangelog() {
+  const idx = parseInt(document.getElementById('ecl-index').value);
+  const text = document.getElementById('ecl-desc').value.trim();
+  if (!text) {
+    showPopup('Error', 'Change description is required.');
+    return;
+  }
+  if (serverChanges[idx]) {
+    serverChanges[idx].desc = text;
+    saveServerChanges();
+    renderServerChangelog();
+    closeEditChangelogModal();
+    showPopup('Success', 'Server change updated successfully.');
+  }
+}
+
+function togglePassword(idx) {
+  const span = document.getElementById(`pass-span-${idx}`);
+  const user = users[idx];
+  if (span.innerText === '••••••••') {
+    span.innerText = user.pass;
+    span.style.color = '#f87171';
+  } else {
+    span.innerText = '••••••••';
+    span.style.color = 'var(--text-primary)';
+  }
+}
+
+function deleteUser(username) {
+  if (userRole !== 'admin') return;
+
+  if (username === currentUsernameHandle) {
+    showPopup('Action Denied', 'You cannot delete the account you are currently logged in with.');
+    return;
+  }
+
+  const u = users.find(x => x.username === username);
+  if (!u) return;
+
+  showConfirm('Confirm Deletion', `Are you sure you want to permanently delete user "${u.name}"?`, true, () => {
+    users = users.filter(x => x.username !== username);
+    saveUsers();
+    renderUsers();
+    showPopup('Success', `User "${u.name}" has been deleted.`);
+  });
+}
+
+function deleteIssue(id) {
+  showConfirm('Confirm Deletion', 'Are you sure you want to delete this issue log?', true, () => {
+    issues = issues.filter(i => i.id !== id);
+    saveIssues();
+    renderIssues();
+    showPage('issues', null);
+    renderDashboard();
+    showPopup('Success', 'Issue log deleted.');
+  });
+}
+function deleteRequest(id) {
+  if (userRole !== 'admin') return;
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+  showConfirm('Confirm Deletion', `Are you sure you want to permanently delete ${r.id}: "${r.summary}"?`, true, () => {
+    requests = requests.filter(x => x.id !== id);
+    logActivity("Deleted Request", id);
+    saveRequests();
+    showPage('requests', null);
+    renderList();
+    renderDashboard();
+    showPopup('Success', `${r.id} has been deleted.`);
+  });
+}
+
+
+function viewCR(id) {
+  viewingId = id;
+  const r = requests.find(x=>x.id===id);
+  if (!r) return;
+  if (userRole === 'staff' && r.author !== currentUser) {
+    showPopup('Access Denied', 'You do not have access to this request.');
+    return;
+  }
+  showPage('detail', null);
+  document.getElementById('breadcrumb').innerHTML = `Requests &rsaquo; <span>${r.id}</span>`;
+
+  const comments = (r.comments||[]).map(c=>`
+    <div class="comment-item">
+      <div class="avatar">${c.author.substring(0,2).toUpperCase()}</div>
+      <div class="comment-body">
+        <span class="comment-author">${c.author}</span><span class="comment-time">${c.time}</span>
+        <div class="comment-text">${c.text}</div>
+      </div>
+    </div>`).join('');
+
+  let sidePanelContent = '';
+  if (userRole === 'admin') {
+    sidePanelContent = `
+      <div class="cr-side-card">
+        <div class="field-label" style="margin-bottom:12px">Change Status Control</div>
+        <div class="field-group">
+          <div class="field-label">Update Status</div>
+          <select id="status-override-select" style="margin-bottom:10px">
+            <option value="pending-review" ${r.status==='pending-review'?'selected':''}>Pending review</option>
+            <option value="in-progress" ${r.status==='in-progress'?'selected':''}>In progress</option>
+            <option value="accepted" ${r.status==='accepted'?'selected':''}>Accepted</option>
+            <option value="rejected" ${r.status==='rejected'?'selected':''}>Rejected</option>
+            <option value="implemented" ${r.status==='implemented'?'selected':''}>Implemented</option>
+          </select>
+          <div style="margin-bottom:10px">
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;color:var(--text-secondary)"><input type="checkbox" id="status-notify-toggle" checked style="width:auto" onchange="toggleNotifySubs('status')"> Send notifications</label>
+            <div id="status-notify-subs" style="display:none;flex-direction:column;gap:6px;margin-left:26px">
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary)"><input type="checkbox" id="status-send-mail" checked style="width:auto"> Email</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary)"><input type="checkbox" id="status-send-discord" checked style="width:auto"> Discord</label>
+            </div>
+          </div>
+          <button class="btn-primary" style="width:100%" onclick="updateStatusManual('${id}')">Apply Status Change</button>
+        </div>
+      </div>`;
+  } else {
+    sidePanelContent = `
+      <div class="cr-side-card">
+        <div class="field-label" style="margin-bottom:12px">Request Status</div>
+        <div class="field-group">
+          <div class="field-label">Current Status</div>
+          <div style="margin-top:6px"><span class="status-badge ${statusClass(r.status)}">${formatStatusLabel(r.status)}</span></div>
+        </div>
+      </div>`;
+  }
+
+  const canEdit = (userRole === 'admin' || r.author === currentUser);
+
+  document.getElementById('detail-content').innerHTML = `
+    <div class="cr-detail ${userRole==='staff'||userRole==='guest'||userRole==='suspect'?'staff-view':''}">
+      <div>
+        <div class="cr-form-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div class="cr-title">${r.id}: ${r.summary}</div>
+              <div class="cr-meta">Created by ${r.author} on ${r.created} &bull; <span class="status-badge ${statusClass(r.status)}">${formatStatusLabel(r.status)}</span></div>
+            </div>
+            ${canEdit ? `<button class="btn-secondary" onclick="openEditCRModal('${r.id}')">Edit Request</button>` : ''}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="field-group"><div class="field-label">Planned start</div><div style="font-size:13px">${r.date||'—'}</div></div>
+            <div class="field-group"><div class="field-label">Impact</div><div style="font-size:13px">${r.impact||'—'}</div></div>
+            <div class="field-group"><div class="field-label">Device / system</div><div style="font-size:13px">${r.device||'—'}</div></div>
+            <div class="field-group"><div class="field-label">Priority</div><div style="font-size:13px" class="${priorityClass(r.priority)}">${r.priority}</div></div>
+          </div>
+          <div class="field-group"><div class="field-label">Description</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.5">${r.desc||'—'}</div></div>
+          <div class="field-group"><div class="field-label">Rollback plan</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.5">${r.rollback||'—'}</div></div>
+          <div class="field-group"><div class="field-label">Tags</div><div style="font-size:13px;display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${(r.tags||[]).map(t=>`<span style="background:var(--surface-1);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--text-secondary)">${t}</span>`).join("")||"—"}</div></div>
+          <div class="comment-box">
+            <div class="field-label" style="margin-bottom:10px">Thread & Comments</div>
+            <div id="comment-list">${comments||'<div style="color:var(--text-muted);font-size:13px">No comments yet.</div>'}</div>
+            ${userRole !== 'guest' && userRole !== 'suspect' && userRole !== 'disabled' ? `
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <input type="text" id="comment-input" placeholder="Add a comment or reply to thread..." style="flex:1">
+              <button class="btn-ghost" onclick="addComment('${id}')">Post</button>
+            </div>` : ''}
+          </div>
+        </div>
+      </div>
+      <div>${sidePanelContent}</div>
+    </div>`;
+}
+
+function viewIssue(id) {
+  viewingIssueId = id;
+  const i = issues.find(x => x.id === id);
+  if (!i) return;
+  showPage('issue-detail', null);
+  document.getElementById('breadcrumb').innerHTML = `Issues Log &rsaquo; <span>${i.id}</span>`;
+
+  if (!i.comments) i.comments = [];
+  const comments = i.comments.map(c=>`
+    <div class="comment-item">
+      <div class="avatar">${c.author.substring(0,2).toUpperCase()}</div>
+      <div class="comment-body">
+        <span class="comment-author">${c.author}</span><span class="comment-time">${c.time}</span>
+        <div class="comment-text">${c.text}</div>
+      </div>
+    </div>`).join('');
+
+  const canEdit = (userRole === 'admin' || i.author === currentUser);
+  const currentStatus = i.status || 'Active';
+
+  document.getElementById('issue-detail-content').innerHTML = `
+    <div class="cr-detail">
+      <div>
+        <div class="cr-form-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div class="cr-title">${i.id}: ${i.title} ${i.pinned ? '<span class="pinned-tag">PINNED</span>' : ''}</div>
+              <div class="cr-meta">Logged by ${i.author} on ${i.date} &bull; <span class="status-badge ${statusClass(currentStatus)}">${currentStatus}</span></div>
+            </div>
+            ${canEdit ? `<button class="btn-secondary" onclick="openEditIssueModal('${i.id}')">Edit Issue</button>` : ''}
+          </div>
+          <div class="field-group">
+            <div class="field-label">Severity</div>
+            <div style="font-size:13px" class="${priorityClass(i.severity)}">${i.severity}</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Problem / Symptom Description</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.5">${i.desc}</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label" style="color:#34d399">Resolution / Fix Implemented</div>
+            <div style="font-size:13px;color:var(--text-primary);background:var(--surface-2);padding:10px;border-radius:4px;line-height:1.5">${i.fix || 'No fix documented yet.'}</div>
+            ${i.linkedCR ? `<div class="field-group" style="margin-top:12px"><div class="field-label" style="color:#60a5fa">Linked Change Request</div><div style="font-size:13px;margin-top:4px"><a onclick="viewCR('${i.linkedCR}')" style="color:#60a5fa;cursor:pointer;text-decoration:underline">${i.linkedCR}</a></div></div>` : ""}
+          </div>
+
+          <div class="comment-box">
+            <div class="field-label" style="margin-bottom:10px">Discussion Thread</div>
+            <div id="issue-comment-list">${comments||'<div style="color:var(--text-muted);font-size:13px">No comments yet.</div>'}</div>
+            ${userRole !== 'guest' && userRole !== 'suspect' && userRole !== 'disabled' ? `
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <input type="text" id="issue-comment-input" placeholder="Add a comment or reply..." style="flex:1">
+              <button class="btn-ghost" onclick="addIssueComment('${id}')">Post</button>
+            </div>` : ''}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cr-side-card">
+          <div class="field-label" style="margin-bottom:12px">Issue Actions & Status</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            ${currentStatus !== 'Resolved' ? `<button class="btn-success" onclick="setIssueStatus('${i.id}', 'Resolved')">Mark as Resolved</button>` : `<button class="btn-warning" onclick="setIssueStatus('${i.id}', 'Active')">Re-open Issue</button>`}
+            ${currentStatus !== 'Closed' ? `<button class="btn-secondary" onclick="setIssueStatus('${i.id}', 'Closed')">Close Issue</button>` : `<button class="btn-warning" onclick="setIssueStatus('${i.id}', 'Active')">Re-open Issue</button>`}
+            <button class="btn-secondary" onclick="setIssueStatus('${i.id}', 'Archived')">Archive Issue</button>
+            <button class="btn-secondary" onclick="togglePinIssue('${i.id}')">${i.pinned ? 'Unpin Issue' : 'Pin Issue'}</button>
+            ${userRole === 'admin' ? `<button class="btn-danger" onclick="deleteIssue('${i.id}')">Delete Issue</button>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function setIssueStatus(id, status) {
+  const i = issues.find(x => x.id === id);
+  if (!i) return;
+  const oldStatus = i.status || 'Active';
+  i.status = status;
+  if (!i.comments) i.comments = [];
+  i.comments.push({author:currentUser, time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}), text:`Changed status from ${oldStatus} to ${status}`});
+  sendNotification(`Status Update: ${i.id} → ${status}`, `<h2>Issue Status Changed</h2><p><b>ID:</b> ${i.id}</p><p><b>New Status:</b> ${status}</p>`, "notifications@yourdomain.com");
+  sendDiscordNotification(`**Issue Status Changed:** ${i.id} → ${status}`);
+  saveIssues();
+  renderIssues();
+  renderDashboard();
+  viewIssue(id);
+  showPopup('Success', `Issue marked as ${status}.`);
+}
+
+function togglePinIssue(id) {
+  const i = issues.find(x => x.id === id);
+  if (!i) return;
+  i.pinned = !i.pinned;
+  saveIssues();
+  renderIssues();
+  viewIssue(id);
+}
+
+function addIssueComment(id) {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') return;
+  const input = document.getElementById('issue-comment-input');
+  if (!input.value.trim()) return;
+  const i = issues.find(x => x.id === id);
+  if (!i.comments) i.comments = [];
+  i.comments.push({author:currentUser,time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),text:input.value.trim()});
+  saveIssues();
+  viewIssue(id);
+}
+
+function openEditCRModal(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('ecr-id').value = r.id;
+  document.getElementById('ecr-summary').value = r.summary;
+  document.getElementById('ecr-date').value = r.date || '';
+  document.getElementById('ecr-priority').value = r.priority;
+  document.getElementById('ecr-impact').value = r.impact || 'Low';
+  document.getElementById('ecr-device').value = r.device || '';
+  document.getElementById('ecr-desc').value = r.desc || '';
+  document.getElementById('ecr-rollback').value = r.rollback || '';
+  document.getElementById('ecr-send-mail').checked = true;
+  document.getElementById('ecr-send-discord').checked = true;
+  document.getElementById('ecr-notify-toggle').checked = true;
+  toggleNotifySubs('ecr');
+  document.getElementById('ecr-status').value = r.status || 'pending-review';
+  document.getElementById('edit-cr-overlay').classList.add('open');
+}
+
+function closeEditCRModal() {
+  document.getElementById('edit-cr-overlay').classList.remove('open');
+}
+
+function submitEditCR() {
+  const id = document.getElementById('ecr-id').value;
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+
+  const oldStatus = r.status;
+  const newStatus = document.getElementById('ecr-status').value;
+
+  r.summary = document.getElementById('ecr-summary').value.trim();
+  r.date = document.getElementById('ecr-date').value;
+  r.priority = document.getElementById('ecr-priority').value;
+  r.impact = document.getElementById('ecr-impact').value;
+  r.device = document.getElementById('ecr-device').value.trim();
+  r.desc = document.getElementById('ecr-desc').value.trim();
+  r.rollback = document.getElementById('ecr-rollback').value.trim();
+  r.status = newStatus;
+
+  logActivity("Status Change", r.id + " u2192 " + formatStatusLabel(newStatus));
+  if (oldStatus !== newStatus) {
+    if (!r.comments) r.comments = [];
+    r.comments.push({author:currentUser, time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}), text:`Changed status from ${formatStatusLabel(oldStatus)} to ${formatStatusLabel(newStatus)}`});
+    if (shouldSendEmail('ecr')) sendNotification(`CR Status Update: ${r.id} → ${newStatus}`, `<h2>${r.id}: ${r.summary}</h2><p><b>Status changed to:</b> ${formatStatusLabel(newStatus)}</p><p><b>Changed by:</b> ${currentUser}</p>`, "notifications@yourdomain.com");
+    if (shouldSendDiscord('ecr')) sendDiscordNotification(`**CR Status Update:** ${r.id} → ${formatStatusLabel(newStatus)}\nChanged by: ${currentUser}`);
+  }
+
+  saveRequests();
+  closeEditCRModal();
+  viewCR(id);
+  renderDashboard();
+  renderList();
+  showPopup('Success', 'Change request updated successfully!');
+}
+
+function openEditIssueModal(id) {
+  const i = issues.find(x => x.id === id);
+  if (!i) return;
+  document.getElementById('ei-id').value = i.id;
+  document.getElementById('ei-title').value = i.title;
+  document.getElementById('ei-severity').value = i.severity;
+  document.getElementById('ei-desc').value = i.desc;
+  document.getElementById('ei-fix').value = i.fix || '';
+  document.getElementById('edit-issue-overlay').classList.add('open');
+}
+
+function closeEditIssueModal() {
+  document.getElementById('edit-issue-overlay').classList.remove('open');
+}
+
+function submitEditIssue() {
+  const id = document.getElementById('ei-id').value;
+  const i = issues.find(x => x.id === id);
+  if (!i) return;
+
+  i.title = document.getElementById('ei-title').value.trim();
+  i.severity = document.getElementById('ei-severity').value;
+  i.desc = document.getElementById('ei-desc').value.trim();
+  i.fix = document.getElementById('ei-fix').value.trim();
+
+  saveIssues();
+  closeEditIssueModal();
+  renderIssues();
+  viewIssue(id);
+  renderDashboard();
+  showPopup('Success', 'Issue log updated successfully!');
+}
+
+function updateStatusManual(id) {
+  if (userRole !== 'admin') return;
+  const r = requests.find(x=>x.id===id);
+  const newStatus = document.getElementById('status-override-select').value;
+  const shouldEmail = shouldSendEmail('status');
+  const shouldDiscord = shouldSendDiscord('status');
+  const oldStatus = r.status;
+  if(oldStatus !== newStatus) {
+    r.status = newStatus;
+    r.comments.push({author:currentUser, time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}), text:`Changed status from ${formatStatusLabel(oldStatus)} to ${formatStatusLabel(newStatus)}`});
+    logActivity("Status Change", r.id + " u2192 " + formatStatusLabel(newStatus));
+    if (shouldEmail) sendNotification(`CR Status Update: ${r.id} → ${newStatus}`, `<h2>${r.id}: ${r.summary}</h2><p><b>Status changed to:</b> ${formatStatusLabel(newStatus)}</p><p><b>Changed by:</b> ${currentUser}</p>`, "notifications@yourdomain.com");
+    if (shouldDiscord) sendDiscordNotification(`**CR Status Update:** ${r.id} → ${formatStatusLabel(newStatus)}\nChanged by: ${currentUser}`);
+    saveRequests();
+    viewCR(id);
+    renderDashboard();
+    renderList();
+    showPopup('Success', 'Status successfully updated!');
+  }
+}
+
+function saveNotificationSettings() {
+  if (userRole !== 'admin') return;
+  const now = Date.now();
+  const diff = (now - lastSettingsSaveTime) / 1000;
+  if (diff < 15) {
+    const remaining = Math.ceil(15 - diff);
+    showPopup('Cooldown Active', `Please wait ${remaining} seconds before saving configuration again.`);
+    return;
+  }
+  lastSettingsSaveTime = now;
+  systemSettings = {
+    mailCmd: document.getElementById('cfg-mailcmd').value.trim(),
+    notifyEmail: document.getElementById('cfg-email').value.trim(),
+    discordWebhook: document.getElementById('cfg-discord-webhook').value.trim(),
+    cronEnabled: document.getElementById('cfg-cron-enabled').checked
+  };
+  saveAppData();
+  startCooldownTimer(15);
+  showPopup('Success', 'Mail services, cron, and Discord webhook configuration saved.');
+}
+
+function loadSettingsIntoForm() {
+  const mailCmdEl = document.getElementById('cfg-mailcmd');
+  const emailEl = document.getElementById('cfg-email');
+  const discordEl = document.getElementById('cfg-discord-webhook');
+  const cronEl = document.getElementById('cfg-cron-enabled');
+  if (!mailCmdEl) return;
+  mailCmdEl.value = systemSettings.mailCmd || '/usr/sbin/sendmail -t -i';
+  emailEl.value = systemSettings.notifyEmail || 'notifications@yourdomain.com';
+  discordEl.value = systemSettings.discordWebhook || '';
+  cronEl.checked = systemSettings.cronEnabled !== false;
+}
+
+function startCooldownTimer(duration) {
+  const btn = document.getElementById('save-settings-btn');
+  const timerDisplay = document.getElementById('cooldown-timer');
+  btn.disabled = true;
+  let remaining = duration;
+  timerDisplay.innerText = `Cooldown: ${remaining}s`;
+  if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+  cooldownTimerInterval = setInterval(() => {
+    remaining--;
+    if (remaining > 0) {
+      timerDisplay.innerText = `Cooldown: ${remaining}s`;
+    } else {
+      clearInterval(cooldownTimerInterval);
+      btn.disabled = false;
+      timerDisplay.innerText = '';
+    }
+  }, 1000);
+}
+
+function deleteAllRequests() {
+  if (userRole !== 'admin') return;
+  showConfirm('Confirm Deletion', 'Are you sure you want to delete all change requests? This cannot be undone.', true, () => {
+    requests = [];
+    saveRequests();
+    renderDashboard();
+    renderList();
+    showPopup('Success', 'All requests have been successfully deleted.');
+  });
+}
+
+function deleteAllIssues() {
+  if (userRole !== 'admin') return;
+  showConfirm('Confirm Deletion', 'Are you sure you want to delete all issue logs? This cannot be undone.', true, () => {
+    issues = [];
+    saveIssues();
+    renderIssues();
+    renderDashboard();
+    showPopup('Success', 'All issue logs have been successfully deleted.');
+  });
+}
+
+function addComment(id) {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') return;
+  const input = document.getElementById('comment-input');
+  if (!input.value.trim()) return;
+  const r = requests.find(x=>x.id===id);
+  r.comments.push({author:currentUser,time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),text:input.value.trim()});
+  saveRequests();
+  viewCR(id);
+}
+
+function openNewCR() {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
+  document.getElementById('nc-send-mail').checked = true;
+  document.getElementById('nc-send-discord').checked = true;
+  document.getElementById('nc-notify-toggle').checked = true;
+  toggleNotifySubs('nc');
+  document.getElementById('new-cr-overlay').classList.add('open');
+}
+function closeNewCR() {
+  document.getElementById('new-cr-overlay').classList.remove('open');
+}
+
+function openNewIssueModal() {
+  const crSelect = document.getElementById("ni-linked-cr");
+  crSelect.innerHTML = "<option value=\"\"\>None</option>" + requests.map(r => `<option value="${r.id}">${r.id}: ${r.summary}</option>`).join("");
+
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
+    showPopup('Action Restricted', 'Action restricted.');
+    return;
+  }
+  document.getElementById('new-issue-overlay').classList.add('open');
+}
+function closeNewIssueModal() {
+  document.getElementById('new-issue-overlay').classList.remove('open');
+}
+
+function submitNewIssue() {
+  const title = document.getElementById('ni-title').value.trim();
+  const severity = document.getElementById('ni-severity').value;
+  const desc = document.getElementById('ni-desc').value.trim();
+  const fix = document.getElementById('ni-fix').value.trim();
+
+  if (!title || !desc) {
+    showPopup('Error', 'Title and description are required.');
+    return;
+  }
+
+  const issue = {
+    id: nextIssueId(),
+    title,
+    severity,
+    desc,
+    fix,
+    linkedCR: document.getElementById("ni-linked-cr") ? document.getElementById("ni-linked-cr").value || null : null,
+    author: currentUser,
+    date: new Date().toISOString().split('T')[0],
+    status: 'Active',
+    pinned: false,
+    comments: []
+  };
+
+  issues.push(issue);
+  saveIssues();
+  closeNewIssueModal();
+  renderIssues();
+  renderDashboard();
+  document.getElementById('ni-title').value = '';
+  document.getElementById('ni-desc').value = '';
+  document.getElementById('ni-fix').value = '';
+  showPopup('Success', 'Issue and fix successfully logged!');
+}
+
+function openNewUserModal() {
+  if (userRole !== 'admin') return;
+  document.getElementById('new-user-overlay').classList.add('open');
+}
+function closeNewUserModal() {
+  document.getElementById('new-user-overlay').classList.remove('open');
+}
+
+function openEditUserModal(username) {
+  if (userRole !== 'admin') return;
+  const u = users.find(x => x.username === username);
+  if (!u) return;
+  document.getElementById('eu-original-username').value = u.username;
+  document.getElementById('eu-username').value = u.username;
+  document.getElementById('eu-name').value = u.name;
+  document.getElementById('eu-email').value = u.email || '';
+  document.getElementById('eu-pass').value = u.pass;
+  document.getElementById('eu-role').value = u.role;
+  document.getElementById('edit-user-overlay').classList.add('open');
+}
+
+function closeEditUserModal() {
+  document.getElementById('edit-user-overlay').classList.remove('open');
+}
+
+function submitEditUser() {
+  if (userRole !== 'admin') return;
+  const origUsername = document.getElementById('eu-original-username').value;
+  const username = document.getElementById('eu-username').value.trim();
+  const name = document.getElementById('eu-name').value.trim();
+  const email = document.getElementById('eu-email').value.trim();
+  const pass = document.getElementById('eu-pass').value;
+  const role = document.getElementById('eu-role').value;
+
+  const uIndex = users.findIndex(x => x.username === origUsername);
+  if (uIndex === -1) return;
+
+  users[uIndex] = {username, name, email, pass, role};
+  saveUsers();
+  closeEditUserModal();
+  renderUsers();
+  showPopup('Success', 'User updated successfully!');
+}
+
+function submitNewUser() {
+  if (userRole !== 'admin') return;
+  const username = document.getElementById('nu-username').value.trim();
+  const name = document.getElementById('nu-name').value.trim();
+  const email = document.getElementById('nu-email').value.trim();
+  const pass = document.getElementById('nu-pass').value;
+  const role = document.getElementById('nu-role').value;
+
+  if (!username || !name || !pass) {
+    showPopup('Error', 'Required fields missing.');
+    return;
+  }
+
+  users.push({username, name, email, pass, role});
+  saveUsers();
+  closeNewUserModal();
+  renderUsers();
+  showPopup('Success', 'User created successfully!');
+}
+
+function submitNewCR() {
+  if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') return;
+  const summary = document.getElementById('nc-summary').value.trim();
+  if (!summary) { showPopup('Error', 'Summary is required'); return; }
+
+  const status = document.getElementById('nc-status').value;
+
+  const r = {
+    id: nextId(),
+    summary,
+    date: document.getElementById('nc-date').value,
+    priority: document.getElementById('nc-priority').value,
+    impact: document.getElementById('nc-impact').value,
+    device: document.getElementById('nc-device').value,
+    desc: document.getElementById('nc-desc').value,
+    rollback: document.getElementById('nc-rollback').value,
+    tags: document.getElementById('nc-tags').value.split(',').map(t=>t.trim()).filter(t=>t),
+    status: status,
+    author: currentUser,
+    comments: [{author:currentUser,time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),text:'Change request created.'}],
+    created: new Date().toISOString().split('T')[0]
+  };
+
+  requests.push(r);
+  logActivity("New Request", r.id + ": " + r.summary);
+if (shouldSendEmail('nc')) sendNotification(`New Change Request: ${r.id} - ${r.summary}`, `<h2>${r.id}: ${r.summary}</h2><p><b>Priority:</b> ${r.priority}</p><p><b>Impact:</b> ${r.impact}</p><p><b>Device:</b> ${r.device}</p><p><b>Planned:</b> ${r.date}</p>`, "notifications@yourdomain.com");
+  if (shouldSendDiscord('nc')) sendDiscordNotification(`**New Change Request:** ${r.id} - ${r.summary}\nPriority: ${r.priority} | Impact: ${r.impact} | Device: ${r.device}`);
+  saveRequests();
+  closeNewCR();
+  renderDashboard();
+  renderList();
+  viewCR(r.id);
+  ['nc-summary','nc-date','nc-device','nc-desc','nc-rollback'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('nc-send-mail').checked = true;
+  document.getElementById('nc-send-discord').checked = true;
+  document.getElementById('nc-notify-toggle').checked = true;
+  toggleNotifySubs('nc');
+  showPopup('Success', 'Request submitted successfully!');
+}
+
+function showPage(name, el) {
+  currentFilter = '';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (name==='dashboard') document.getElementById('breadcrumb').innerHTML='Dashboard';
+  if (name==='requests') { document.getElementById('breadcrumb').innerHTML = 'Requests'; document.getElementById('filter-status').value=''; renderList(); }
+  if (name==='users') { document.getElementById('breadcrumb').innerHTML = 'User Management'; renderUsers(); }
+  if (name==='issues') { document.getElementById('breadcrumb').innerHTML = 'Issues & Fixes Log'; renderIssues(); }
+  if (name==='changelog') { document.getElementById('breadcrumb').innerHTML = 'Change Log'; renderServerChangelog(); }
+  if (name==='settings') { document.getElementById('breadcrumb').innerHTML = 'Mail Services'; loadSettingsIntoForm(); }
+  if (name==='activity') { document.getElementById('breadcrumb').innerHTML = 'Activity Log'; renderActivityLog(); }
+}
+
+function showFiltered(status, el) {
+    currentFilter = status;
+
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-requests').classList.add('active');
+    document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    document.getElementById('breadcrumb').innerHTML = `Requests &rsaquo; <span>${formatStatusLabel(status)}</span>`;
+    document.getElementById('filter-status').value = status;
+    renderList();
+}
+
+function restoreSession() {
+  const savedUser = localStorage.getItem("ccms-user");
+  const savedRole = localStorage.getItem("ccms-role");
+  const savedHandle = localStorage.getItem("ccms-handle");
+  if (savedUser && savedRole) {
+    currentUser = savedUser;
+    userRole = savedRole;
+    currentUsernameHandle = savedHandle || "admin";
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app").style.display = "flex";
+    document.getElementById("logged-user-display").innerText = currentUser;
+    applyRoleUIRestrictions();
+    setupNav();
+    renderDashboard();
+    renderList();
+    renderUsers();
+  }
+}
+
+async function loadAppData() {
+    try {
+        const res = await fetch('/api/data');
+        const data = await res.json();
+        requests = data.changeRequests || [];
+        issues = data.issues || [];
+        users = data.users || [{ username: 'admin', name: 'Administrator', pass: 'password', role: 'admin' }];
+        if (data.settings) systemSettings = { ...systemSettings, ...data.settings };
+        loadSettingsIntoForm();
+        restoreSession();
+    } catch(e) {
+        console.error('Failed to load from server, falling back to localStorage');
+        requests = JSON.parse(localStorage.getItem('ccms-requests') || '[]');
+        users = JSON.parse(localStorage.getItem('ccms-users-list') || '[]');
+        issues = JSON.parse(localStorage.getItem('ccms-issues-list') || '[]');
+    }
+}
+
+async function sendNotification(subject, body, to) {
+    try {
+        await fetch("/api/notify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ subject, body, to })
+        });
+    } catch(e) { console.error("Notification failed:", e); }
+}
+
+function toggleNotifySubs(prefix) {
+  const main = document.getElementById(prefix + '-notify-toggle');
+  const subs = document.getElementById(prefix + '-notify-subs');
+  if (!main || !subs) return;
+  subs.style.display = main.checked ? 'none' : 'flex';
+}
+
+function shouldSendEmail(prefix) {
+  const main = document.getElementById(prefix + '-notify-toggle');
+  if (main && main.checked) return true;
+  const sub = document.getElementById(prefix + '-send-mail');
+  return sub ? sub.checked : false;
+}
+
+function shouldSendDiscord(prefix) {
+  const main = document.getElementById(prefix + '-notify-toggle');
+  if (main && main.checked) return true;
+  const sub = document.getElementById(prefix + '-send-discord');
+  return sub ? sub.checked : false;
+}
+
+async function sendDiscordNotification(message) {
+    if (!systemSettings.discordWebhook) return;
+    try {
+        await fetch("/api/discord", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message, webhookUrl: systemSettings.discordWebhook })
+        });
+    } catch(e) { console.error("Discord notification failed:", e); }
+}
+
+async function saveAppData() {
+    const appState = {
+        changeRequests: requests,
+        issues: issues,
+        settings: typeof systemSettings !== 'undefined' ? systemSettings : {},
+        users: users
+    };
+    try {
+        await fetch('/api/data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(appState)
+        });
+    } catch (error) {
+        console.error('Error saving data to server:', error);
+    }
+}
+
+async function applyStatusChange() {
+    const selectedStatus = document.getElementById('update-status-select') || document.getElementById('filter-status');
+    const newStatus = selectedStatus ? selectedStatus.value : null;
+
+    if (typeof currentRequest !== 'undefined' && currentRequest && newStatus) {
+        currentRequest.status = newStatus;
+
+        const index = window.allChangeRequests.findIndex(r => r.id === currentRequest.id);
+        if (index !== -1) {
+            window.allChangeRequests[index].status = newStatus;
+        }
+    }
+
+    if (typeof renderDetail === 'function') renderDetail(currentRequest);
+    if (typeof renderList === 'function') renderList();
+
+    await saveAppData();
+}
+
+function exportBackup() {
+  const data = JSON.stringify({ changeRequests: requests, issues, users, serverChanges, activityLog, exportDate: new Date().toISOString() }, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ccms-backup-" + new Date().toISOString().split("T")[0] + ".json";
+  a.click();
+  logActivity("Backup", "Data exported by " + currentUser);
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.changeRequests) { showPopup("Error", "Invalid backup file."); return; }
+      showConfirm("Confirm Import", "This will overwrite all current data. Are you sure?", true, () => {
+        requests = data.changeRequests || [];
+        issues = data.issues || [];
+        users = data.users || [];
+        serverChanges = data.serverChanges || [];
+        activityLog = data.activityLog || [];
+        saveRequests();
+        saveUsers();
+        saveIssues();
+        saveServerChanges();
+        renderDashboard();
+        renderList();
+        renderUsers();
+        renderIssues();
+        renderServerChangelog();
+        showPopup("Success", "Backup restored successfully.");
+        logActivity("Restore", "Data restored from backup by " + currentUser);
+      });
+    } catch(e) { showPopup("Error", "Failed to parse backup file."); }
+  };
+  reader.readAsText(file);
+}
+
+function toggleSelectAll() {
+  const allChecked = document.getElementById("bulk-select-all").checked;
+  document.querySelectorAll(".bulk-cb").forEach(cb => cb.checked = allChecked);
+  updateBulkToolbar();
+}
+function updateBulkToolbar() {
+  const checked = document.querySelectorAll(".bulk-cb:checked");
+  const toolbar = document.getElementById("bulk-toolbar");
+  const countEl = document.getElementById("bulk-count");
+  if (checked.length > 0) {
+    toolbar.style.display = "flex";
+    countEl.innerText = checked.length + " selected";
+  } else {
+    toolbar.style.display = "none";
+  }
+}
+function clearBulkSelection() {
+  document.querySelectorAll(".bulk-cb").forEach(cb => cb.checked = false);
+  const sa = document.getElementById("bulk-select-all");
+  if (sa) sa.checked = false;
+  updateBulkToolbar();
+}
+function applyBulkStatus() {
+  const checked = document.querySelectorAll(".bulk-cb:checked");
+  if (checked.length === 0) return;
+  const newStatus = document.getElementById("bulk-status-select").value;
+  checked.forEach(cb => {
+    const id = cb.getAttribute("data-id");
+    const r = requests.find(x => x.id === id);
+    if (r) {
+      const oldStatus = r.status;
+      r.status = newStatus;
+      if (!r.comments) r.comments = [];
+      r.comments.push({author: currentUser, time: new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}), text: "Bulk status change: " + formatStatusLabel(oldStatus) + " to " + formatStatusLabel(newStatus)});
+      logActivity("Bulk Status Change", id + " to " + formatStatusLabel(newStatus));
+    }
+  });
+  saveRequests();
+  clearBulkSelection();
+  renderList();
+  renderDashboard();
+  showPopup("Success", checked.length + " requests updated to " + formatStatusLabel(newStatus));
+}
+
+window.onload = function() {
+    loadAppData();
+};
+</script>
+</body>
+</html>
+```[cite: 1]

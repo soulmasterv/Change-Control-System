@@ -1,0 +1,4 @@
+node_modules/
+.env
+data/app_state.json
+*.log
