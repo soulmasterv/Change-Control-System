@@ -1078,11 +1078,18 @@ function setupNav() {
     `;
   } else if (userRole === 'guest') {
     nav.innerHTML = `
-      <div class="sidebar-section">Main (Guest)</div>
+      <div class="sidebar-section">Main</div>
       <a class="active" onclick="showPage('dashboard',this)">Dashboard</a>
       <a onclick="showPage('requests',this)">Requests</a>
-      <a onclick="showPage('issues',this)">Issues Log</a>
+      <a onclick="showPage('issues',this)">Issues & Fixes Log</a>
       <a onclick="showPage('changelog',this)">Change log</a>
+      <a onclick="showPage('activity',this)">Activity Log</a>
+      <div class="sidebar-section">Views</div>
+      <a onclick="showFiltered('pending-review',this)"><span>Pending review</span> ${pendingBadge}</a>
+      <a onclick="showFiltered('in-progress',this)">In progress</a>
+      <a onclick="showFiltered('accepted',this)">Accepted</a>
+      <a onclick="showFiltered('rejected',this)">Rejected</a>
+      <a onclick="showFiltered('implemented',this)">Implemented</a>
     `;
   } else {
     nav.innerHTML = `
