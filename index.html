@@ -213,7 +213,7 @@ textarea{resize:vertical;min-height:90px}
           <button class="btn-primary" onclick="applyBulkStatus()">Apply to selected</button>
           <button class="btn-ghost" onclick="clearBulkSelection()">Clear selection</button>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <div id="bulk-select-all-row" style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
           <input type="checkbox" id="bulk-select-all" onclick="toggleSelectAll()" style="width:16px;height:16px;cursor:pointer">
           <label for="bulk-select-all" style="font-size:13px;color:var(--text-secondary);cursor:pointer">Select all</label>
         </div>
@@ -981,10 +981,18 @@ function toggleAccountStatus(username) {
 
 function applyRoleUIRestrictions() {
   const newCrBtn = document.getElementById('new-cr-top-btn');
+  const selectAllRow = document.getElementById('bulk-select-all-row');
   if (userRole === 'guest' || userRole === 'suspect' || userRole === 'disabled') {
     if (newCrBtn) newCrBtn.style.display = 'none';
   } else {
     if (newCrBtn) newCrBtn.style.display = 'inline-block';
+  }
+  if (userRole === 'admin') {
+    if (selectAllRow) selectAllRow.style.display = 'flex';
+  } else {
+    if (selectAllRow) selectAllRow.style.display = 'none';
+    const toolbar = document.getElementById('bulk-toolbar');
+    if (toolbar) toolbar.style.display = 'none';
   }
 }
 
@@ -1169,7 +1177,7 @@ function renderList() {
   });
 
   document.getElementById('cr-total').innerText = `Total: ${filtered.length} request${filtered.length !== 1 ? 's' : ''}`;
-  document.getElementById('cr-list').innerHTML = filtered.length ? filtered.map(r=>crRow(r, true)).join('') : '<div class="empty-state">No requests match this filter.</div>';
+  document.getElementById('cr-list').innerHTML = filtered.length ? filtered.map(r=>crRow(r, userRole === 'admin')).join('') : '<div class="empty-state">No requests match this filter.</div>';
 }
 
 function renderUsers() {
@@ -2102,11 +2110,13 @@ function importBackup(event) {
 }
 
 function toggleSelectAll() {
+  if (userRole !== 'admin') return;
   const allChecked = document.getElementById("bulk-select-all").checked;
   document.querySelectorAll(".bulk-cb").forEach(cb => cb.checked = allChecked);
   updateBulkToolbar();
 }
 function updateBulkToolbar() {
+  if (userRole !== 'admin') return;
   const checked = document.querySelectorAll(".bulk-cb:checked");
   const toolbar = document.getElementById("bulk-toolbar");
   const countEl = document.getElementById("bulk-count");
@@ -2124,6 +2134,7 @@ function clearBulkSelection() {
   updateBulkToolbar();
 }
 function applyBulkStatus() {
+  if (userRole !== 'admin') return;
   const checked = document.querySelectorAll(".bulk-cb:checked");
   if (checked.length === 0) return;
   const newStatus = document.getElementById("bulk-status-select").value;
@@ -2151,4 +2162,3 @@ window.onload = function() {
 </script>
 </body>
 </html>
-```[cite: 1]
