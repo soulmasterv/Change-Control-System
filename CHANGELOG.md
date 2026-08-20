@@ -1,8 +1,33 @@
 # Changelog
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
-## 1.11.1 (2026-08-19)
+
+### 1.12.0 (2026-08-19)
 
 #### Features
+
+- Reworked the **Requests** page into a statistics-focused page with additional request-management settings:
+  - Ability to enable or disable incoming requests
+  - Configurable default notification option
+  - Ability to automatically reject requests that remain unchanged for a specified number of days or hours
+  - Configurable maximum number of requests per user within a specified number of days or hours
+- Added support for **preset and custom tags**
+- Added the ability to customize **tag colors**
+- Added the ability to **publish or save changelogs as drafts**
+- Added the ability to **link change requests to changelogs**
+- Added Discord embeds for **issues and changelogs**
+- Discord embeds now include a **link button** to the associated request, issue, or changelog
+- Added notifications when a new account is created and access is requested
+- Reworked **Issues & Fixes** with an option to mark an issue as resolved with a resolution note
+
+#### Bug Fixes
+
+- Fixed an issue where archived items could be archived again
+- Archived items are now fully read-only and can no longer be edited
+
+### 1.11.2 (2026-08-19)
+
+#### Features
+
 - Added a new "Archived" section holding all archived data
 - Archived requests can no longer be edited/reopened until unarchived
 - Archived requests get auto closed (even if they were open)
@@ -27,6 +52,7 @@ All notable changes to this project will be documented in this file. See [standa
 - Added automated daily/weekly backups sent via email/Discord at a set time
 
 #### Bug Fixes
+
 - Fixed minor bugs in "Edit Profile"
 - Fixed bugs with pop-up notifications
 - Fixed a bug allowing duplicate username creation on signup
@@ -39,188 +65,92 @@ All notable changes to this project will be documented in this file. See [standa
 - Force log-out message now displays for 10 seconds before logging out (user is locked from all actions during that window)
 
 #### Removed
+
 - Removed ability for administrators to view a user's password — they may only reset it now
-### 1.11.1 (2026-08-19)
-
-#### Features
-
-* Reworked the **Requests** page into a statistics-focused page with additional request-management settings:
-  * Ability to enable or disable incoming requests
-  * Configurable default notification option
-  * Ability to automatically reject requests that remain unchanged for a specified number of days or hours
-  * Configurable maximum number of requests per user within a specified number of days or hours
-* Added support for **preset and custom tags**
-* Added the ability to customize **tag colors**
-* Added the ability to **publish or save changelogs as drafts**
-* Added the ability to **link change requests to changelogs**
-* Added Discord embeds for **issues and changelogs**
-* Discord embeds now include a **link button** to the associated request, issue, or changelog
-* Added notifications when a new account is created and access is requested
-* Reworked **Issues & Fixes** with an option to mark an issue as resolved with a resolution note
-
-#### Bug Fixes
-
-* Fixed an issue where archived items could be archived again
-* Archived items are now fully read-only and can no longer be edited
 
 ### 1.11.1 (2026-08-18)
 
 #### Bug Fixes
 
-* Fixed force-logged-out sessions silently re-establishing themselves a few minutes later instead of staying logged out
+- Fixed force-logged-out sessions silently re-establishing themselves a few minutes later instead of staying logged out
 
 ### 1.11.0 (2026-08-17)
 
 #### Features
 
-* Added a force-logout option for administrators, from the user management page
-* Archived requests and issues are now read-only and can no longer be edited
-* Added the ability to delete a single request or issue individually
+- Added a force-logout option for administrators, from the user management page
+- Archived requests and issues are now read-only and can no longer be edited
+- Added the ability to delete a single request or issue individually
 
 #### Bug Fixes
 
-* Fixed the danger zone data-reset option not actually deleting anything
-* Fixed Discord embeds not sending on certain notifications
+- Fixed the danger zone data-reset option not actually deleting anything
+- Fixed Discord embeds not sending on certain notifications
 
 ### 1.10.0 (2026-08-15)
 
 #### Features
 
-* Added Discord embeds with interactive buttons for richer notifications
-* Added a public demo version with sample test data
-* Added archiving for requests and issues
+- Added Discord embeds with interactive buttons for richer notifications
+- Added a public demo version with sample test data
+- Added archiving for requests and issues
 
 #### Bug Fixes
 
-* Fixed the export/import flow
+- Fixed the export/import flow
 
 ### 1.9.0 (2026-08-13)
 
 #### Features
 
-* Added a "Request Access" flow — new sign-ups now notify administrators to review and assign a role
-* Administrators can now log in directly as another user from the user management page
-* Limited accounts to a single active login — a second login attempt is blocked while the account is already active elsewhere
-* Improved accuracy of the "last seen" status
+- Added a "Request Access" flow — new sign-ups now notify administrators to review and assign a role
+- Administrators can now log in directly as another user from the user management page
+- Limited accounts to a single active login — a second login attempt is blocked while the account is already active elsewhere
+- Improved accuracy of the "last seen" status
 
 #### Bug Fixes
 
-* Various minor bug fixes
+- Various minor bug fixes
 
 ### 1.8.0 (2026-08-12)
 
 #### Features
 
-* Added a "Mark as Resolved" action for issues, with an optional resolution note
-* Added online/offline status and "last seen" tracking for users
-* Reworked the user management page UI
+- Added a "Mark as Resolved" action for issues, with an optional resolution note
+- Added online/offline status and "last seen" tracking for users
+- Reworked the user management page UI
 
 #### Bug Fixes
 
-* Fixed Discord webhook links not sending
-* Fixed request status changes not saving
+- Fixed Discord webhook links not sending
+- Fixed request status changes not saving
 
 ### 1.7.0 (2026-08-11)
 
 #### Features
 
-* Added threaded chat/comments on requests
-* Added the ability to lock (close) a thread
-* Added an optional note when closing a thread
-* Enforced password complexity requirements
+- Added threaded chat/comments on requests
+- Added the ability to lock (close) a thread
+- Added an optional note when closing a thread
+- Enforced password complexity requirements
 
 #### Bug Fixes
 
-* Removed the bulk status-change action for requests
+- Removed the bulk status-change action for requests
 
 ### 1.6.0 (2026-08-10)
 
 #### Features
 
-* Added Discord webhook notifications
-* Added a self-service Edit Profile option (password, username, email)
-* Added request statistics to the main dashboard
-* Added bulk status-change selection for requests
+- Added Discord webhook notifications
+- Added a self-service Edit Profile option (password, username, email)
+- Added request statistics to the main dashboard
+- Added bulk status-change selection for requests
 
-### 1.5.1 (2026-08-15)
-
-#### Features
-
-* Redesigned the sign-in and account creation screens with a refreshed visual style
-* Reorganized page layout and navigation so key sections are easier to find
-* Added two-way email support — the system can now send and receive notification emails
-* Introduced archiving for both requests and issues, alongside a refreshed request UI
-* Improved data handling and control across stored records
-* Added a self-service Edit Profile option, letting users update their own name, email, username, role title, and password
-* Added configurable preset tags for change requests, managed from Settings
-* Reworked request status controls — decisions now lock in once made, with dedicated status options for In Progress, Implemented, or Rejected and an optional close-thread action
-* Archived issues are now automatically unpinned and closed to further comments, and archiving redirects back to the Issues & Fixes Log
-
-#### Bug Fixes
-
-* Fixed intermittent email delivery issues
-* Fixed an issue where an already-accepted request could be accepted again
-
-### 1.5.0
+### 1.5.1 (date needs verification — see note below)
 
 #### Features
 
-* Reworked the export/import flow for more reliable data portability
-
-### 1.4.0
-
-#### Features
-
-* Added bulk actions for managing multiple requests at once
-* Reworked guest account handling
-* Reworked user information management
-* Reworked the status update interface
-* Reworked password and username requirements
-* Added multi-device session support
-* Added the ability to close and delete threads
-
-### 1.3.7
-
-#### Bug Fixes
-
-* Resolved a number of stability and reliability issues across the system
-
-### 1.3.6
-
-#### Bug Fixes
-
-* Activity log entries now persist to the server and capture all manual actions
-
-### 1.3.5
-
-#### Bug Fixes
-
-* Removed a duplicate authentication error popup; login errors now surface inline only
-
-### 1.3.4
-
-#### Bug Fixes
-
-* Fixed a cross-tab session bleed issue by switching session identity to sessionStorage
-
-### 1.3.3
-
-#### Bug Fixes
-
-* Fixed redirect behavior so a status change returns you to the Pending Review view
-
-### 1.3.0
-
-#### Features
-
-* Added a manual approval workflow for new guest sign-ups, with options to approve and assign a role or deny and remove the account
-
-### 1.2.0
-
-#### Bug Fixes
-
-* Fixed an issue where multiple logins from the same device would force users into a single account
-
-### Initial Release
-
-* Initial system architecture laid out
+- Redesigned the sign-in and account creation screens with a refreshed visual style
+- Reorganized page layout and navigation so key sections are easier to find
+- Added two-way email support — the system can now send and receive notification
