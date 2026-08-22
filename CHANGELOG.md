@@ -1,6 +1,42 @@
 # Changelog
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+
+### 1.13.0 (2026-08-21)
+
+#### Features
+
+- Reworked all settings and consolidated them into a single **Settings** page
+- Reworked the main dashboard and added:
+  - Online staff
+  - Chat, with chats retained for **48 hours**
+  - System messages for administrator announcements or notes about disabled features
+  - Server status
+  - Quick actions
+- Added the ability to change your status:
+  - Online
+  - Do Not Disturb
+  - Idle
+- Added the ability to archive draft changelogs
+- Added an **Archived** tab to view all archived items
+- Added the ability for users to upload profile pictures
+
+### 1.13.1 (2026-08-20)
+
+#### Features
+
+- Added an automated system report showing:
+  - Recent activity from activity logs
+  - Pending accounts
+  - Active issues
+  - Escalated requests
+  - Reviews overview
+- Added the ability to generate system reports **on demand**
+- Added scheduled report generation with:
+  - Daily scheduling
+  - Weekly scheduling
+  - Configurable generation time
+
 ### 1.12.0 (2026-08-19)
 
 #### Features
