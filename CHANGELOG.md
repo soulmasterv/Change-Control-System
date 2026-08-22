@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.13.2 (2026-08-22)
+
+#### Fixes
+
+- Fixed a scrolling issue on the main dashboard
+- Re-added mobile support after it was removed during the UI updates
+- Fixed an error affecting multiple-device logins
+
+#### Changes
+
+- Activity logs now display **50 entries per page**
 
 ### 1.13.1 (2026-08-21)
 
