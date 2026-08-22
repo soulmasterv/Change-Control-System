@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="/logo.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 :root{--font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--surface-0:#121212;--surface-1:#1e1e1e;--surface-2:#252525;--border:#333333;--border-strong:#4d4d4d;--text-primary:#e0e0e0;--text-secondary:#a0a0a0;--text-muted:#707070;--radius:6px}
 body{font-family:var(--font-sans);background:var(--surface-1);color:var(--text-primary);overflow-x:hidden}
 .login-screen{position:relative;min-height:100vh;width:100%;background:#0b0f22;display:flex;align-items:center;justify-content:center;z-index:1000;font-family:'Inter',var(--font-sans)}
@@ -58,7 +59,7 @@ body{font-family:var(--font-sans);background:var(--surface-1);color:var(--text-p
 .lg-footer-link a:hover{text-decoration:underline}
 .lg-below{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#8f9bc4;letter-spacing:0.03em;text-shadow:0 1px 8px rgba(0,0,0,0.4)}
 .lg-below .sep{opacity:0.4}
-.app{display:flex;min-height:100vh;background:var(--surface-0)}
+.app{display:flex;height:100vh;background:var(--surface-0)}
 .sidebar{width:220px;background:#0f172a;color:#fff;padding:0;flex-shrink:0;border-right:1px solid var(--border)}
 .sidebar-logo{padding:16px;font-size:14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:8px}
 .sidebar-nav a{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:13px;color:rgba(255,255,255,0.75);cursor:pointer;text-decoration:none}
@@ -68,7 +69,7 @@ body{font-family:var(--font-sans);background:var(--surface-1);color:var(--text-p
 .topbar{background:var(--surface-1);border-bottom:1px solid var(--border);padding:0 24px;padding-top:env(safe-area-inset-top);height:calc(56px + env(safe-area-inset-top));box-sizing:border-box;display:flex;align-items:center;justify-content:space-between}
 .topbar-left{font-size:14px;color:var(--text-secondary)}
 .topbar-left span{color:var(--text-primary);font-weight:600}
-.user-menu{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text-secondary)}
+.top-profile-wrap{position:relative;display:flex;align-items:center}.top-user-chip{cursor:pointer}.top-user-chip-chevron{font-size:13px;color:var(--text-secondary);margin-left:2px}.top-profile-menu{position:absolute;right:0;top:calc(100% + 6px);min-width:150px;padding:5px;background:var(--surface-1);border:1px solid var(--border);border-radius:9px;box-shadow:0 12px 28px rgba(0,0,0,.45);z-index:3000;display:none}.top-profile-menu.open{display:block}.top-profile-menu button{display:block;width:100%;border:0;background:transparent;color:var(--text-primary);text-align:left;padding:9px 10px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer}.top-profile-menu button:hover{background:var(--surface-2)}.top-profile-menu button.danger{color:#f87171}.user-menu{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary)}.top-user-chip{display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text-primary);white-space:nowrap}.top-user-chip-avatar{width:26px;height:26px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#2563eb;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}.top-user-chip-avatar img{width:100%;height:100%;object-fit:cover;display:block}.top-user-chip-name{font-size:12px;font-weight:600}
 .btn-primary{background:#2563eb;color:#fff;border:none;padding:8px 16px;border-radius:var(--radius);font-size:13px;cursor:pointer;font-weight:500}
 .btn-primary:disabled{background:#4b5563;color:#9ca3af;cursor:not-allowed}
 .btn-primary.btn-closed-look{background:#4b5563;color:#9ca3af}
@@ -83,15 +84,18 @@ body{font-family:var(--font-sans);background:var(--surface-1);color:var(--text-p
 .btn-danger{background:#dc2626;color:#fff;border:none;padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer}
 .btn-danger:hover{background:#b91c1c}
 .btn-ghost{background:transparent;border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 16px;border-radius:var(--radius);font-size:13px;cursor:pointer}
+.pager-arrow-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:6px;color:var(--text-secondary);cursor:pointer;padding:0}
+.pager-arrow-btn:hover:not(:disabled){background:var(--surface-2);color:var(--text-primary)}
+.pager-arrow-btn:disabled{opacity:0.4;cursor:default}
 .btn-ghost:hover{background:var(--surface-2)}
-.content{padding:24px;flex:1;overflow-y:auto;background:var(--surface-0);scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
+.content{padding:24px;box-sizing:border-box;flex:1;overflow-y:auto;background:var(--surface-0);scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
 .content::-webkit-scrollbar{width:8px}
 .content::-webkit-scrollbar-track{background:transparent}
 .content::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:8px}
 .content::-webkit-scrollbar-thumb:hover{background:var(--text-secondary)}
 .content::-webkit-scrollbar-button{display:none;width:0;height:0}
 .page{display:none}
-.page.active{display:block}
+.page.active{display:block;height:100%}
 .cr-detail{display:grid;grid-template-columns:1fr 300px;gap:24px}
 .cr-detail.staff-view{display:block}
 .cr-form-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
@@ -119,7 +123,7 @@ input[type=checkbox]:checked::after{content:'';position:absolute;left:5px;top:2p
 .status-closed{background:#27272a;color:#a1a1aa}
 .status-archived{background:#334155;color:#94a3b8}
 .pinned-tag{background:#d97706;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;margin-left:6px;vertical-align:middle}
-/* Colored tag chips */
+
 .request-tags{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:7px}
 .request-tag{display:inline-flex;align-items:center;white-space:nowrap;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:600;line-height:1.25;border:1px solid transparent}
 
@@ -161,10 +165,7 @@ input[type=checkbox]:checked::after{content:'';position:absolute;left:5px;top:2p
 .linked-cr-picker label:hover{background:var(--surface-1)}
 .linked-cr-picker input[type="checkbox"]{width:auto;flex-shrink:0}
 .linked-cr-picker .empty-note{font-size:12px;color:var(--text-muted);padding:6px 4px}
-/* Blocking "Signed Out" overlay: sits above every other modal, covers the
-   full viewport including the login screen behind it, and cannot be
-   dismissed until the JS-driven countdown in showSignedOutOverlay()
-   re-enables the button. */
+
 .signed-out-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:5000;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
 .signed-out-overlay.open{display:flex}
 .signed-out-box{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;width:100%;max-width:380px;padding:28px;text-align:center;box-shadow:0 24px 48px -12px rgba(0,0,0,0.7)}
@@ -180,7 +181,7 @@ input[type=checkbox]:checked::after{content:'';position:absolute;left:5px;top:2p
 .user-table th{color:var(--text-secondary);font-weight:600}
 .user-table th:nth-child(1){width:15%}.user-table th:nth-child(2){width:22%}.user-table th:nth-child(3){width:23%}.user-table th:nth-child(4){width:12%}.user-table th:nth-child(5){width:12%}.user-table th:nth-child(6){width:10%}.user-table th:nth-child(7){width:6%}
 .user-table td:nth-child(2){white-space:normal}
-.impersonation-banner{display:none;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;background:#3a2a05;border-bottom:1px solid #8a6410;color:#fef3c7;font-size:12px;z-index:50}.impersonation-banner strong{display:block;color:#fff;font-size:13px}.impersonation-banner span{display:block;color:#fde68a;margin-top:2px}.impersonation-banner .imp-back-btn{flex:0 0 auto;padding:6px 12px;border:1px solid #d97706;background:#92400e;color:#fff7ed;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}.impersonation-banner .imp-back-btn:hover{background:#b45309}
+.force-login-banner{display:none;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;background:#3a2a05;border-bottom:1px solid #8a6410;color:#fef3c7;font-size:12px;z-index:50}.force-login-banner strong{display:block;color:#fff;font-size:13px}.force-login-banner span{display:block;color:#fde68a;margin-top:2px}.force-login-banner .imp-back-btn{flex:0 0 auto;padding:6px 12px;border:1px solid #d97706;background:#92400e;color:#fff7ed;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}.force-login-banner .imp-back-btn:hover{background:#b45309}
 .pass-toggle{cursor:pointer;color:#60a5fa;font-size:12px;margin-left:6px;user-select:none}
 .action-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .user-menu-item{display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text-primary);font-size:13px;cursor:pointer;font-family:inherit}
@@ -191,32 +192,10 @@ input[type=checkbox]:checked::after{content:'';position:absolute;left:5px;top:2p
 .issue-card{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,0.1);cursor:pointer}
 .issue-card:hover{border-color:#2563eb;background:var(--surface-2)}
 
+.dashboard-home .dashboard-card,.dashboard-main-grid .dashboard-card,.dashboard-bottom-grid .dashboard-card{background:var(--surface-1)!important;color:var(--text-primary)!important;border-color:var(--border)!important}.dashboard-bottom-grid{background:transparent!important}.dashboard-bottom-grid .quick-action{background:var(--surface-2)!important;color:var(--text-primary)!important}.dashboard-bottom-grid #dashboard-updates-list{background:transparent!important;color:var(--text-primary)!important}
 
+.dashboard-home{max-width:1120px;margin:0 auto;height:100%;min-height:0;overflow:hidden;display:flex;flex-direction:column}.dashboard-home>.dashboard-welcome{flex-shrink:0}.dashboard-home>.dashboard-system-messages{flex-shrink:0;max-height:154px;overflow:hidden}.dashboard-home>.dashboard-status-card{flex-shrink:0}.dashboard-home>.dashboard-main-grid{flex:0 0 250px}.dashboard-home>.dashboard-bottom-grid{flex:1 1 auto;min-height:174px}.dashboard-home>.dashboard-bottom-grid .dashboard-card{min-height:0;overflow:visible}.content:has(#page-dashboard.active){overflow-y:hidden}.dashboard-home>.dashboard-bottom-grid .dashboard-card{padding:14px}.dashboard-home>.dashboard-bottom-grid .dashboard-card-header{margin-bottom:12px}.dashboard-welcome{margin-bottom:14px}.dashboard-system-messages{border:1px solid var(--border);background:var(--surface-1);border-radius:10px;padding:12px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.2)}.dashboard-system-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.dashboard-system-title strong{font-size:13px;color:var(--text-primary)}.dashboard-system-title span{font-size:10px;color:var(--text-secondary)}.system-message-list{display:flex;flex-direction:column;gap:6px}.system-message-row{display:grid;grid-template-columns:190px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid #d97706;background:rgba(120,53,15,.14);border-radius:7px}.system-message-row strong{font-size:11px;color:var(--text-primary)}.system-message-row span{font-size:11px;color:#e5e7eb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.system-message-row small{font-size:10px;color:var(--text-secondary)}.dashboard-status-card{margin-bottom:14px}.dashboard-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.dashboard-status-item{display:flex;justify-content:space-between;align-items:center;padding:9px 11px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px}.dashboard-status-item strong{font-size:11px}.dashboard-status-item span{font-size:10px;font-weight:700}.dashboard-status-item .ok{color:#6ee7b7}.dashboard-status-item .bad{color:#f87171}.dashboard-status-item .warn{color:#fbbf24}.dashboard-welcome h1{margin:0 0 5px;font-size:24px;font-weight:600;color:var(--text-primary)}.dashboard-welcome p{margin:0;font-size:13px;color:var(--text-secondary)}.dashboard-main-grid,.dashboard-bottom-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:12px;margin-bottom:12px;min-height:0}.dashboard-bottom-grid{grid-template-columns:1fr 1fr;margin-bottom:0;min-height:0}.dashboard-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.2)}.dashboard-card-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.dashboard-card-title{font-size:15px;font-weight:600;color:var(--text-primary)}.dashboard-card-subtitle{font-size:11px;color:var(--text-secondary);margin-top:3px}.online-staff-list{display:flex;flex-direction:column;gap:8px}.online-staff-member{display:flex;align-items:center;gap:11px;padding:10px;background:var(--surface-2);border:1px solid transparent;border-radius:8px}.online-staff-member:hover{border-color:var(--border-strong)}.staff-avatar,.chat-message-avatar{display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}.staff-avatar{width:38px;height:38px;border-radius:8px;background:#2563eb;color:#fff;font-size:13px}.staff-details{min-width:0;flex:1}.staff-username{color:var(--text-primary);font-size:13px;font-weight:600}.staff-role{margin-top:2px;color:var(--text-secondary);font-size:11px}.staff-online{display:flex;align-items:center;gap:6px;font-size:10px;color:#6ee7b7}.online-dot,.presence-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.5);flex-shrink:0}.presence-dot.idle{background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.45)}.presence-dot.dnd{background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,.45)}.presence-dot.offline{background:#6b7280;box-shadow:none}.staff-presence{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600}.staff-presence.online{color:#6ee7b7}.staff-presence.idle{color:#fbbf24}.staff-presence.dnd{color:#f87171}.staff-presence.offline{color:var(--text-secondary)}.chat-title-row{display:flex;align-items:center;gap:8px}.unread-badge{display:none;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:700;line-height:18px;text-align:center}.unread-badge.show{display:inline-block}.nav-unread-badge{display:none;margin-left:auto;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:700;line-height:18px;text-align:center}.nav-unread-badge.show{display:inline-block}.staff-chat{display:flex;flex-direction:column;height:248px;padding:0;overflow:hidden}.staff-chat-header{padding:18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}.chat-messages{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:14px}.chat-message{display:flex;gap:9px}.chat-message-avatar{width:30px;height:30px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-secondary);font-size:10px;overflow:hidden}.chat-message-avatar img{width:100%;height:100%;object-fit:cover;display:block}.chat-message-body{min-width:0;flex:1}.chat-message-meta{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}.chat-message-name{color:var(--text-primary);font-size:12px;font-weight:600}.chat-message-time{color:var(--text-secondary);font-size:10px}.chat-message-text{color:var(--text-secondary);font-size:12px;line-height:1.45}.chat-input-area{display:flex;gap:8px;padding:12px;border-top:1px solid var(--border);background:var(--surface-1)}.chat-input-area input{flex:1;min-width:0}.chat-send-btn{padding:8px 14px;flex-shrink:0}.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.quick-action{display:flex;align-items:center;gap:10px;padding:10px;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s}.quick-action:hover{background:var(--surface-1);border-color:#2563eb}.quick-action-icon{width:30px;height:30px;border-radius:7px;background:rgba(37,99,235,.15);color:#60a5fa;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}.quick-action-name{font-size:12px;font-weight:600}.quick-action-desc{font-size:10px;color:var(--text-secondary);margin-top:2px}.dashboard-feed-item{padding:12px 0;border-bottom:1px solid var(--border)}.dashboard-feed-item:last-child{border-bottom:none;padding-bottom:0}.dashboard-feed-title{color:var(--text-primary);font-size:12px;font-weight:500}.dashboard-feed-meta{margin-top:4px;color:var(--text-secondary);font-size:10px}.online-staff-member.self{border-color:#2563eb;background:rgba(37,99,235,.10);box-shadow:0 0 0 1px rgba(37,99,235,.12)}.online-staff-member.self .staff-avatar{background:#60a5fa;box-shadow:0 0 0 3px rgba(37,99,235,.14)}.self-label{font-size:10px;color:#93c5fd;margin-left:6px}.staff-avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}.online-staff-member.self{border-color:#2563eb}.online-staff-member.self .staff-role{color:#93c5fd}.changelog-action-btn{min-width:72px;height:32px;display:inline-flex;align-items:center;justify-content:center;padding:0 12px}.status-page-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.status-service-list{display:flex;flex-direction:column;gap:10px}.status-service{display:flex;justify-content:space-between;align-items:center;padding:14px 15px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px}.status-service-name{font-size:13px;font-weight:600}.status-service-state{font-size:12px;font-weight:700}.status-service-state.operational{color:#6ee7b7}.status-service-state.warning{color:#fbbf24}.status-service-state.dnd{color:#f87171}@media(max-width:850px){.dashboard-main-grid,.dashboard-bottom-grid,.status-page-grid{grid-template-columns:1fr}.quick-actions{grid-template-columns:1fr}.dashboard-status-grid{grid-template-columns:1fr}.system-message-row{grid-template-columns:1fr;gap:3px}.system-message-row span{white-space:normal}.content:has(#page-dashboard.active){overflow-y:auto}.dashboard-home{overflow:visible;height:auto}.dashboard-home>.dashboard-main-grid{flex:none;min-height:0}.dashboard-home>.dashboard-bottom-grid{flex:none;min-height:0}.dashboard-home>.dashboard-system-messages{max-height:none;overflow:visible}}
 
-/* Server Operations — compact status card matching the dashboard reference UI. */
-.server-operations-page{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:0}
-.server-status-card{width:520px;min-height:300px;box-sizing:border-box;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.server-status-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:16px}
-.server-status-list{display:flex;flex-direction:column;gap:9px}
-.server-status-row{height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 10px;background:var(--surface-2);border:1px solid rgba(255,255,255,.02);border-radius:8px}
-.server-status-name{font-size:12px;color:var(--text-primary);font-weight:500}
-.server-status-state{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;white-space:nowrap}
-.server-status-state.operational{color:#22c55e}.server-status-state.warning{color:#f59e0b}.server-status-state.danger{color:#ef4444}
-.server-status-dot{width:5px;height:5px;border-radius:50%;display:inline-block;background:currentColor}
-.server-controls{width:520px;display:flex;flex-direction:column;gap:12px}
-.server-control-card{box-sizing:border-box;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
-.server-control-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:10px}
-.server-control-check{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text-primary);cursor:pointer;margin:7px 0}
-.server-control-check input{margin:0}
-.server-control-help{font-size:10px;line-height:1.4;color:var(--text-secondary);margin-top:6px}
-.server-simulation-options{margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
-.server-simulation-title{font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:7px}
-@media(max-width:600px){.server-status-card,.server-controls{width:100%}}
-
-/* ===== Dashboard refresh ===== */
-.dashboard-home{max-width:1200px;margin:0 auto}.dashboard-welcome{margin-bottom:22px}.dashboard-welcome h1{margin:0 0 5px;font-size:24px;font-weight:600;color:var(--text-primary)}.dashboard-welcome p{margin:0;font-size:13px;color:var(--text-secondary)}.dashboard-main-grid,.dashboard-bottom-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:18px;margin-bottom:18px}.dashboard-bottom-grid{grid-template-columns:1fr 1fr;margin-bottom:0}.dashboard-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.2)}.dashboard-card-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.dashboard-card-title{font-size:15px;font-weight:600;color:var(--text-primary)}.dashboard-card-subtitle{font-size:11px;color:var(--text-secondary);margin-top:3px}.online-staff-list{display:flex;flex-direction:column;gap:8px}.online-staff-member{display:flex;align-items:center;gap:11px;padding:10px;background:var(--surface-2);border:1px solid transparent;border-radius:8px}.online-staff-member:hover{border-color:var(--border-strong)}.staff-avatar,.chat-message-avatar{display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}.staff-avatar{width:38px;height:38px;border-radius:8px;background:#2563eb;color:#fff;font-size:13px}.staff-details{min-width:0;flex:1}.staff-username{color:var(--text-primary);font-size:13px;font-weight:600}.staff-role{margin-top:2px;color:var(--text-secondary);font-size:11px}.staff-online{display:flex;align-items:center;gap:6px;font-size:10px;color:#6ee7b7}.online-dot,.presence-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.5);flex-shrink:0}.presence-dot.idle{background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.45)}.presence-dot.dnd{background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,.45)}.presence-dot.offline{background:#6b7280;box-shadow:none}.staff-presence{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600}.staff-presence.online{color:#6ee7b7}.staff-presence.idle{color:#fbbf24}.staff-presence.dnd{color:#f87171}.staff-presence.offline{color:var(--text-secondary)}.chat-title-row{display:flex;align-items:center;gap:8px}.unread-badge{display:none;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:700;line-height:18px;text-align:center}.unread-badge.show{display:inline-block}.nav-unread-badge{display:none;margin-left:auto;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:700;line-height:18px;text-align:center}.nav-unread-badge.show{display:inline-block}.staff-chat{display:flex;flex-direction:column;height:350px;padding:0;overflow:hidden}.staff-chat-header{padding:18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}.chat-messages{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:14px}.chat-message{display:flex;gap:9px}.chat-message-avatar{width:28px;height:28px;border-radius:7px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-secondary);font-size:10px}.chat-message-body{min-width:0;flex:1}.chat-message-meta{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}.chat-message-name{color:var(--text-primary);font-size:12px;font-weight:600}.chat-message-time{color:var(--text-secondary);font-size:10px}.chat-message-text{color:var(--text-secondary);font-size:12px;line-height:1.45}.chat-input-area{display:flex;gap:8px;padding:12px;border-top:1px solid var(--border);background:var(--surface-1)}.chat-input-area input{flex:1;min-width:0}.chat-send-btn{padding:8px 14px;flex-shrink:0}.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.quick-action{display:flex;align-items:center;gap:10px;padding:12px;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s}.quick-action:hover{background:var(--surface-1);border-color:#2563eb}.quick-action-icon{width:30px;height:30px;border-radius:7px;background:rgba(37,99,235,.15);color:#60a5fa;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}.quick-action-name{font-size:12px;font-weight:600}.quick-action-desc{font-size:10px;color:var(--text-secondary);margin-top:2px}.dashboard-feed-item{padding:12px 0;border-bottom:1px solid var(--border)}.dashboard-feed-item:last-child{border-bottom:none;padding-bottom:0}.dashboard-feed-title{color:var(--text-primary);font-size:12px;font-weight:500}.dashboard-feed-meta{margin-top:4px;color:var(--text-secondary);font-size:10px}.online-staff-member.self{border-color:#2563eb;background:rgba(37,99,235,.10);box-shadow:0 0 0 1px rgba(37,99,235,.12)}.online-staff-member.self .staff-avatar{background:#60a5fa;box-shadow:0 0 0 3px rgba(37,99,235,.14)}.self-label{font-size:10px;color:#93c5fd;margin-left:6px}.staff-avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}.online-staff-member.self{border-color:#2563eb}.online-staff-member.self .staff-role{color:#93c5fd}.changelog-action-btn{min-width:72px;height:32px;display:inline-flex;align-items:center;justify-content:center;padding:0 12px}.status-page-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.status-service-list{display:flex;flex-direction:column;gap:10px}.status-service{display:flex;justify-content:space-between;align-items:center;padding:14px 15px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px}.status-service-name{font-size:13px;font-weight:600}.status-service-state{font-size:12px;font-weight:700}.status-service-state.operational{color:#6ee7b7}.status-service-state.warning{color:#fbbf24}.status-service-state.dnd{color:#f87171}@media(max-width:850px){.dashboard-main-grid,.dashboard-bottom-grid,.status-page-grid{grid-template-columns:1fr}.quick-actions{grid-template-columns:1fr}}
-
-/* ===== Mobile / responsive layer ===== */
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .mobile-menu-btn{display:none;background:none;border:1px solid var(--border);color:var(--text-primary);border-radius:6px;width:34px;height:34px;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0}
 .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1499}
@@ -257,6 +236,16 @@ input[type=checkbox]:checked::after{content:'';position:absolute;left:5px;top:2p
   .filter-row select{flex:1 1 auto;min-width:0}
   .filter-row label{flex-basis:100%}
   #bulk-select-all-row{flex-wrap:wrap}
+  [style*="justify-content:space-between"]{flex-wrap:wrap;row-gap:8px}
+  .top-user-chip-name{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .section-title{overflow-wrap:break-word}
+  .dashboard-welcome h1{font-size:20px;overflow-wrap:break-word}
+  .modal-title,.cr-title{overflow-wrap:break-word}
+  .user-table th,.user-table td{white-space:nowrap}
+  .quick-action{padding:10px}
+  .quick-action-name{font-size:11.5px}
+  .quick-action-desc{font-size:9.5px}
+  .top-profile-menu{right:auto;left:0}
 }
 
 @media (max-width:480px){
@@ -415,30 +404,29 @@ if (sessionStorage.getItem('ccms-user')) {
         <div id="breadcrumb">Dashboard</div>
       </div>
       <div class="user-menu">
-        <span id="logged-user-display">Admin</span>
-        <button class="btn-ghost" onclick="openMyProfileModal()" style="padding:5px 10px;font-size:12px">Edit Profile</button>
-        <button class="btn-ghost" onclick="handleLogout()" style="padding:5px 10px;font-size:12px">Logout</button>
+        <div class="top-profile-wrap" id="top-profile-wrap"><button class="top-user-chip" id="top-user-chip" onclick="toggleTopProfileMenu(event)" aria-haspopup="true" aria-expanded="false"><div class="top-user-chip-avatar" id="top-user-avatar">A</div><span class="top-user-chip-name" id="logged-user-display">Admin</span><span class="top-user-chip-chevron">⌄</span></button><div class="top-profile-menu" id="top-profile-menu"><button onclick="openMyProfileModal();closeTopProfileMenu()">Edit Profile</button><button onclick="handleLogout()" class="danger">Log Out</button></div></div>
         <button class="btn-primary" id="new-cr-top-btn" onclick="openNewCR()">+ New change request</button>
       </div>
     </div>
-    <div class="impersonation-banner" id="impersonation-banner"></div>
+    <div class="force-login-banner" id="force-login-banner"></div>
 
     <div class="content">
       <div class="page active" id="page-dashboard">
         <div class="dashboard-home">
           <div class="dashboard-welcome"><h1>Welcome back, <span id="dashboard-welcome-user">Staff</span></h1><p>Stay connected with your team and keep up with the latest updates.</p></div>
+          <div class="dashboard-system-messages" id="dashboard-system-messages"></div>
+          <div class="dashboard-card dashboard-status-card"><div class="dashboard-card-header"><div><div class="dashboard-card-title">System Status</div><div class="dashboard-card-subtitle">Live service health</div></div><span id="dashboard-status-live" style="font-size:10px;color:#6ee7b7">Live</span></div><div class="dashboard-status-grid" id="dashboard-status-grid"></div></div>
           <div class="dashboard-main-grid">
             <div class="dashboard-card"><div class="dashboard-card-header"><div><div class="dashboard-card-title">Online Staff</div><div class="dashboard-card-subtitle" id="online-staff-count">Loading...</div></div></div><div class="online-staff-list" id="online-staff-list"></div></div>
             <div class="dashboard-card staff-chat"><div class="staff-chat-header"><div><div class="chat-title-row"><div class="dashboard-card-title">Staff Chat</div><span class="unread-badge" id="staff-chat-unread-badge">0</span></div><div class="dashboard-card-subtitle">Team conversation</div></div><div class="staff-online" id="chat-online-count"><span class="online-dot"></span>0 online</div></div><div class="chat-messages" id="staff-chat-messages"></div><div class="chat-input-area"><input id="staff-chat-input" type="text" placeholder="Message staff..." onkeydown="if(event.key==='Enter')sendStaffChatMessage()"><button class="btn-primary chat-send-btn" onclick="sendStaffChatMessage()">Send</button></div></div>
           </div>
-          <div class="dashboard-bottom-grid">
+          <div class="dashboard-bottom-grid" style="grid-template-columns:1fr">
             <div class="dashboard-card"><div class="dashboard-card-header"><div><div class="dashboard-card-title">Quick Actions</div><div class="dashboard-card-subtitle">Jump where you need to go</div></div></div><div class="quick-actions">
               <button class="quick-action" onclick="showPage('requests',null)"><div class="quick-action-icon">▣</div><div><div class="quick-action-name">Requests</div><div class="quick-action-desc">View all requests</div></div></button>
               <button class="quick-action" onclick="showPage('issues',null)"><div class="quick-action-icon">!</div><div><div class="quick-action-name">Issues &amp; Fixes</div><div class="quick-action-desc">View reported issues</div></div></button>
               <button class="quick-action" onclick="showPage('changelog',null)"><div class="quick-action-icon">↻</div><div><div class="quick-action-name">Change Log</div><div class="quick-action-desc">See latest updates</div></div></button>
               <button class="quick-action" onclick="showPage('status',null)"><div class="quick-action-icon">●</div><div><div class="quick-action-name">Server Operations</div><div class="quick-action-desc">View server availability</div></div></button>
             </div></div>
-            <div class="dashboard-card"><div class="dashboard-card-header"><div><div class="dashboard-card-title">Latest Updates</div><div class="dashboard-card-subtitle">Recent changes and fixes</div></div></div><div id="dashboard-updates-list"></div></div>
           </div>
         </div>
       </div>
@@ -469,84 +457,7 @@ if (sessionStorage.getItem('ccms-user')) {
           </div>
         </div>
 
-        <div id="request-settings-section" style="margin-top:32px">
-          <div class="section-title" style="margin-top:28px">Request Settings</div>
 
-          <div class="cr-form-card" style="border-color:#059669;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div style="font-size:13px;color:var(--text-primary);font-weight:600;margin-bottom:4px">Accepting requests</div>
-              <div style="font-size:11px;color:var(--text-muted)">When off, staff and guests can't submit new change requests. Admins can always submit.</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span id="req-accepting-badge" style="font-size:11px;font-weight:600">OPEN</span>
-              <label class="toggle-switch">
-                <input type="checkbox" id="req-accepting-toggle" checked onchange="handleAcceptingRequestsToggle(this)">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div id="req-accepting-note" style="display:none;margin-top:12px;font-size:11px;color:#fde68a;background:#3f2d12;border:1px solid #92400e;border-radius:6px;padding:8px 10px"></div>
-            <div style="margin-top:12px">
-              <span id="req-accepting-save-status" style="font-size:11px;color:var(--text-muted)"></span>
-            </div>
-          </div>
-
-          <div class="cr-form-card" style="margin-bottom:16px">
-            <div class="field-label" style="margin-bottom:4px">Default notifications on new requests</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Applied automatically unless someone changes it on a specific request.</div>
-            <div style="display:flex;gap:24px">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
-                <span class="toggle-switch"><input type="checkbox" id="req-default-email" checked onchange="autoSaveRequestNotificationSettings()"><span class="toggle-slider"></span></span>
-                Email
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
-                <span class="toggle-switch"><input type="checkbox" id="req-default-discord" checked onchange="autoSaveRequestNotificationSettings()"><span class="toggle-slider"></span></span>
-                Discord
-              </label>
-            </div>
-            <div id="req-notification-save-status" style="margin-top:10px;font-size:11px;color:var(--text-muted)"></div>
-          </div>
-
-          <div class="cr-form-card" style="margin-bottom:16px">
-            <div class="field-label" style="margin-bottom:4px">Per-employee submission cooldown</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Limits how often a single staff member can submit a new request. Admins are exempt.</div>
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
-                <span class="toggle-switch"><input type="checkbox" id="req-cooldown-enabled"><span class="toggle-slider"></span></span>
-                Enabled
-              </label>
-              <span style="color:var(--text-muted);font-size:12px">&middot;</span>
-              <span style="color:var(--text-secondary);font-size:12px">Max</span>
-              <input type="number" id="req-cooldown-max" value="3" min="1" style="width:60px;padding:6px 10px">
-              <span style="color:var(--text-secondary);font-size:12px">requests per</span>
-              <input type="number" id="req-cooldown-hours" value="24" min="1" style="width:60px;padding:6px 10px">
-              <span style="color:var(--text-secondary);font-size:12px">hours</span>
-            </div>
-            <div style="margin-top:12px">
-              <button class="btn-primary" id="save-cooldown-settings-btn" onclick="saveRequestSettings('cooldown')">Save Per-Employee Setting</button>
-              <span id="req-cooldown-save-status" style="font-size:11px;color:var(--text-muted);margin-left:8px"></span>
-            </div>
-          </div>
-
-          <div class="cr-form-card" style="margin-bottom:20px">
-            <div class="field-label" style="margin-bottom:4px">Auto-close stale requests</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">If a request sits in pending review with no status change, automatically reject and close the thread.</div>
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
-                <span class="toggle-switch"><input type="checkbox" id="req-autoclose-enabled"><span class="toggle-slider"></span></span>
-                Enabled
-              </label>
-              <span style="color:var(--text-muted);font-size:12px">&middot;</span>
-              <span style="color:var(--text-secondary);font-size:12px">After</span>
-              <input type="number" id="req-autoclose-days" value="14" min="1" style="width:60px;padding:6px 10px">
-              <span style="color:var(--text-secondary);font-size:12px">days with no status change</span>
-            </div>
-            <div style="margin-top:10px;font-size:11px;color:#fdba74;background:#78350f;border:1px solid #b45309;border-radius:6px;padding:8px 10px">Off by default &mdash; this automatically rejects real pending work, so test it on a low-traffic period first.</div>
-            <div style="margin-top:12px">
-              <button class="btn-primary" id="save-autoclose-settings-btn" onclick="saveRequestSettings('autoclose')">Save Auto-Close Setting</button>
-              <span id="req-autoclose-save-status" style="font-size:11px;color:var(--text-muted);margin-left:8px"></span>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="page" id="page-requests-status">
@@ -674,18 +585,22 @@ if (sessionStorage.getItem('ccms-user')) {
               <input type="checkbox" id="changelog-published" checked style="width:auto">
               <label for="changelog-published" style="font-size:13px;color:var(--text-secondary)">Published (visible to everyone, announced on Discord/email, linked requests auto-implemented)</label>
             </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:-6px">Drafts stay private to staff until published or archived.</div>
           </div>
           <button class="btn-primary" id="changelog-submit-btn" onclick="submitServerChangelog()">Add Change Log Entry</button>
           <div id="changelog-restricted-note" style="display:none;font-size:13px;color:var(--text-muted)">You don't have permission to add change log entries.</div>
           <div style="margin-top:24px" id="changelog-history-list"></div>
+        <div style="margin-top:24px" id="changelog-archived-drafts-list"></div>
         </div>
       </div>
 
       <div class="page" id="page-settings">
-        <div class="section-title">System Notification Settings</div>
+        <div class="section-title">Dashboard Settings</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin:-8px 0 20px">Centralized controls for notifications, submissions, announcements, reports, and dashboard behavior.</div>
+        <div class="section-title" style="margin-top:0">System Notification Settings</div>
         <div class="cr-form-card">
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:20px">
-            Configure mail services and Discord webhooks for notifications. Requests are rate-limited with a 30-second cooldown to prevent flooding.
+            Configure mail services and Discord webhooks for notifications.
           </div>
           <div class="field-group">
             <div class="field-label">System Notification Email Address</div>
@@ -703,6 +618,105 @@ if (sessionStorage.getItem('ccms-user')) {
           <div style="margin-top:20px; display:flex; gap:12px; align-items:center;">
             <button class="btn-primary" id="save-settings-btn" onclick="saveNotificationSettings()" title="">Save Configuration</button>
             <span id="cooldown-timer" style="font-size:12px;color:#f87171;"></span>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:28px">System Messages</div>
+        <div class="cr-form-card" style="border-color:#d97706;background:linear-gradient(135deg,rgba(120,53,15,.18),var(--surface-1));margin-bottom:20px">
+          <div style="font-size:13px;color:#fbbf24;font-weight:700;margin-bottom:5px">Admin Announcement</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">This appears at the top of the dashboard for everyone.</div>
+          <div class="field-group"><div class="field-label">Announcement text</div><textarea id="cfg-admin-announcement" placeholder="Write an announcement..."></textarea></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="field-group"><div class="field-label">Requests disabled note</div><input type="text" id="cfg-requests-disabled-note" placeholder="Request submissions are currently disabled."></div>
+            <div class="field-group"><div class="field-label">Issues disabled note</div><input type="text" id="cfg-issues-disabled-note" placeholder="Issue submissions are currently disabled."></div>
+            <div class="field-group"><div class="field-label">Change Log disabled note</div><input type="text" id="cfg-changelog-disabled-note" placeholder="Change Log submissions are currently disabled."></div>
+          </div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap;margin:4px 0 14px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px"><input type="checkbox" id="cfg-requests-disabled"> Disable Requests</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px"><input type="checkbox" id="cfg-issues-disabled"> Disable Issue Submissions</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px"><input type="checkbox" id="cfg-changelog-disabled"> Disable Change Log Submissions</label>
+          </div>
+          <button class="btn-warning" onclick="saveSystemMessagesSettings()">Save System Messages</button>
+          <span id="system-messages-save-status" style="font-size:11px;color:var(--text-muted);margin-left:8px"></span>
+        </div>
+
+        <div class="section-title" style="margin-top:28px">Change Log Drafts</div>
+        <div class="cr-form-card" style="margin-bottom:20px">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:14px">Keep unfinished change log entries private and automatically archive drafts that have been sitting too long. Manual archive is always available from the Change Log page.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px">
+            <div><div class="field-label" style="margin-bottom:3px">Automatically archive old drafts</div><div style="font-size:11px;color:var(--text-muted)">Only unpublished drafts are affected. Published entries are never auto-archived.</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="cfg-changelog-auto-archive-enabled"><span class="toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="field-label" style="margin:0">Archive drafts after</span>
+            <input type="number" id="cfg-changelog-auto-archive-days" min="1" max="3650" value="30" style="width:100px">
+            <span style="font-size:12px;color:var(--text-secondary)">days</span>
+            <button class="btn-primary" onclick="saveChangelogArchiveSettings()">Save Draft Archive Settings</button>
+          </div>
+          <div id="changelog-auto-archive-status" style="font-size:11px;color:var(--text-muted);margin-top:10px"></div>
+        </div>
+
+        <div class="section-title" style="margin-top:28px">Automated Status Reports</div>
+        <div class="cr-form-card" style="border-color:#2563eb;margin-bottom:20px">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:14px">Send the same System Status Report automatically by Email and/or Discord. Default interval: 6 hours.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px">
+            <div><div class="field-label" style="margin-bottom:3px">Enable automated status reports</div><div style="font-size:11px;color:var(--text-muted)">The server schedules this independently of the browser.</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="cfg-status-report-enabled"><span class="toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <span class="field-label" style="margin:0">Every</span>
+            <input type="number" id="cfg-status-report-interval" min="1" max="43200" value="360" style="width:100px">
+            <span style="font-size:12px;color:var(--text-secondary)">minutes</span>
+            <span id="status-report-interval-preview" style="font-size:11px;color:var(--text-muted)"></span>
+          </div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px"><input type="checkbox" id="cfg-status-report-email"> Email</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px"><input type="checkbox" id="cfg-status-report-discord"> Discord</label>
+          </div>
+          <div id="status-report-next-info" style="font-size:11px;color:var(--text-muted);margin-bottom:14px"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn-primary" onclick="saveStatusReportSettings()">Save Report Settings</button>
+            <button class="btn-secondary" onclick="sendStatusReportNow(this)">Send Status Report Now</button>
+          </div>
+        </div>
+
+        <div id="request-settings-section" style="margin-top:32px">
+          <div class="section-title" style="margin-top:28px">Request & Submission Settings</div>
+
+          <div class="cr-form-card" style="margin-bottom:16px">
+            <div class="field-label" style="margin-bottom:4px">Default notifications on new requests</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Applied automatically unless someone changes it on a specific request.</div>
+            <div style="display:flex;gap:24px">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
+                <span class="toggle-switch"><input type="checkbox" id="req-default-email" checked onchange="autoSaveRequestNotificationSettings()"><span class="toggle-slider"></span></span>
+                Email
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
+                <span class="toggle-switch"><input type="checkbox" id="req-default-discord" checked onchange="autoSaveRequestNotificationSettings()"><span class="toggle-slider"></span></span>
+                Discord
+              </label>
+            </div>
+            <div id="req-notification-save-status" style="margin-top:10px;font-size:11px;color:var(--text-muted)"></div>
+          </div>
+
+          <div class="cr-form-card" style="margin-bottom:20px">
+            <div class="field-label" style="margin-bottom:4px">Auto-close stale requests</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px">If a request sits in pending review with no status change, automatically reject and close the thread.</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-primary);cursor:pointer">
+                <span class="toggle-switch"><input type="checkbox" id="req-autoclose-enabled"><span class="toggle-slider"></span></span>
+                Enabled
+              </label>
+              <span style="color:var(--text-muted);font-size:12px">&middot;</span>
+              <span style="color:var(--text-secondary);font-size:12px">After</span>
+              <input type="number" id="req-autoclose-days" value="14" min="1" style="width:60px;padding:6px 10px">
+              <span style="color:var(--text-secondary);font-size:12px">days with no status change</span>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:#fdba74;background:#78350f;border:1px solid #b45309;border-radius:6px;padding:8px 10px">Off by default &mdash; this automatically rejects real pending work, so test it on a low-traffic period first.</div>
+            <div style="margin-top:12px">
+              <button class="btn-primary" id="save-autoclose-settings-btn" onclick="saveRequestSettings('autoclose')">Save Auto-Close Setting</button>
+              <span id="req-autoclose-save-status" style="font-size:11px;color:var(--text-muted);margin-left:8px"></span>
+            </div>
           </div>
         </div>
 
@@ -782,6 +796,11 @@ if (sessionStorage.getItem('ccms-user')) {
             </div>
           </div>
           <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)">
+            <div class="field-label" style="margin-bottom:8px">Staff Chat</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Permanently remove the staff chat history. This only affects the shared staff chat.</div>
+            <button class="btn-danger" onclick="purgeStaffChat()">Purge Staff Chat</button>
+          </div>
+          <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)">
             <div class="field-label" style="margin-bottom:8px">Archived Records</div>
             <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Permanently remove requests and issues that have already been archived. This does not affect active records.</div>
             <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -801,6 +820,7 @@ if (sessionStorage.getItem('ccms-user')) {
       <div class="page" id="page-activity">
         <div class="section-title">Activity Log</div>
         <div id="activity-log-list"></div>
+        <div id="activity-log-pagination" style="display:flex;justify-content:center;align-items:center;gap:12px;margin-top:16px"></div>
       </div>
 
       <div class="page" id="page-detail">
@@ -1302,7 +1322,7 @@ let issues = [];
 let serverChanges = [];
 let activityLog = [];
 let presetTags = [];
-let presetTagColors = {}; // { tagName: paletteColorKey } — explicit color assignments for preset tags, like Discord role colors
+let presetTagColors = {}; 
 let ncSelectedTags = [];
 let ecrSelectedTags = [];
 let currentFilter = '';
@@ -1316,9 +1336,9 @@ let currentUser = 'Admin';
 let userRole = 'admin';
 let currentUsernameHandle = 'admin';
 
-function getImpersonationContext() {
+function getForceLoginContext() {
   try {
-    const raw = sessionStorage.getItem('ccms-impersonation');
+    const raw = sessionStorage.getItem('ccms-force-login');
     return raw ? JSON.parse(raw) : null;
   } catch(e) { return null; }
 }
@@ -1326,23 +1346,23 @@ function getImpersonationContext() {
 function actorLabel() {
   const u = users.find(x => String(x.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase());
   const label = (u && u.roleTitle && u.roleTitle.trim()) ? `${u.roleTitle.trim()} ${currentUser}` : currentUser;
-  const imp = getImpersonationContext();
+  const imp = getForceLoginContext();
   return imp ? `${label} (admin: ${imp.adminName || imp.adminUsername})` : label;
 }
 
-function renderImpersonationBanner() {
-  const banner = document.getElementById('impersonation-banner');
+function renderForceLoginBanner() {
+  const banner = document.getElementById('force-login-banner');
   if (!banner) return;
-  const imp = getImpersonationContext();
+  const imp = getForceLoginContext();
   if (!imp) { banner.style.display = 'none'; return; }
   banner.style.display = 'flex';
   const admin = imp.adminName || imp.adminUsername || 'Administrator';
   const target = imp.targetName || currentUser;
-  banner.innerHTML = `<div><strong>Viewing as ${target}</strong><span>Administrator ${admin} is signed in as this user. All actions during this session are recorded.</span></div><button class="imp-back-btn" onclick="returnFromImpersonation()">← Back to Administrator</button>`;
+  banner.innerHTML = `<div><strong>Viewing as ${target}</strong><span>Administrator ${admin} is signed in as this user. All actions during this session are recorded.</span></div><button class="imp-back-btn" onclick="returnFromForceLogin()">← Back to Administrator</button>`;
 }
 
-async function returnFromImpersonation() {
-  const imp = getImpersonationContext();
+async function returnFromForceLogin() {
+  const imp = getForceLoginContext();
   if (!imp) return;
   const target = users.find(u => String(u.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase());
   const admin = users.find(u => u.username === imp.adminUsername);
@@ -1361,14 +1381,14 @@ async function returnFromImpersonation() {
     admin.activeSessionAt = Date.now();
     admin.lastOnline = Date.now();
     await saveUsers();
-    await logActivity('Impersonation Ended', `${imp.targetName || target?.name || currentUsernameHandle} returned to Administrator ${currentUser}.`);
-    sessionStorage.removeItem('ccms-impersonation');
+    await logActivity('Force Login Ended', `${imp.targetName || target?.name || currentUsernameHandle} returned to Administrator ${currentUser}.`);
+    sessionStorage.removeItem('ccms-force-login');
     sessionStorage.setItem('ccms-user', currentUser);
     sessionStorage.setItem('ccms-role', userRole);
     sessionStorage.setItem('ccms-handle', currentUsernameHandle);
     sessionStorage.setItem('ccms-login-time', Date.now().toString());
     sessionStorage.setItem('ccms-session-id', adminSessionId);
-    renderImpersonationBanner();
+    renderForceLoginBanner();
     document.getElementById('logged-user-display').innerText = currentUser;
     applyRoleUIRestrictions();
     setupNav();
@@ -1379,29 +1399,21 @@ async function returnFromImpersonation() {
     showPage('dashboard', document.querySelector('.sidebar-nav a'));
     showPopup('Success', `Back to ${currentUser}.`);
   } catch (e) {
-    console.error('Failed to return from impersonation:', e);
+    console.error('Failed to return from force login:', e);
     showPopup('Error', 'Could not return to the administrator session.');
   }
 }
 
 let pendingConfirmCallback = null;
-const SESSION_TIMEOUT_MS = 8 * 60 * 60 * 1000; // auto-logout 8 hours after login
-const SESSION_ONLINE_MS = 20 * 1000; // heartbeat renews every 5s, so 20s of silence means the tab is gone
-// A server-side session is considered live only while this tab is periodically renewing it.
-// This makes tab/window closes safe even if the browser does not complete an unload request.
-const SESSION_LEASE_MS = 15 * 1000;
+const SESSION_TIMEOUT_MS = 8 * 60 * 60 * 1000; 
+const SESSION_ONLINE_MS = 5 * 60 * 1000; 
 
-// "Last Online" is now kept fresh by the 5s session-heartbeat's queued write
-// (see startSessionPoll/startSessionHeartbeatOnly below), which also stamps
-// lastOnline on every renewal — accurate to a few seconds instead of the old
-// 5-minute interval this replaced (which could report someone as "online 2
-// minutes ago" when they'd genuinely been active seconds before).
+const SESSION_LEASE_MS = 5 * 60 * 1000;
+
 const SESSION_HEARTBEAT_MS = 5 * 1000;
 let sessionTimeoutHandle = null;
 let sessionHeartbeatHandle = null;
-// Serialize all server read-modify-write operations. Without this, a heartbeat
-// could fetch an older database snapshot and POST it after an escalation/tag/user
-// change, silently reverting the newer change.
+
 let serverWriteChain = Promise.resolve();
 function queueServerWrite(task) {
   const run = serverWriteChain.then(task, task);
@@ -1425,16 +1437,16 @@ function scheduleSessionTimeout() {
   }, remaining);
 }
 
-const SESSION_POLL_MS = 10 * 1000; // check every 10s whether this session is still the active one
+const SESSION_POLL_MS = 10 * 1000; 
 let sessionPollHandle = null;
 
 function startSessionHeartbeatOnly() {
-  // Used only to keep this tab's lease alive during brief windows where the
-  // normal poll is paused (e.g. mid-way through an admin operation). Renews
-  // via the atomic /api/session/heartbeat endpoint below instead of a
-  // client-side GET-whole-file -> POST-whole-file round trip, so it can't
-  // race against a concurrent admin write. Doesn't need to react to being
-  // kicked itself — startSessionPoll picks that back up once it resumes.
+  
+  
+  
+  
+  
+  
   if (sessionHeartbeatHandle) clearInterval(sessionHeartbeatHandle);
   sessionHeartbeatHandle = setInterval(() => {
     queueServerWrite(async () => {
@@ -1452,6 +1464,28 @@ function startSessionHeartbeatOnly() {
   }, SESSION_HEARTBEAT_MS);
 }
 
+function renewSessionImmediately() {
+  const sessionId = sessionStorage.getItem('ccms-session-id');
+  const username = sessionStorage.getItem('ccms-handle');
+  if (!sessionId || !username) return;
+  fetch('/api/session/heartbeat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, sessionId }),
+    cache: 'no-store',
+    keepalive: true
+  }).then(() => {
+    if (typeof refreshOnlineStaffSilently === 'function') refreshOnlineStaffSilently();
+    if (typeof refreshUsersFromServer === 'function') refreshUsersFromServer();
+  }).catch(() => {});
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') renewSessionImmediately();
+});
+
+window.addEventListener('pageshow', () => renewSessionImmediately());
+
 function startSessionPoll() {
   if (sessionPollHandle) clearInterval(sessionPollHandle);
   if (sessionHeartbeatHandle) clearInterval(sessionHeartbeatHandle);
@@ -1467,9 +1501,9 @@ function startSessionPoll() {
     });
   }
 
-  // Read-only safety-net check every 10s. The heartbeat below now detects a
-  // kick as soon as it happens (within one 5s cycle), so this mostly exists
-  // as a backstop in case a heartbeat call itself gets dropped.
+  
+  
+  
   sessionPollHandle = setInterval(async () => {
     const mySessionId = sessionStorage.getItem('ccms-session-id');
     const username = sessionStorage.getItem('ccms-handle');
@@ -1479,36 +1513,28 @@ function startSessionPoll() {
       const data = await res.json();
       const liveUsers = data.users || [];
       const me = liveUsers.find(x => x.username === username);
-      const otherSessionIsLive = !!(
-        me &&
-        me.activeSessionId &&
-        me.activeSessionId !== mySessionId &&
-        me.activeSessionAt &&
-        (Date.now() - me.activeSessionAt) < SESSION_LEASE_MS
-      );
-      const clearedByAdmin = !!(me && !me.activeSessionId);
-      const wasRevoked = !!(me && me.revokedSessionId === mySessionId);
-      if (otherSessionIsLive || clearedByAdmin || wasRevoked) {
-        let reason = 'Your account was signed in from another location, so this session has been logged out.';
-        if (clearedByAdmin || wasRevoked) {
-          reason = 'An administrator has logged you out.\nNote: ' + (me.revokedReason || 'No note provided.');
-        }
-        reactToKick(reason);
+      const sessions = me && me.activeSessions && typeof me.activeSessions === 'object' ? me.activeSessions : {};
+      const hasMySession = !!(me && sessions[mySessionId] && (Date.now() - Number(sessions[mySessionId])) < SESSION_LEASE_MS);
+      const wasRevoked = !!(me && ((Array.isArray(me.revokedSessionIds) && me.revokedSessionIds.includes(mySessionId)) || me.revokedSessionId === mySessionId));
+      if (wasRevoked) {
+        reactToKick('An administrator has logged you out.\nNote: ' + (me.revokedReason || 'No note provided.'));
+      } else if (me && !hasMySession && !sessions[mySessionId]) {
+        renewSessionImmediately();
       }
-    } catch(e) { /* ignore transient network errors */ }
+    } catch(e) {  }
   }, SESSION_POLL_MS);
 
-  // Renews the lease through the atomic /api/session/heartbeat endpoint
-  // instead of a client-side GET-whole-file -> POST-whole-file round trip.
-  // That old pattern was the actual source of the intermittent "force
-  // logout doesn't work" / "online status flickers off then back on" bugs:
-  // two tabs (e.g. an admin's force-logout and this user's own heartbeat)
-  // could each read a snapshot and then both write back a full copy of
-  // app_state.json — whichever POST landed last silently undid the other.
-  // The server now does this read-modify-write as one queued operation, so
-  // a force-logout and a heartbeat can never interleave, and the response
-  // tells this tab immediately if it was kicked (no need to wait for the
-  // 10s poll above).
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   sessionHeartbeatHandle = setInterval(() => {
     queueServerWrite(async () => {
       const mySessionId = sessionStorage.getItem('ccms-session-id');
@@ -1523,12 +1549,9 @@ function startSessionPoll() {
         const result = await res.json();
         if (result.status === 'revoked') {
           reactToKick('An administrator has logged you out.\nNote: ' + (result.reason || 'No note provided.'));
-        } else if (result.status === 'other-session') {
-          reactToKick('Your account was signed in from another location, so this session has been logged out.');
+          return;
         }
-        // 'ok' -> lease renewed. 'not-found' -> account was deleted mid-
-        // session; leave it to the next poll/page load to sort out.
-      } catch(e) { /* transient network failure; retry next heartbeat */ }
+      } catch(e) {}
     });
   }, SESSION_HEARTBEAT_MS);
 }
@@ -1539,16 +1562,25 @@ let systemSettings = {
   notifyEmail: 'notifications@yourdomain.com',
   discordWebhook: '',
   requestSettings: {
-    acceptingRequests: true,
     defaultNotifyEmail: true,
     defaultNotifyDiscord: true,
-    cooldownEnabled: false,
-    cooldownMax: 3,
-    cooldownHours: 24,
     autoCloseEnabled: false,
     autoCloseDays: 14
   },
-  allowCustomTags: true
+  allowCustomTags: true,
+  adminAnnouncement: '',
+  requestsDisabled: false,
+  requestsDisabledNote: '',
+  issuesDisabled: false,
+  issuesDisabledNote: '',
+  changelogDisabled: false,
+  changelogDisabledNote: '',
+  changelogAutoArchiveEnabled: false,
+  changelogAutoArchiveDays: 30,
+  statusReportEnabled: false,
+  statusReportIntervalMinutes: 360,
+  statusReportEmail: false,
+  statusReportDiscord: false
 };
 let cooldownTimerInterval = null;
 
@@ -1562,9 +1594,6 @@ function closePopupModal() {
   document.getElementById('popup-modal-overlay').classList.remove('open');
 }
 
-// Blocking administrator-forced sign-out notice. The notice appears while the
-// user is still inside the app, blocks all interaction, and logs them out after
-// exactly 10 seconds.
 let signedOutCountdownHandle = null;
 const SIGNED_OUT_DISPLAY_SECONDS = 10;
 
@@ -1592,8 +1621,8 @@ function showSignedOutOverlay(msg, onComplete) {
 }
 
 function closeSignedOutOverlay() {
-  // Intentionally disabled: administrator-forced sign-out notices cannot be
-  // dismissed or bypassed. The session is cleared automatically after 8s.
+  
+  
   return;
 }
 
@@ -1744,7 +1773,7 @@ function seedIssues() {
 }
 
 async function logActivity(action, detail) {
-  const imp = getImpersonationContext();
+  const imp = getForceLoginContext();
   const entry = {
     id: `act-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
     time: new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}),
@@ -1753,13 +1782,13 @@ async function logActivity(action, detail) {
     detail
   };
   if (imp) {
-    entry.impersonatedBy = imp.adminName || imp.adminUsername;
-    entry.impersonatedAs = currentUser;
+    entry.forceLoginBy = imp.adminName || imp.adminUsername;
+    entry.forceLoginAs = currentUser;
   }
 
-  // Activity entries are saved as an atomic append against the freshest server
-  // snapshot. This prevents a log save from restoring an older requests/users
-  // array and makes every action durable even when several saves happen together.
+  
+  
+  
   activityLog.unshift(entry);
   try { localStorage.setItem("ccms-activity-log", JSON.stringify(activityLog)); } catch(e){}
 
@@ -1815,13 +1844,13 @@ function saveServerChanges() {
 }
 
 async function savePresetTags() {
-  // Keep a local copy immediately so a refresh/network hiccup cannot make the
-  // admin's preset tags disappear from the UI.
+  
+  
   try { localStorage.setItem('ccms-preset-tags', JSON.stringify(presetTags)); } catch(e){}
   try { localStorage.setItem('ccms-preset-tag-colors', JSON.stringify(presetTagColors)); } catch(e){}
 
-  // Preset tags need their own fresh-server merge. The old generic save path could
-  // race with another background save and write an older presetTags array back.
+  
+  
   try {
     const res = await fetch('/api/data', { cache: 'no-store' });
     if (!res.ok) throw new Error('Could not read current server data');
@@ -1845,8 +1874,8 @@ async function savePresetTags() {
     });
     if (!saveRes.ok) throw new Error('Server rejected preset tag save');
 
-    // Sync the rest of the in-memory state to exactly what was saved, but do not
-    // replace presetTags/presetTagColors with a stale server copy.
+    
+    
     requests = appState.changeRequests;
     issues = appState.issues;
     users = appState.users;
@@ -1860,7 +1889,6 @@ async function savePresetTags() {
     showPopup('Save Failed', 'Could not save preset tags to the server. Your local copy was kept.');
   }
 }
-
 
 function tagColor(tag) {
   const name = String(tag || '').trim();
@@ -1894,7 +1922,7 @@ function tagChip(tag) {
   return `<span class="request-tag" style="background:${c.bg};border-color:${c.border};color:${c.color}">${t}</span>`;
 }
 
-let openTagColorPicker = null; // tag name currently showing its palette, or null
+let openTagColorPicker = null; 
 
 function toggleTagColorPicker(tag) {
   openTagColorPicker = (openTagColorPicker === tag) ? null : tag;
@@ -1952,15 +1980,11 @@ async function handleLogin() {
   const p = document.getElementById('login-pass').value;
   const errBox = document.getElementById('login-error');
 
-  // If the last tab for this account was closed, the browser can restore its
-  // sessionStorage when the tab is reopened.  A short-lived close marker lets
-  // a new login take over that abandoned session immediately instead of
-  // waiting for the server-side lease to expire.
   try {
     const res = await fetch('/api/data');
     const data = await res.json();
     if (data.users) users = data.users;
-  } catch(e) { /* fall back to local copy if the server is unreachable */ }
+  } catch(e) {  }
 
   const foundUser = users.find(x => String(x.username||'').toLowerCase() === String(u||'').toLowerCase() && x.pass === p);
 
@@ -1982,36 +2006,24 @@ async function handleLogin() {
   }
 
   const sessionAge = Date.now() - (foundUser.activeSessionAt || 0);
-  let closedSessionMarker = null;
-  try {
-    closedSessionMarker = JSON.parse(localStorage.getItem('ccms-closed-session') || 'null');
-  } catch (e) {}
-  const closedSessionMatches = !!(
-    closedSessionMarker &&
-    closedSessionMarker.username === foundUser.username &&
-    closedSessionMarker.sessionId === foundUser.activeSessionId &&
-    (Date.now() - Number(closedSessionMarker.closedAt || 0)) < 60 * 1000
-  );
-
-  if (foundUser.activeSessionId && sessionAge < SESSION_LEASE_MS && !closedSessionMatches) {
-    errBox.innerText = 'This account is already logged in on another device or browser tab. Log out there first, or ask an admin to force-logout the session.';
-    errBox.style.display = 'block';
-    return;
-  }
-
-  if (closedSessionMatches) {
-    try { localStorage.removeItem('ccms-closed-session'); } catch (e) {}
+  if (foundUser.activeSessionId && sessionAge < SESSION_LEASE_MS) {
+    let closedMarker = null;
+    try { closedMarker = JSON.parse(localStorage.getItem('ccms-closed-session') || 'null'); } catch(e) {}
+    const markerMatches = closedMarker
+      && String(closedMarker.username||'').toLowerCase() === String(foundUser.username||'').toLowerCase()
+      && closedMarker.sessionId === foundUser.activeSessionId
+      && (Date.now() - Number(closedMarker.closedAt||0)) < SESSION_LEASE_MS;
+    if (!markerMatches) {
+      errBox.innerText = 'This account is already logged in on another device or browser tab. Log out there first, or ask an admin to force-logout the session.';
+      errBox.style.display = 'block';
+      return;
+    }
+    try { localStorage.removeItem('ccms-closed-session'); } catch(e) {}
     foundUser.activeSessionId = null;
     foundUser.activeSessionAt = null;
   }
 
   errBox.style.display = 'none';
-  try {
-    const marker = JSON.parse(localStorage.getItem('ccms-closed-session') || 'null');
-    if (marker && marker.username === foundUser.username && marker.sessionId === foundUser.activeSessionId) {
-      localStorage.removeItem('ccms-closed-session');
-    }
-  } catch (e) {}
   setupUserSession(foundUser);
 }
 
@@ -2031,7 +2043,6 @@ function toggleLoginPassword() {
     : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
 }
 
-// Generic show/hide toggle for any masked field (e.g. the Discord webhook URL)
 function toggleFieldVisibility(inputId, iconId) {
   const input = document.getElementById(inputId);
   const icon = document.getElementById(iconId);
@@ -2055,10 +2066,6 @@ function showLogin() {
   document.getElementById('signup-pass-confirm').value = '';
 }
 
-// Shown instead of "logging in" a pending account: they never get an actual
-// app session — only this status card, so there's nothing to see regardless
-// of what they try. Reused for both right after signup and if a still-
-// pending user tries to sign in again later.
 function showPendingStatusScreen(user) {
   document.querySelectorAll('#login-screen .login-card').forEach(el => { el.style.display = 'none'; });
   document.getElementById('pending-status-msg').innerText =
@@ -2119,11 +2126,11 @@ async function submitSignup() {
   const newUser = { username, name, email, pass, role: 'pending', createdAt: new Date().toISOString() };
   users.push(newUser);
 
-  // Wait for the server to actually confirm the save before telling the
-  // person their request went through. The old version fired this save and
-  // moved straight on regardless of the result, so a network hiccup or a
-  // rejected save produced a false "success" screen with nothing actually
-  // persisted — and no error anywhere to explain why.
+  
+  
+  
+  
+  
   if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.6'; }
   let saved = false;
   try {
@@ -2135,7 +2142,7 @@ async function submitSignup() {
   if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ''; }
 
   if (!saved) {
-    users = users.filter(u => u.username !== username); // roll back the optimistic local add
+    users = users.filter(u => u.username !== username); 
     fail('Could not submit your request — the server did not confirm the save. Check your connection and try again.');
     return;
   }
@@ -2168,9 +2175,9 @@ function getUserCreationTimestamp(u) {
   if (!u) return null;
   const direct = u.createdAt || u.created || u.requestedAt;
   if (direct) { const d = new Date(direct); if (!isNaN(d.getTime()) && d.getFullYear() >= 2024) return d; }
-  // Older pending accounts may predate createdAt. Recover their original
-  // request timestamp from the durable activity entry rather than displaying
-  // Unknown when the audit log still contains the creation event.
+  
+  
+  
   const username = String(u.username || '').toLowerCase();
   const name = String(u.name || '').toLowerCase();
   const match = activityLog.find(a => a.action === 'Account Requested' &&
@@ -2217,9 +2224,6 @@ function buildSignupDiscordComponents() {
   }];
 }
 
-// Fires on every new signup, unconditionally — unlike CR notifications there's
-// no per-item toggle for this since a pending account needs an admin to act
-// on it regardless of notification preferences elsewhere.
 function notifyAdminsOfSignupRequest(u) {
   const usersUrl = getUsersUrl();
   sendNotification(
@@ -2255,10 +2259,10 @@ function loginAsUser(username) {
     showConfirm('Account Already Logged In', `${foundUser.name} is already logged in elsewhere. Log out that session and log in as them now?`, true, () => {
       foundUser.activeSessionId = null; foundUser.activeSessionAt = null; saveUsers();
       const adminContext = { adminUsername: currentUsernameHandle, adminName: currentUser, targetUsername: foundUser.username, targetName: foundUser.name, startedAt: Date.now() };
-      logActivity('Impersonation Started', `${currentUser} started viewing as ${foundUser.name} (${foundUser.username}) after ending their existing session.`);
-      try { sessionStorage.setItem('ccms-impersonation', JSON.stringify(adminContext)); } catch(e) {}
+      logActivity('Force Login Started', `${currentUser} started viewing as ${foundUser.name} (${foundUser.username}) after ending their existing session.`);
+      try { sessionStorage.setItem('ccms-force-login', JSON.stringify(adminContext)); } catch(e) {}
       setupUserSession(foundUser);
-      renderImpersonationBanner();
+      renderForceLoginBanner();
     });
     return;
   }
@@ -2269,20 +2273,20 @@ function loginAsUser(username) {
     targetName: foundUser.name,
     startedAt: Date.now()
   };
-  logActivity('Impersonation Started', `${currentUser} started viewing as ${foundUser.name} (${foundUser.username}).`);
-  try { sessionStorage.setItem('ccms-impersonation', JSON.stringify(adminContext)); } catch(e) {}
+  logActivity('Force Login Started', `${currentUser} started viewing as ${foundUser.name} (${foundUser.username}).`);
+  try { sessionStorage.setItem('ccms-force-login', JSON.stringify(adminContext)); } catch(e) {}
   setupUserSession(foundUser);
-  renderImpersonationBanner();
+  renderForceLoginBanner();
 }
 
 async function logoutUser(username, then) {
   if (userRole !== 'admin') return;
   if (username === currentUsernameHandle) { showPopup('Not Allowed', "Use the Logout button for your own account."); return; }
 
-  // Always read the freshest server record before force-logging a user out.
-  // Do NOT use saveUsers() here: its normal merge rules intentionally preserve
-  // a server session when the local copy has a null session, which would make
-  // the admin logout appear to succeed while leaving the account locked.
+  
+  
+  
+  
   let target = users.find(x => x.username === username);
   try {
     const res = await fetch('/api/data', { cache: 'no-store' });
@@ -2299,11 +2303,11 @@ async function logoutUser(username, then) {
 
   showPromptModal('Log Out User', `Log out "${target.name}" from their active session? You can optionally give a reason — they'll see it in their sign-out message.`, async (reason) => {
     try {
-      // Atomic, server-side kick via /api/session/force-logout: the server
-      // does the read-modify-write (clear activeSessionId, stamp
-      // revokedSessionId/revokedReason) as one queued operation, so it can
-      // no longer race against the target's own heartbeat the way the old
-      // client-side GET-whole-file -> POST-whole-file version could.
+      
+      
+      
+      
+      
       const res = await fetch('/api/session/force-logout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2365,10 +2369,10 @@ function setupUserSession(foundUser) {
   document.getElementById('app').style.display = 'flex';
   document.getElementById('logged-user-display').innerText = currentUser;
   applyRoleUIRestrictions();
-  const imp = getImpersonationContext();
-  logActivity("Login", imp ? `${foundUser.name} logged in via admin ${imp.adminName || imp.adminUsername}` : (foundUser.name + " logged in as " + foundUser.role));
+  const imp = getForceLoginContext();
+  logActivity("Login", imp ? `${foundUser.name} logged in via admin ${imp.adminName || imp.adminUsername}` : (foundUser.name + " logged in"));
   setupNav();
-  renderImpersonationBanner();
+  renderForceLoginBanner();
   renderDashboard();
   renderList();
   renderUsers();
@@ -2406,8 +2410,7 @@ function toggleAccountStatus(username) {
 }
 
 function isAcceptingRequests() {
-  const rs = systemSettings.requestSettings || {};
-  return rs.acceptingRequests !== false;
+  return systemSettings.requestsDisabled !== true;
 }
 
 function updateNewCrBtnVisibility() {
@@ -2450,18 +2453,12 @@ function applyRoleUIRestrictions() {
     const toolbar = document.getElementById('bulk-toolbar');
     if (toolbar) toolbar.style.display = 'none';
   }
-  const requestSettingsSection = document.getElementById('request-settings-section');
-  if (requestSettingsSection) requestSettingsSection.style.display = (userRole === 'admin') ? 'block' : 'none';
 }
 
 function closeAlertModal() {
   document.getElementById('alert-overlay').classList.remove('open');
 }
 
-// Mark this tab's session as closed without sending the application database.
-// The marker is deliberately stored in localStorage, not POSTed to /api/data,
-// so Ctrl+W can never overwrite requests/users/issues with stale browser data.
-// A new login can immediately take over a session carrying this marker.
 let sessionReleaseSent = false;
 function releaseSessionOnTabClose() {
   if (sessionReleaseSent) return;
@@ -2476,27 +2473,38 @@ function releaseSessionOnTabClose() {
   sessionReleaseSent = true;
 }
 
-// Ctrl+W/closing a tab triggers pagehide. We only mark the session; we never
-// write the whole database while unloading.
-window.addEventListener('pagehide', () => releaseSessionOnTabClose());
-window.addEventListener('beforeunload', () => releaseSessionOnTabClose());
+async function releaseSessionOnServer() {
+  const sessionId = sessionStorage.getItem('ccms-session-id');
+  const username = sessionStorage.getItem('ccms-handle');
+  if (!sessionId || !username) return;
+  try {
+    await fetch('/api/session/release', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username,sessionId}),
+      keepalive:true
+    });
+  } catch(e) {}
+}
+window.addEventListener('pagehide', () => { releaseSessionOnTabClose(); releaseSessionOnServer(); });
+window.addEventListener('beforeunload', () => { releaseSessionOnTabClose(); releaseSessionOnServer(); });
 
-function handleLogout() {
-  const imp = getImpersonationContext();
-  logActivity("Logout", imp ? `${currentUser} ended an impersonation session started by ${imp.adminName || imp.adminUsername}.` : currentUser + " logged out");
+async function handleLogout() {
+  const imp = getForceLoginContext();
   const me = users.find(x => String(x.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase());
   if (me) {
     me.activeSessionId = null;
     me.activeSessionAt = null;
     me.lastOnline = Date.now();
-    saveUsers();
+    await saveUsers();
   }
+  logActivity("Logout", imp ? `${currentUser} ended a force-login session started by ${imp.adminName || imp.adminUsername}.` : currentUser + " logged out");
   sessionStorage.removeItem('ccms-user');
   sessionStorage.removeItem('ccms-role');
   sessionStorage.removeItem('ccms-handle');
   sessionStorage.removeItem('ccms-login-time');
   sessionStorage.removeItem('ccms-session-id');
-  sessionStorage.removeItem('ccms-impersonation');
+  sessionStorage.removeItem('ccms-force-login');
   if (sessionTimeoutHandle) { clearTimeout(sessionTimeoutHandle); sessionTimeoutHandle = null; }
   if (sessionPollHandle) { clearInterval(sessionPollHandle); sessionPollHandle = null; }
   if (sessionHeartbeatHandle) { clearInterval(sessionHeartbeatHandle); sessionHeartbeatHandle = null; }
@@ -2561,15 +2569,52 @@ function renderArchivePage() {
   }
 }
 
-function renderActivityLog() {
+const ACTIVITY_LOG_PAGE_SIZE = 50;
+let activityLogPage = 1;
+
+function renderActivityLog(page) {
   const container = document.getElementById("activity-log-list");
+  const pager = document.getElementById("activity-log-pagination");
   if (!container) return;
-  container.innerHTML = activityLog.length ? activityLog.map(a => `
+
+  if (page) activityLogPage = page;
+  const totalPages = Math.max(1, Math.ceil(activityLog.length / ACTIVITY_LOG_PAGE_SIZE));
+  if (activityLogPage > totalPages) activityLogPage = totalPages;
+  if (activityLogPage < 1) activityLogPage = 1;
+
+  const start = (activityLogPage - 1) * ACTIVITY_LOG_PAGE_SIZE;
+  const pageItems = activityLog.slice(start, start + ACTIVITY_LOG_PAGE_SIZE);
+
+  container.innerHTML = pageItems.length ? pageItems.map(a => `
     <div class="cr-list-item" style="cursor:default">
       <div class="cr-list-id" style="min-width:120px">${a.time}</div>
-      <div class="cr-list-title">${a.action}: ${a.detail}${a.impersonatedBy ? `<div style="font-size:11px;color:#fbbf24;margin-top:4px">Logged by Administrator: ${a.impersonatedBy}</div>` : ''}</div>
+      <div class="cr-list-title">${a.action}: ${a.detail}${(a.forceLoginBy || a.impersonatedBy) ? `<div style="font-size:11px;color:#fbbf24;margin-top:4px">Logged in by: ${a.forceLoginBy || a.impersonatedBy}</div>` : ''}</div>
       <div class="cr-list-right"><span style="font-size:12px;color:var(--text-secondary)">${a.user}</span></div>
     </div>`).join("") : "<div class=\"empty-state\">No activity recorded yet.</div>";
+
+  if (pager) {
+    pager.innerHTML = activityLog.length ? `
+      <div style="display:inline-flex;align-items:center;gap:4px;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:4px">
+        <button class="pager-arrow-btn" ${activityLogPage <= 1 ? 'disabled' : ''} onclick="renderActivityLog(activityLogPage - 1)" aria-label="Previous page">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span style="font-size:13px;color:var(--text-secondary);padding:0 4px">Page</span>
+        <input type="text" inputmode="numeric" id="activity-log-jump-input" value="${activityLogPage}" onkeydown="if(event.key==='Enter')jumpToActivityLogPage()" style="width:32px;height:24px;text-align:center;padding:0;font-size:13px;font-weight:600">
+        <span style="font-size:13px;color:var(--text-secondary)">of ${totalPages}</span>
+        <button class="pager-arrow-btn" ${activityLogPage >= totalPages ? 'disabled' : ''} onclick="renderActivityLog(activityLogPage + 1)" aria-label="Next page">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    ` : '';
+  }
+}
+
+function jumpToActivityLogPage() {
+  const input = document.getElementById('activity-log-jump-input');
+  if (!input) return;
+  const n = parseInt(input.value, 10);
+  if (!n || n < 1) return;
+  renderActivityLog(n);
 }
 
 function setupNav() {
@@ -2599,7 +2644,7 @@ function setupNav() {
       <div class="sidebar-section">Administration</div>
       <a onclick="showPage('users',this)"><span>User management</span> ${pendingSignupBadge}</a>
       <a onclick="showPage('activity',this)">Activity Log</a>
-      <a onclick="showPage('settings',this)">System Notification Settings</a>
+      <a onclick="showPage('settings',this)">Dashboard Settings</a>
       <a onclick="showPage('data-management',this)">Data Management</a>
     `;
   } else if (userRole === 'guest') {
@@ -2673,13 +2718,28 @@ function priorityClass(p) {
 }
 
 function escapeDashboardText(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function renderTopUserChip() {
+  const avatar = document.getElementById('top-user-avatar');
+  const label = document.getElementById('logged-user-display');
+  if (!avatar || !label) return;
+  const me = (users || []).find(u => String(u.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase()) || (users || []).find(u => u.name === currentUser);
+  const pic = String(me?.profilePicture || '').trim();
+  avatar.innerHTML = pic ? `<img src="${escapeDashboardText(pic)}" alt="" onerror="this.remove()">` : escapeDashboardText((me?.name || currentUser || 'S').charAt(0).toUpperCase());
+  label.textContent = me?.name || currentUser || me?.username || 'Staff';
+}
+
 function renderDashboard() {
   const welcome = document.getElementById('dashboard-welcome-user');
   const me = (users || []).find(u => String(u.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase()) || (users || []).find(u => u.name === currentUser);
   if (welcome) welcome.textContent = me?.name || currentUser || me?.username || 'Staff';
+  renderTopUserChip();
   const lease = typeof SESSION_LEASE_MS !== 'undefined' ? SESSION_LEASE_MS : 60000;
   const now = Date.now();
-  const online = (users || []).filter(u => u.activeSessionAt && (now - Number(u.activeSessionAt)) < lease).sort((a,b) => { const as=String(a.username||'').toLowerCase()===String(currentUsernameHandle||'').toLowerCase()?1:0; const bs=String(b.username||'').toLowerCase()===String(currentUsernameHandle||'').toLowerCase()?1:0; return bs-as; });
+  const online = (users || []).filter(u => {
+    const sessions = u.activeSessions && typeof u.activeSessions === 'object' ? u.activeSessions : {};
+    const live = Object.values(sessions).some(t => Number(t) && now - Number(t) < lease);
+    return live || (u.activeSessionAt && now - Number(u.activeSessionAt) < lease);
+  }).sort((a,b) => { const as=String(a.username||'').toLowerCase()===String(currentUsernameHandle||'').toLowerCase()?1:0; const bs=String(b.username||'').toLowerCase()===String(currentUsernameHandle||'').toLowerCase()?1:0; return bs-as; });
   const list = document.getElementById('online-staff-list');
   const count = document.getElementById('online-staff-count');
   const chatCount = document.getElementById('chat-online-count');
@@ -2688,14 +2748,38 @@ function renderDashboard() {
   if (count) count.textContent = `${online.length} staff member${online.length===1?'':'s'} online`;
   if (chatCount) chatCount.innerHTML = `<span class="online-dot"></span>${online.length} online`;
   if (list) list.innerHTML = online.length ? online.map(u => { const p=presenceClass(String(u.presenceStatus||'online').toLowerCase()); const self = String(u.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase(); const pic=String(u.profilePicture||'').trim(); const avatar=pic ? `<img src="${escapeDashboardText(pic)}" alt="" onerror="this.remove()">` : escapeDashboardText((u.username||'?').charAt(0).toUpperCase()); return `<div class="online-staff-member${self?' self':''}"${self?' onclick="cycleMyPresenceStatus()" style="cursor:pointer" title="Click to change your status"':''}><div class="staff-avatar">${avatar}</div><div class="staff-details"><div class="staff-username">${escapeDashboardText(u.username||'Unknown')}</div><div class="staff-role">${escapeDashboardText(u.roleTitle || u.title || u.role || 'Staff')}${self?' · Click to change status':''}</div></div><div class="staff-presence ${p}"><span class="presence-dot ${p}"></span>${presenceLabel(p)}</div></div>`; }).join('') : '<div class="empty-state">No staff members are currently online.</div>';
+  renderSystemMessages();
+  renderDashboardStatus();
   renderStaffChat();
   updateStaffChatUnreadBadges();
-  const updates = [];
-  (serverChanges || []).slice(-3).reverse().forEach(x => updates.push({title:x.title || x.summary || x.name || 'Change updated', meta:'Change Log · '+(x.date || x.createdAt || 'Recently')}));
-  (issues || []).slice(-3).reverse().forEach(x => updates.push({title:x.title || x.summary || x.name || 'Issue updated', meta:'Issue & Fix · '+(x.date || x.createdAt || 'Recently')}));
-  const updatesEl = document.getElementById('dashboard-updates-list');
-  if (updatesEl) updatesEl.innerHTML = updates.slice(0,4).map(x => `<div class="dashboard-feed-item"><div class="dashboard-feed-title">${escapeDashboardText(x.title)}</div><div class="dashboard-feed-meta">${escapeDashboardText(x.meta)}</div></div>`).join('') || '<div class="empty-state">No updates yet.</div>';
 }
+function renderSystemMessages() {
+  const settings = systemSettings || {};
+  const messages = [];
+  const announcement = String(settings.adminAnnouncement || '').trim();
+  if (announcement) messages.push({title:'Admin Announcement',text:announcement,detail:'Administrator message',kind:'announcement'});
+  if (settings.requestsDisabled) messages.push({title:'Requests Disabled',text:String(settings.requestsDisabledNote || 'Request submissions are currently disabled.'),detail:'Change request submissions',kind:'disabled'});
+  if (settings.issuesDisabled) messages.push({title:'Issue Submissions Disabled',text:String(settings.issuesDisabledNote || 'Issue submissions are currently disabled.'),detail:'Issues & Fixes submissions',kind:'disabled'});
+  if (settings.changelogDisabled) messages.push({title:'Change Log Submissions Disabled',text:String(settings.changelogDisabledNote || 'Change Log submissions are currently disabled.'),detail:'Change Log submissions',kind:'disabled'});
+  const html = messages.length ? messages.map(m => `<div class="system-message-row"><strong>${escapeDashboardText(m.title)}</strong><span>${escapeDashboardText(m.text)}</span><small>${escapeDashboardText(m.detail)}</small></div>`).join('') : '<div style="font-size:11px;color:var(--text-muted);padding:4px 2px">No active system messages.</div>';
+  const top = document.getElementById('dashboard-system-messages');
+  const bottom = document.getElementById('dashboard-system-messages-bottom');
+  if (top) top.innerHTML = `<div class="dashboard-system-title"><strong>System Messages</strong><span>Important notices and announcements</span></div><div class="system-message-list">${html}</div>`;
+  if (bottom) bottom.innerHTML = `<div class="system-message-list">${html}</div>`;
+}
+
+function renderDashboardStatus() {
+  const grid = document.getElementById('dashboard-status-grid');
+  if (!grid) return;
+  const test = systemSettings.serverOperationsTest || {};
+  const rows = [
+    ['Main Server', test.enabled && test.mainServer ? 'Offline' : 'Operational', test.enabled && test.mainServer ? 'bad' : 'ok'],
+    ['API', test.enabled && test.api ? 'Unavailable' : 'Operational', test.enabled && test.api ? 'bad' : 'ok'],
+    ['Notifications', (systemSettings.tempDisableAllNotifications || (test.enabled && test.notifications)) ? 'Disabled' : 'Operational', (systemSettings.tempDisableAllNotifications || (test.enabled && test.notifications)) ? 'warn' : 'ok']
+  ];
+  grid.innerHTML = rows.map(r => `<div class="dashboard-status-item"><strong>${r[0]}</strong><span class="${r[2]}">${r[1]}</span></div>`).join('');
+}
+
 let onlineStaffRefreshTimer = null;
 async function refreshOnlineStaffSilently() {
   try {
@@ -2704,26 +2788,20 @@ async function refreshOnlineStaffSilently() {
     const fresh = await res.json();
     if (!Array.isArray(fresh.users)) return;
 
-    // Replace only presence/user data with the latest server snapshot.
-    // Do not write anything back: this is a read-only silent refresh.
     users = fresh.users;
     try { localStorage.setItem('ccms-users-list', JSON.stringify(users)); } catch(e) {}
 
-    // Redraw the live staff list/status page in place.
     renderDashboard();
     renderStatusPage();
   } catch(e) {
-    // Silent by design: a temporary network failure should not show a popup.
   }
 }
 
-// Keep other staff presence/statuses current without a page refresh.
 refreshOnlineStaffSilently();
 setInterval(refreshOnlineStaffSilently, 90000);
 
 function startOnlineStaffRefresh() {
   if (onlineStaffRefreshTimer) return;
-  // Refresh presence quietly every 90 seconds without page reloads or popups.
   onlineStaffRefreshTimer = setInterval(refreshOnlineStaffSilently, 90 * 1000);
 }
 let staffChatSyncTimer = null;
@@ -2783,112 +2861,44 @@ function renderStaffChat() {
   if (renderKey === staffChatLastRenderKey && box.dataset.rendered === '1') return;
   staffChatLastRenderKey = renderKey;
   box.dataset.rendered = '1';
-  box.innerHTML = messages.length ? messages.map(m => `<div class="chat-message"><div class="chat-message-avatar">${escapeDashboardText((m.username||'?').charAt(0).toUpperCase())}</div><div class="chat-message-body"><div class="chat-message-meta"><span class="chat-message-name">${escapeDashboardText(m.username||'Staff')}</span><span class="chat-message-time">${escapeDashboardText(m.time || '')}</span></div><div class="chat-message-text">${escapeDashboardText(m.text)}</div></div></div>`).join('') : '<div class="empty-state">No messages yet. Start the conversation.</div>';
+  box.innerHTML = messages.length ? messages.map(m => { const author = (users || []).find(u => String(u.username||'').toLowerCase() === String(m.username||'').toLowerCase()) || (users || []).find(u => String(u.name||'').toLowerCase() === String(m.username||'').toLowerCase()); const pic = String(m.profilePicture || author?.profilePicture || '').trim(); const avatar = pic ? `<img src="${escapeDashboardText(pic)}" alt="" onerror="this.remove()">` : escapeDashboardText((m.username||'?').charAt(0).toUpperCase()); return `<div class="chat-message"><div class="chat-message-avatar">${avatar}</div><div class="chat-message-body"><div class="chat-message-meta"><span class="chat-message-name">${escapeDashboardText(m.username||'Staff')}</span><span class="chat-message-time">${escapeDashboardText(m.time || '')}</span></div><div class="chat-message-text">${escapeDashboardText(m.text)}</div></div></div>`; }).join('') : '<div class="empty-state">No messages yet. Start the conversation.</div>';
   attachStaffChatScrollHandler();
   if (wasAtLatest) box.scrollTop = box.scrollHeight;
 }
-let serverOperationsHealth = { main: null, api: null, notifications: null, checkedAt: null, checking: false };
+let serverOperationsHealth = { main: null, api: null, checkedAt: null, checking: false };
 
 function renderStatusPage() {
   ensureOperationalSettings();
   const c = document.getElementById('page-status');
   if (!c) return;
-
   const test = systemSettings.serverOperationsTest || {};
-  const service = (name, state, tone) => {
-    const dot = tone === 'warning' ? 'warning' : tone === 'danger' ? 'danger' : 'operational';
-    return `<div class="server-status-row">
-      <span class="server-status-name">${name}</span>
-      <span class="server-status-state ${dot}"><span class="server-status-dot"></span>${state}</span>
-    </div>`;
-  };
-
-  // These values come from real server responses, not the checkbox state.
-  const mainOperational = serverOperationsHealth.main !== null
-    ? serverOperationsHealth.main
-    : !test.mainServer;
-  const apiOperational = serverOperationsHealth.api !== null
-    ? serverOperationsHealth.api
-    : !test.api;
-  const notificationsDisabled = serverOperationsHealth.notifications !== null
-    ? !serverOperationsHealth.notifications
-    : !!(test.notifications || systemSettings.tempDisableAllNotifications);
-
-  const mainState = mainOperational ? ['Operational','operational'] : ['Offline','danger'];
-  const apiState = apiOperational ? ['Operational','operational'] : ['Unavailable','danger'];
-  const notifState = notificationsDisabled ? ['Temporarily Disabled','warning'] : ['Operational','operational'];
-
-  c.innerHTML = `<div class="server-operations-page">
-    <div class="server-status-card">
-      <div class="server-status-title">Server Status</div>
-      <div class="server-status-list">
-        ${service('Main Server', mainState[0], mainState[1])}
-        ${service('API', apiState[0], apiState[1])}
-        ${service('Notifications', notifState[0], notifState[1])}
-      </div>
-    </div>
-
-    <div class="server-controls">
-      <div class="server-control-card">
-        <div class="server-control-title">Notifications</div>
-        <label class="server-control-check">
-          <input type="checkbox" ${systemSettings.tempDisableAllNotifications ? 'checked' : ''} onchange="setTempDisableAllNotifications(this.checked)">
-          <span>Temporarily Disable All Notifications</span>
-        </label>
-        <div class="server-control-help">This is a real server-side notification block and is independent of Test Mode.</div>
-      </div>
-
-      ${isAdminUser() ? `<div class="server-control-card">
-        <div class="server-control-title">Test Mode</div>
-        <label class="server-control-check">
-          <input type="checkbox" ${test.enabled ? 'checked' : ''} onchange="setServerOperationsTestMode(this.checked)">
-          <span>Enable Test Mode</span>
-        </label>
-        <div class="server-control-help">Controls the real server-side test switches below. These are not visual-only simulations.</div>
-        ${test.enabled ? `<div class="server-simulation-options">
-          <div class="server-simulation-title">Test Controls</div>
-          <label class="server-control-check"><input type="checkbox" ${test.mainServer ? 'checked' : ''} onchange="setServerOperationsTest('mainServer',this.checked)"><span>Take Main Server Offline</span></label>
-          <label class="server-control-check"><input type="checkbox" ${test.api ? 'checked' : ''} onchange="setServerOperationsTest('api',this.checked)"><span>Disable API</span></label>
-          <label class="server-control-check"><input type="checkbox" ${test.notifications ? 'checked' : ''} onchange="setServerOperationsTest('notifications',this.checked)"><span>Disable Notifications</span></label>
-        </div>` : ''}
-      </div>` : ''}
-    </div>
-  </div>`;
+  const fmt = new Date().toLocaleString();
+  const mainState = test.enabled && test.mainServer ? 'Offline' : 'Operational';
+  const apiState = test.enabled && test.api ? 'Unavailable' : 'Operational';
+  const notifState = (systemSettings.tempDisableAllNotifications || (test.enabled && test.notifications)) ? 'Disabled' : 'Operational';
+  const stateClass = state => ['Offline','Unavailable'].includes(state) ? 'dnd' : state === 'Disabled' ? 'warning' : 'operational';
+  const row = (name, detail, state) => `<div class="status-service"><div><div class="status-service-name">${name}</div><div class="dashboard-card-subtitle">${detail}</div></div><div class="status-service-state ${stateClass(state)}">● ${state}</div></div>`;
+  c.innerHTML = `<div class="page-header"><div><h1>Server Operations</h1><p>Service health and operational status</p></div></div>
+    <div class="dashboard-card" style="margin-bottom:18px"><div class="status-service-list">
+      ${row('Main Server', test.enabled && test.mainServer ? 'Test Mode is actively stopping web service requests.' : 'Server responding', mainState)}
+      ${row('API', test.enabled && test.api ? 'Test Mode is actively rejecting API requests.' : '/api/data reachable', apiState)}
+      ${row('Notifications', systemSettings.tempDisableAllNotifications ? 'Temporarily disabled' : (test.enabled && test.notifications ? 'Test Mode is actively blocking notifications.' : 'Notifications enabled'), notifState)}
+      ${row('Staff Availability', 'Based on current multi-tab staff presence data', 'Operational')}
+    </div><div style="font-size:11px;color:var(--text-muted);margin-top:12px">Last checked: ${fmt}</div></div>
+    <div class="dashboard-card" style="margin-bottom:18px"><div class="dashboard-card-title" style="margin-bottom:10px">Notifications</div><label style="display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" ${systemSettings.tempDisableAllNotifications ? 'checked' : ''} onchange="setTempDisableAllNotifications(this.checked)"><span>Temporarily Disable All Notifications</span></label><div class="dashboard-card-subtitle" style="margin-top:6px">This is independent of Test Mode and can be used whenever you want.</div></div>
+    ${isAdminUser() ? `<div class="dashboard-card"><div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px"><div><div class="dashboard-card-title">Test Mode</div><div class="dashboard-card-subtitle">When enabled, the service controls below actually affect server-side requests.</div></div><label class="toggle-switch"><input type="checkbox" ${test.enabled ? 'checked' : ''} onchange="setServerTestMode(this.checked)"><span class="toggle-slider"></span></label></div>${test.enabled ? `<div style="border-top:1px solid var(--border);padding-top:12px"><label style="display:flex;align-items:center;gap:10px;margin:9px 0"><input type="checkbox" ${test.mainServer ? 'checked' : ''} onchange="setServerOperationsTest('mainServer',this.checked)"> Simulate Main Server Offline</label><label style="display:flex;align-items:center;gap:10px;margin:9px 0"><input type="checkbox" ${test.api ? 'checked' : ''} onchange="setServerOperationsTest('api',this.checked)"> Simulate API Failure</label><label style="display:flex;align-items:center;gap:10px;margin:9px 0"><input type="checkbox" ${test.notifications ? 'checked' : ''} onchange="setServerOperationsTest('notifications',this.checked)"> Simulate Notifications Disabled</label></div>` : ''}</div>` : ''}`;
 }
-
 async function checkServerOperations() {
   if (serverOperationsHealth.checking) return;
   serverOperationsHealth.checking = true;
   renderStatusPage();
   const bust = `?_health=${Date.now()}`;
-  const [mainResult, apiResult, opsResult] = await Promise.allSettled([
+  const [mainResult, apiResult] = await Promise.allSettled([
     fetch('/' + bust, { method:'HEAD', cache:'no-store' }),
-    fetch('/api/data' + bust, { cache:'no-store' }),
-    fetch('/api/server-operations' + bust, { cache:'no-store' })
+    fetch('/api/data' + bust, { cache:'no-store' })
   ]);
-
   serverOperationsHealth.main = mainResult.status === 'fulfilled' && mainResult.value.ok;
   serverOperationsHealth.api = apiResult.status === 'fulfilled' && apiResult.value.ok;
-
-  if (opsResult.status === 'fulfilled' && opsResult.value.ok) {
-    try {
-      const ops = await opsResult.value.json();
-      ensureOperationalSettings();
-      systemSettings.tempDisableAllNotifications = !!ops.tempDisableAllNotifications;
-      systemSettings.serverOperationsTest = {
-        enabled: !!ops.enabled,
-        mainServer: !!ops.mainServer,
-        api: !!ops.api,
-        notifications: !!ops.notifications
-      };
-      serverOperationsHealth.notifications = !ops.notificationsDisabled;
-    } catch (e) {
-      serverOperationsHealth.notifications = null;
-    }
-  } else {
-    serverOperationsHealth.notifications = null;
-  }
-
   serverOperationsHealth.checkedAt = Date.now();
   serverOperationsHealth.checking = false;
   renderStatusPage();
@@ -2897,8 +2907,6 @@ async function cycleMyPresenceStatus() {
   const sessionId = sessionStorage.getItem('ccms-session-id');
   const handle = sessionStorage.getItem('ccms-handle') || currentUsernameHandle;
 
-  // Always start from the freshest server user list. Presence changes must patch
-  // only this account and never save a stale in-memory list over other staff.
   try {
     const res = await fetch('/api/data', { cache: 'no-store' });
     if (res.ok) {
@@ -2922,11 +2930,8 @@ async function cycleMyPresenceStatus() {
   u.activeSessionId = sessionId || u.activeSessionId;
   u.activeSessionAt = Date.now();
 
-  // Save and wait for the merged server write before re-rendering.
   await saveUsers();
 
-  // The save routine may replace the in-memory array with its merged snapshot.
-  // Re-render from that complete list so other staff never disappear locally.
   renderDashboard();
   renderStatusPage();
 }
@@ -2945,16 +2950,13 @@ async function syncStaffChat() {
     systemSettings = { ...systemSettings, ...data.settings, staffChatMessages: merged };
     renderStaffChat();
     updateStaffChatUnreadBadges();
-  } catch(e) { /* keep the existing messages visible until the next sync */ }
+  } catch(e) {  }
 }
 function startStaffChatSync() {
   startOnlineStaffRefresh();
   if (staffChatSyncTimer) clearInterval(staffChatSyncTimer);
   syncStaffChat();
   staffChatSyncTimer = setInterval(() => {
-    // Keep syncing while the app is open. Rendering only happens when the
-    // chat exists, so this does not disturb other pages, and messages appear
-    // without requiring a manual refresh.
     syncStaffChat();
   }, 3000);
 }
@@ -2962,7 +2964,7 @@ async function sendStaffChatMessage() {
   const input = document.getElementById('staff-chat-input'); if (!input) return;
   const text = input.value.trim(); if (!text) return;
   const me = (users || []).find(u => String(u.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase()) || (users || []).find(u => u.name === currentUser);
-  const message = { id: `chat-${Date.now()}-${Math.random().toString(36).slice(2,8)}`, username: me?.name || currentUser || currentUsernameHandle || 'Staff', text, time: new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}), createdAt: Date.now() };
+  const message = { id: `chat-${Date.now()}-${Math.random().toString(36).slice(2,8)}`, username: me?.name || currentUser || currentUsernameHandle || 'Staff', profilePicture: me?.profilePicture || '', text, time: new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}), createdAt: Date.now() };
   input.value='';
   try {
     const freshRes = await fetch('/api/data', { cache: 'no-store' });
@@ -3172,6 +3174,27 @@ function renderCommonTags(accessible) {
   }).join('');
 }
 
+function toggleTopProfileMenu(evt) {
+  if (evt) evt.stopPropagation();
+  const menu = document.getElementById('top-profile-menu');
+  const trigger = document.getElementById('top-user-chip');
+  if (!menu) return;
+  const open = menu.classList.toggle('open');
+  if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function closeTopProfileMenu() {
+  const menu = document.getElementById('top-profile-menu');
+  const trigger = document.getElementById('top-user-chip');
+  if (menu) menu.classList.remove('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+
+document.addEventListener('click', function(event) {
+  const wrap = document.getElementById('top-profile-wrap');
+  if (wrap && !wrap.contains(event.target)) closeTopProfileMenu();
+});
+
 function toggleUserMenu(username, evt) {
   if (evt) evt.stopPropagation();
   document.querySelectorAll('.user-action-menu').forEach(m => {
@@ -3199,11 +3222,7 @@ document.querySelector('.content')?.addEventListener('scroll', () => {
   document.querySelectorAll('.user-action-menu').forEach(m => m.style.display = 'none');
 });
 
-// The Users table only reflects whatever was already in memory (loaded at
-// login or last saved locally) — it never pulls other users' logins/logouts
-// on its own. This fetches the latest server state and re-renders whenever
-// the Users page is open, so Session/Last Online stay current without
-// needing a manual reload.
+
 async function refreshUsersFromServer() {
   if (currentPageName !== 'users') return;
   try {
@@ -3214,7 +3233,7 @@ async function refreshUsersFromServer() {
       try { localStorage.setItem('ccms-users-list', JSON.stringify(users)); } catch(e) {}
       renderUsers();
     }
-  } catch(e) { /* ignore transient network errors */ }
+  } catch(e) {  }
 }
 
 function startUsersPageAutoRefresh() {
@@ -3409,9 +3428,9 @@ function renderLinkedCrOptions(containerId, selectedIds) {
   const container = document.getElementById(containerId);
   if (!container) return;
   const selected = new Set(selectedIds || []);
-  // Rejected and archived CRs aren't really "pending release" — everything
-  // else (including already-implemented ones, in case a later entry wants
-  // to reference them) stays selectable.
+  
+  
+  
   const eligible = requests.filter(r => r.status !== 'rejected' && !r.archived);
   container.innerHTML = eligible.length ? eligible.map(r =>
     `<label><input type="checkbox" value="${r.id}" ${selected.has(r.id) ? 'checked' : ''}> ${r.id} — ${(r.summary || '').slice(0, 60)}</label>`
@@ -3427,11 +3446,11 @@ function getLinkedCrSelection(containerId) {
 async function applyLinkedRequestsToChangelog(entry) {
   if (!entry.published || !Array.isArray(entry.linkedRequests) || !entry.linkedRequests.length) return;
 
-  // Refresh just the linked requests from the server before touching their status.
-  // This tab's local `requests` array can be stale relative to the server (e.g. an
-  // auto-close ran via another tab, or this tab's own periodic check hasn't run
-  // since), and applying "mark implemented" on top of a stale pending-review copy
-  // would resurrect a request the server already auto-rejected and closed.
+  
+  
+  
+  
+  
   try {
     const res = await fetch('/api/data', { cache: 'no-store' });
     if (res.ok) {
@@ -3444,7 +3463,7 @@ async function applyLinkedRequestsToChangelog(entry) {
         });
       }
     }
-  } catch (e) { /* fall back to whatever's in memory if the server is unreachable */ }
+  } catch (e) {  }
 
   entry.linkedRequests.forEach(id => {
     const r = requests.find(x => x.id === id);
@@ -3464,10 +3483,11 @@ function renderServerChangelog() {
   const container = document.getElementById('changelog-history-list');
   renderLinkedCrOptions('changelog-linked-crs', []);
   if (!container) return;
-  // Drafts (published === false) are only visible to admins/staff — everyone
-  // else only ever sees entries once they're actually published.
+  
+  
   const canSeeDrafts = (userRole === 'admin' || userRole === 'staff');
-  const visibleChanges = serverChanges.filter(c => c.published !== false || canSeeDrafts);
+  const visibleChanges = serverChanges.filter(c => !c.archived && (c.published !== false || canSeeDrafts));
+  const archivedDrafts = serverChanges.filter(c => c.archived && c.published === false && canSeeDrafts);
   container.innerHTML = visibleChanges.length ? visibleChanges.map((c) => {
     const idx = serverChanges.indexOf(c);
     const isDraft = c.published === false;
@@ -3485,6 +3505,7 @@ function renderServerChangelog() {
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:12px;color:var(--text-secondary)">${c.date} &bull; By ${c.author}</span>
           ${(userRole === 'admin' || (c.author === currentUser && userRole !== 'guest' && userRole !== 'disabled')) ? `<button class="btn-secondary changelog-action-btn" onclick="openEditChangelogModal(${idx})">Edit</button>` : ''}
+          ${isDraft && (userRole === 'admin' || (c.author === currentUser && userRole !== 'guest' && userRole !== 'disabled')) ? `<button class="btn-secondary changelog-action-btn" onclick="archiveChangelogDraft(${idx})">Archive</button>` : ''}
           ${isDraft && userRole === 'admin' ? `<button class="btn-primary changelog-action-btn" onclick="publishChangelogEntry(${idx})">Publish</button>` : ''}
           ${userRole === 'admin' ? `<button class="btn-danger changelog-action-btn" onclick="deleteChangelogEntry(${idx})">Delete</button>` : ''}
         </div>
@@ -3494,9 +3515,31 @@ function renderServerChangelog() {
     </div>
   `;
   }).join('') : '<div class="empty-state">No server changes logged yet.</div>';
+  const archivedEl = document.getElementById('changelog-archived-drafts-list');
+  if (archivedEl) {
+    archivedEl.innerHTML = archivedDrafts.length ? `
+      <div class="field-label" style="margin-bottom:10px">Archived Drafts</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${archivedDrafts.map(c => {
+          const archivedDate = c.archivedAt ? new Date(c.archivedAt).toLocaleString() : 'Archived';
+          return `<div class="cr-list-item" style="cursor:default;display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <div style="min-width:0">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <span style="background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;color:#94a3b8;font-weight:600">v${c.version || '—'}</span>
+                <span style="font-size:13px;font-weight:600;color:var(--text-primary)">${c.title || '(untitled)'}</span>
+                <span class="status-badge status-archived">ARCHIVED DRAFT</span>
+              </div>
+              <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">By ${c.author || 'Unknown'} · ${archivedDate}</div>
+            </div>
+            ${userRole === 'admin' ? `<button class="btn-danger changelog-action-btn" onclick="deleteChangelogEntry(${serverChanges.indexOf(c)})">Delete</button>` : ''}
+          </div>`;
+        }).join('')}
+      </div>` : '';
+  }
 }
 
 async function submitServerChangelog() {
+  if (systemSettings.changelogDisabled && userRole !== 'admin') { showPopup('Submissions Disabled', systemSettings.changelogDisabledNote || 'Change Log submissions are currently disabled.'); return; }
   if (userRole === 'guest' || userRole === 'disabled') {
     showPopup('Action Restricted', 'Action restricted.');
     return;
@@ -3512,6 +3555,7 @@ async function submitServerChangelog() {
   }
   const entry = {
     date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+    createdAt: Date.now(),
     version,
     title,
     desc: text,
@@ -3576,7 +3620,7 @@ async function submitEditChangelog() {
     saveServerChanges();
     if (linkedRequests.length) saveRequests();
     if (!wasPublished && published) {
-      // Draft is going live for the first time — announce it like a new entry.
+      
       sendDiscordEmbed(buildChangelogDiscordEmbed(serverChanges[idx]), `**New Change Log Entry:** v${version} — ${title}`, buildChangelogDiscordComponents());
     } else if (wasPublished && published) {
       sendDiscordEmbed(
@@ -3591,6 +3635,23 @@ async function submitEditChangelog() {
     closeEditChangelogModal();
     showPopup('Success', 'Server change updated successfully.');
   }
+}
+
+async function archiveChangelogDraft(idx) {
+  const c = serverChanges[idx];
+  if (!c || c.published !== false || c.archived) return;
+  const allowed = userRole === 'admin' || (c.author === currentUser && userRole !== 'guest' && userRole !== 'disabled');
+  if (!allowed) return;
+  showConfirm('Archive Draft', `Archive "${c.title || 'this draft'}" (v${c.version || '—'})? It will no longer appear in the active Change Log.`, false, async () => {
+    c.archived = true;
+    c.archivedAt = Date.now();
+    c.archivedBy = currentUser;
+    await saveServerChanges();
+    logActivity('Change Log Draft Archived', `Archived draft v${c.version || '—'} — ${c.title || '(untitled)'}`);
+    renderServerChangelog();
+    renderDashboard();
+    showPopup('Draft Archived', 'The change log draft has been archived.');
+  });
 }
 
 async function publishChangelogEntry(idx) {
@@ -3704,10 +3765,10 @@ async function deleteUser(username) {
   if (!localUser) return;
 
   showConfirm('Confirm Deletion', `Are you sure you want to permanently delete user "${localUser.name}"?`, true, async () => {
-    // User deletion must be based on the freshest server state. The generic
-    // saveUsers() merge intentionally preserves local-only users, which means
-    // deleting a user locally and then calling saveUsers() can accidentally
-    // add that user straight back from the server copy.
+    
+    
+    
+    
     const wasHeartbeatRunning = !!sessionHeartbeatHandle;
     if (wasHeartbeatRunning) clearInterval(sessionHeartbeatHandle);
     sessionHeartbeatHandle = null;
@@ -3718,9 +3779,9 @@ async function deleteUser(username) {
       const data = await res.json();
       const freshUsers = Array.isArray(data.users) ? data.users.filter(u => u.username !== username) : [];
 
-      // Refuse to claim success if the server did not contain the account we
-      // intended to delete. This prevents a stale browser copy from causing
-      // misleading success messages.
+      
+      
+      
       if (!Array.isArray(data.users) || !data.users.some(u => u.username === username)) {
         showPopup('Already Deleted', `User "${localUser.name}" is already gone from the server.`);
         users = freshUsers;
@@ -3786,13 +3847,12 @@ function deleteRequest(id) {
   });
 }
 
-
 function viewCR(id) {
   viewingId = id;
   const r = requests.find(x=>x.id===id);
   if (!r) return;
   showPage('detail', null);
-  // Archived requests always live on their own read-only route.
+  
   syncURL((r.archived ? '/archive-requests/' : '/requests/') + encodeURIComponent(id));
   document.getElementById('breadcrumb').innerHTML = `Requests &rsaquo; <span>${r.id}</span>`;
 
@@ -3817,17 +3877,17 @@ function viewCR(id) {
     } else if (r.threadClosed) {
       sidePanelContent = `
       <div class="cr-side-card">
-        <div class="field-label" style="margin-bottom:12px">Change Status Control</div>
+        <div class="field-label" style="margin-bottom:12px">Change Status</div>
+        ${['implemented','accepted','in-progress','rejected'].includes(r.status) ? `<button class="btn-warning" style="width:100%;margin-bottom:12px" onclick="bringBackToPending('${id}')">Bring Back to Pending</button>` : ''}
         <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:14px">This thread is closed. Status can't be changed and no further comments can be posted.</div>
-        ${['implemented','accepted','in-progress','rejected'].includes(r.status) ? `<button class="btn-warning" style="width:100%;margin-bottom:8px" onclick="bringBackToPending('${id}')">Bring Back to Pending</button>` : ''}
         <button class="btn-ghost" style="width:100%;margin-bottom:8px" onclick="reopenThread('${id}')">Reopen Thread</button>
         <button class="btn-secondary" style="width:100%" onclick="toggleArchiveRequest('${id}')">Archive Request</button>
       </div>`;
     } else {
       sidePanelContent = `
       <div class="cr-side-card">
-        <div class="field-label" style="margin-bottom:12px">Change Status Control</div>
-        ${r.status === 'rejected' ? `<button class="btn-warning" style="width:100%;margin-bottom:14px;padding:8px 12px;font-size:13px" onclick="bringBackToPending('${id}')">Bring Back to Pending</button>` : ''}
+        <div class="field-label" style="margin-bottom:12px">Change Status</div>
+        ${['implemented','accepted','in-progress','rejected'].includes(r.status) ? `<button class="btn-warning" style="width:100%;margin-bottom:14px;padding:8px 12px;font-size:13px" onclick="bringBackToPending('${id}')">Bring Back to Pending</button>` : ''}
         ${r.status === 'pending-review' ? `
         <div class="field-group" style="display:flex;gap:8px;margin-bottom:14px">
           <button class="btn-success" style="flex:1;padding:8px 12px;font-size:13px" onclick="quickAccept('${id}')">Accept</button>
@@ -4147,8 +4207,8 @@ async function submitEditCR() {
     r.acceptedAt = new Date().toISOString();
   }
 
-  // Persist the complete request, including tags, before writing the activity log.
-  // The activity-log save also writes /api/data, so ordering matters.
+  
+  
   await saveRequests();
   logActivity("Status Change", r.id + " u2192 " + formatStatusLabel(newStatus));
   if (oldStatus !== newStatus) {
@@ -4244,7 +4304,7 @@ async function bringBackToPending(id) {
   if (userRole !== 'admin') return;
   const r = requests.find(x=>x.id===id);
   if (r?.archived) { showPopup('Archived Request', 'This request is archived and locked. Unarchive it before making changes.'); return; }
-  if (!r || r.status !== 'rejected') return;
+  if (!r || !['implemented','accepted','in-progress','rejected'].includes(r.status)) return;
   showConfirm('Bring Back to Pending', `Move ${r.id} back to Pending review?${r.threadClosed ? ' This will also reopen the thread.' : ''}`, false, async () => {
     r.status = 'pending-review';
     const wasClosed = !!r.threadClosed;
@@ -4336,12 +4396,12 @@ function quickEscalate(id) {
     r.escalationReason = reason;
     r.escalatedBy = actorLabel();
     r.escalatedAt = new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-    // Escalation is also a real system tag so it is visible outside the request detail.
+    
     r.tags = Array.isArray(r.tags) ? r.tags.filter(t => String(t).toLowerCase() !== 'escalated') : [];
     const text = `Escalated by ${actorLabel()}. Reason: "${reason}"${oldPriority!=='High' ? ` (priority raised from ${oldPriority} to High)` : ''}`;
     r.comments.push({author:currentUser, time:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}), text});
-    // Save the request FIRST. The old code started request-save and activity-save
-    // concurrently; whichever POST arrived last could overwrite the escalation.
+    
+    
     await saveRequests();
     logActivity("Escalated", r.id + ": " + reason);
     sendNotification(`CR Escalated: ${r.id}`, `<h2>${r.id}: ${r.summary}</h2><p><b>Escalated by:</b> ${actorLabel()}</p><p><b>Reason:</b> ${reason}</p><p><b>Priority:</b> High</p>`, (systemSettings.notifyEmail || "notifications@yourdomain.com"));
@@ -4504,6 +4564,135 @@ async function saveTagSettings() {
   }
 }
 
+function loadStatusReportSettingsIntoForm() {
+  const enabled = document.getElementById('cfg-status-report-enabled');
+  const interval = document.getElementById('cfg-status-report-interval');
+  const email = document.getElementById('cfg-status-report-email');
+  const discord = document.getElementById('cfg-status-report-discord');
+  if (!enabled) return;
+  enabled.checked = !!systemSettings.statusReportEnabled;
+  interval.value = Number(systemSettings.statusReportIntervalMinutes) >= 1 ? Number(systemSettings.statusReportIntervalMinutes) : 360;
+  email.checked = !!systemSettings.statusReportEmail;
+  discord.checked = !!systemSettings.statusReportDiscord;
+  updateStatusReportIntervalPreview();
+  loadStatusReportSchedule();
+}
+
+function loadChangelogArchiveSettingsIntoForm() {
+  const enabled = document.getElementById('cfg-changelog-auto-archive-enabled');
+  const days = document.getElementById('cfg-changelog-auto-archive-days');
+  if (!enabled || !days) return;
+  enabled.checked = !!systemSettings.changelogAutoArchiveEnabled;
+  days.value = Number(systemSettings.changelogAutoArchiveDays) >= 1 ? Number(systemSettings.changelogAutoArchiveDays) : 30;
+  const status = document.getElementById('changelog-auto-archive-status');
+  if (status) status.textContent = enabled.checked ? `Automatic draft archiving is enabled after ${days.value} day${Number(days.value) === 1 ? '' : 's'}.` : 'Automatic draft archiving is disabled.';
+}
+
+async function saveChangelogArchiveSettings() {
+  if (userRole !== 'admin') return;
+  const enabled = !!document.getElementById('cfg-changelog-auto-archive-enabled')?.checked;
+  const days = Number(document.getElementById('cfg-changelog-auto-archive-days')?.value);
+  if (!Number.isFinite(days) || days < 1 || days > 3650) { showPopup('Invalid Archive Period', 'Use a draft archive period between 1 and 3650 days.'); return; }
+  try {
+    const res = await fetch('/api/settings', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ changelogAutoArchiveEnabled:enabled, changelogAutoArchiveDays:Math.round(days) }) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Save failed');
+    systemSettings = { ...systemSettings, ...data.settings };
+    try { localStorage.setItem('ccms-settings', JSON.stringify(systemSettings)); } catch(e) {}
+    loadChangelogArchiveSettingsIntoForm();
+    renderServerChangelog();
+    showPopup('Success', enabled ? `Drafts will automatically archive after ${Math.round(days)} day${Math.round(days) === 1 ? '' : 's'}.` : 'Automatic draft archiving disabled.');
+  } catch(e) { showPopup('Error', 'Failed to save draft archive settings: ' + e.message); }
+}
+
+function updateStatusReportIntervalPreview() {
+  const input = document.getElementById('cfg-status-report-interval');
+  const preview = document.getElementById('status-report-interval-preview');
+  if (!input || !preview) return;
+  const minutes = Number(input.value);
+  if (!Number.isFinite(minutes) || minutes < 1) { preview.textContent = ''; return; }
+  if (minutes % 60 === 0) { const hours = minutes / 60; preview.textContent = `(${hours} hour${hours === 1 ? '' : 's'})`; }
+  else preview.textContent = `(${minutes} minutes)`;
+}
+
+async function loadStatusReportSchedule() {
+  try {
+    const res = await fetch('/api/status-report/settings', { cache:'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const next = document.getElementById('status-report-next-info');
+    if (!next) return;
+    if (!data.enabled) { next.textContent = 'Automated status reports are disabled.'; return; }
+    if (data.nextReportAt) next.textContent = `Next automated report: ${new Date(data.nextReportAt).toLocaleString()}`;
+    else next.textContent = 'Automated reports are enabled; the server is scheduling the next report.';
+  } catch(e) {}
+}
+
+async function saveSystemMessagesSettings() {
+  if (userRole !== 'admin') return;
+  const payload = {
+    adminAnnouncement: document.getElementById('cfg-admin-announcement')?.value.trim() || '',
+    requestsDisabled: !!document.getElementById('cfg-requests-disabled')?.checked,
+    requestsDisabledNote: document.getElementById('cfg-requests-disabled-note')?.value.trim() || '',
+    issuesDisabled: !!document.getElementById('cfg-issues-disabled')?.checked,
+    issuesDisabledNote: document.getElementById('cfg-issues-disabled-note')?.value.trim() || '',
+    changelogDisabled: !!document.getElementById('cfg-changelog-disabled')?.checked,
+    changelogDisabledNote: document.getElementById('cfg-changelog-disabled-note')?.value.trim() || ''
+  };
+  try {
+    const res = await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Save failed');
+    systemSettings = { ...systemSettings, ...data.settings };
+    try { localStorage.setItem('ccms-settings',JSON.stringify(systemSettings)); } catch(e) {}
+    const status = document.getElementById('system-messages-save-status');
+    if (status) { status.textContent = 'Saved'; status.style.color = '#4ade80'; }
+    renderDashboard();
+  } catch(e) { showPopup('Error','Failed to save system messages: ' + e.message); }
+}
+
+async function saveStatusReportSettings() {
+  if (userRole !== 'admin') return;
+  const enabled = !!document.getElementById('cfg-status-report-enabled')?.checked;
+  const interval = Number(document.getElementById('cfg-status-report-interval')?.value);
+  const email = !!document.getElementById('cfg-status-report-email')?.checked;
+  const discord = !!document.getElementById('cfg-status-report-discord')?.checked;
+  if (!Number.isFinite(interval) || interval < 1 || interval > 43200) { showPopup('Invalid Interval','Use an interval between 1 and 43200 minutes.'); return; }
+  if (enabled && !email && !discord) { showPopup('No Channel Selected','Select Email or Discord before enabling automated reports.'); return; }
+  if (enabled && email && !document.getElementById('cfg-email')?.value.trim()) { showPopup('Email Not Configured','Set the System Notification Email Address first.'); return; }
+  if (enabled && discord && !document.getElementById('cfg-discord-webhook')?.value.trim()) { showPopup('Discord Not Configured','Set the Discord Webhook URL first.'); return; }
+  const payload = { statusReportEnabled:enabled, statusReportIntervalMinutes:Math.round(interval), statusReportEmail:email, statusReportDiscord:discord };
+  try {
+    const res = await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Save failed');
+    systemSettings = { ...systemSettings, ...data.settings };
+    try { localStorage.setItem('ccms-settings',JSON.stringify(systemSettings)); } catch(e) {}
+    updateStatusReportIntervalPreview();
+    loadStatusReportSchedule();
+    showPopup('Success','Status report settings saved.');
+  } catch(e) { showPopup('Error','Failed to save report settings: ' + e.message); }
+}
+
+async function sendStatusReportNow(button) {
+  if (userRole !== 'admin') return;
+  const email = !!document.getElementById('cfg-status-report-email')?.checked;
+  const discord = !!document.getElementById('cfg-status-report-discord')?.checked;
+  if (!email && !discord) { showPopup('No Channel Selected','Select Email or Discord first.'); return; }
+  if (button) { button.disabled = true; button.textContent = 'Sending...'; }
+  try {
+    const res = await fetch('/api/status-report/send-now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,discord})});
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Failed to send status report.');
+    const sent = Object.entries(data.results || {}).filter(([k,v]) => v === 'ok').map(([k]) => k);
+    showPopup('Status Report Sent',sent.length ? `Sent successfully via ${sent.join(' and ')}.` : 'The report was processed.');
+  } catch(e) { showPopup('Status Report Failed',e.message); }
+  finally { if (button) { button.disabled = false; button.textContent = 'Send Status Report Now'; } }
+}
+
+const statusReportIntervalInput = document.getElementById('cfg-status-report-interval');
+if (statusReportIntervalInput) statusReportIntervalInput.addEventListener('input', updateStatusReportIntervalPreview);
+
 async function saveNotificationSettings() {
   if (userRole !== 'admin') return;
   const now = Date.now();
@@ -4539,9 +4728,9 @@ async function saveNotificationSettings() {
         localStorage.setItem('ccms-allow-custom-tags', JSON.stringify(!!payload.allowCustomTags));
       }
     } catch(e) {}
-    // Also persist the setting in the main app-data document. The settings
-    // page is restored from /api/data on refresh, so saving only /api/settings
-    // could make the custom-tags checkbox snap back to checked after reload.
+    
+    
+    
     try {
       await queueServerWrite(async () => {
         const freshRes = await fetch('/api/data', { cache: 'no-store' });
@@ -4570,44 +4759,11 @@ async function saveNotificationSettings() {
   }
 }
 
-function handleAcceptingRequestsToggle(toggle) {
-  updateAcceptingBadgePreview();
-  // The switch itself is the save control. No separate Save Accepting Requests button.
-  saveRequestSettings('accepting');
-}
-
-function updateAcceptingBadgePreview() {
-  const toggle = document.getElementById('req-accepting-toggle');
-  const badge = document.getElementById('req-accepting-badge');
-  if (!toggle || !badge) return;
-  const note = document.getElementById('req-accepting-note');
-  if (toggle.checked) {
-    badge.innerText = 'OPEN';
-    badge.style.color = '#4ade80';
-    if (note) {
-      const saved = (systemSettings.requestSettings || {}).closedNote;
-      note.style.display = saved ? 'block' : 'none';
-    }
-  } else {
-    badge.innerText = 'CLOSED';
-    badge.style.color = '#f87171';
-    if (note) {
-      const saved = (systemSettings.requestSettings || {}).closedNote;
-      note.style.display = 'block';
-      note.innerHTML = saved
-        ? `<strong>Closure note:</strong> ${String(saved).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}`
-        : '<strong>Closure note:</strong> A note will be requested when you save this setting.';
-    }
-  }
-}
-
-const requestSettingSaveTimes = { accepting: 0, cooldown: 0, autoclose: 0, notifications: 0 };
+const requestSettingSaveTimes = { autoclose: 0, notifications: 0 };
 const requestSettingCooldownIntervals = {};
 
 function requestSettingStatus(scope, text, isError=false) {
   const ids = {
-    accepting: 'req-accepting-save-status',
-    cooldown: 'req-cooldown-save-status',
     autoclose: 'req-autoclose-save-status',
     notifications: 'req-notification-save-status'
   };
@@ -4657,9 +4813,9 @@ async function persistRequestSettingsPatch(scope, patch) {
   });
 }
 
-function saveRequestSettings(scope='accepting') {
+function saveRequestSettings(scope='autoclose') {
   if (userRole !== 'admin') return;
-  if (!['accepting','cooldown','autoclose'].includes(scope)) scope='accepting';
+  if (scope !== 'autoclose') scope = 'autoclose';
 
   const now = Date.now();
   const last = Number(requestSettingSaveTimes[scope] || 0);
@@ -4669,45 +4825,8 @@ function saveRequestSettings(scope='accepting') {
     return;
   }
 
-  if (scope === 'accepting') {
-    const wasAccepting = isAcceptingRequests();
-    const willAccept = document.getElementById('req-accepting-toggle').checked;
-    if (wasAccepting && !willAccept) {
-      const acceptingToggle = document.getElementById('req-accepting-toggle');
-      const originalClosePrompt = closePromptModal;
-      showPromptModal('Close Responses', 'Enter a note explaining why responses are being closed. Staff will see this on the dashboard.', async (note) => {
-        window.__restoreAcceptingToggleOnCancel = false;
-        await finishRequestSettingSave(scope, {
-          acceptingRequests:false,
-          closedNote: note || '',
-          closedBy: currentUser
-        });
-      }, true);
-      window.__restoreAcceptingToggleOnCancel = true;
-      window.__acceptingToggleRef = acceptingToggle;
-      return;
-    }
-    finishRequestSettingSave(scope, willAccept ? {
-      acceptingRequests:true,
-      closedNote:null,
-      closedBy:null
-    } : {
-      acceptingRequests:false
-    });
-    return;
-  }
-
-  if (scope === 'cooldown') {
-    finishRequestSettingSave(scope, {
-      cooldownEnabled: document.getElementById('req-cooldown-enabled').checked,
-      cooldownMax: Math.max(1, parseInt(document.getElementById('req-cooldown-max').value,10) || 3),
-      cooldownHours: Math.max(1, parseInt(document.getElementById('req-cooldown-hours').value,10) || 24)
-    });
-    return;
-  }
-
-  const enabled = document.getElementById('req-autoclose-enabled').checked;
-  const days = Math.max(1, parseInt(document.getElementById('req-autoclose-days').value,10) || 14);
+  const enabled = !!document.getElementById('req-autoclose-enabled')?.checked;
+  const days = Math.max(1, parseInt(document.getElementById('req-autoclose-days')?.value,10) || 14);
 
   if (enabled) {
     const affectedCount = requests.filter(r =>
@@ -4736,8 +4855,6 @@ async function finishRequestSettingSave(scope, patch) {
     updateNewCrBtnVisibility();
     startRequestSettingCooldownTimer(scope, 15);
     requestSettingStatus(scope, 'Saved');
-    if (scope === 'accepting') showPopup('Success', 'Accepting requests setting saved.');
-    if (scope === 'cooldown') showPopup('Success', 'Per-employee setting saved.');
     if (scope === 'autoclose') showPopup('Success', 'Auto-close setting saved.');
   } catch(e) {
     console.error('Failed to save request setting:', e);
@@ -4766,11 +4883,7 @@ function autoSaveRequestNotificationSettings() {
 }
 
 function startRequestSettingCooldownTimer(scope, duration) {
-  const buttonIds = {
-    accepting:'save-accepting-requests-btn',
-    cooldown:'save-cooldown-settings-btn',
-    autoclose:'save-autoclose-settings-btn'
-  };
+  const buttonIds = { autoclose:'save-autoclose-settings-btn' };
   const btn = document.getElementById(buttonIds[scope]);
   if (!btn) return;
   if (requestSettingCooldownIntervals[scope]) clearInterval(requestSettingCooldownIntervals[scope]);
@@ -4792,28 +4905,13 @@ function startRequestSettingCooldownTimer(scope, duration) {
 }
 
 function loadRequestSettingsIntoForm() {
-  const toggle = document.getElementById('req-accepting-toggle');
-  if (!toggle) return;
   const rs = systemSettings.requestSettings || {};
-  toggle.checked = rs.acceptingRequests !== false;
-  document.getElementById('req-default-email').checked = rs.defaultNotifyEmail !== false;
-  document.getElementById('req-default-discord').checked = rs.defaultNotifyDiscord !== false;
-  document.getElementById('req-cooldown-enabled').checked = !!rs.cooldownEnabled;
-  document.getElementById('req-cooldown-max').value = rs.cooldownMax || 3;
-  document.getElementById('req-cooldown-hours').value = rs.cooldownHours || 24;
+  const email = document.getElementById('req-default-email');
+  const discord = document.getElementById('req-default-discord');
+  if (email) email.checked = rs.defaultNotifyEmail !== false;
+  if (discord) discord.checked = rs.defaultNotifyDiscord !== false;
   document.getElementById('req-autoclose-enabled').checked = !!rs.autoCloseEnabled;
   document.getElementById('req-autoclose-days').value = rs.autoCloseDays || 14;
-  updateAcceptingBadgePreview();
-  const note = document.getElementById('req-accepting-note');
-  if (note) {
-    if (rs.closedNote) {
-      note.style.display = 'block';
-      note.innerHTML = `<strong>Closure note:</strong> ${String(rs.closedNote).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}`;
-    } else {
-      note.style.display = 'none';
-      note.innerHTML = '';
-    }
-  }
 }
 
 function runAutoCloseCheck() {
@@ -4854,6 +4952,22 @@ function loadSettingsIntoForm() {
   if (!emailEl) return;
   emailEl.value = systemSettings.notifyEmail || 'notifications@yourdomain.com';
   discordEl.value = systemSettings.discordWebhook || '';
+  const announcementEl = document.getElementById('cfg-admin-announcement');
+  const requestsDisabledEl = document.getElementById('cfg-requests-disabled');
+  const requestsDisabledNoteEl = document.getElementById('cfg-requests-disabled-note');
+  const issuesDisabledEl = document.getElementById('cfg-issues-disabled');
+  const issuesDisabledNoteEl = document.getElementById('cfg-issues-disabled-note');
+  const changelogDisabledEl = document.getElementById('cfg-changelog-disabled');
+  const changelogDisabledNoteEl = document.getElementById('cfg-changelog-disabled-note');
+  if (announcementEl) announcementEl.value = systemSettings.adminAnnouncement || '';
+  if (requestsDisabledEl) requestsDisabledEl.checked = !!systemSettings.requestsDisabled;
+  if (requestsDisabledNoteEl) requestsDisabledNoteEl.value = systemSettings.requestsDisabledNote || '';
+  if (issuesDisabledEl) issuesDisabledEl.checked = !!systemSettings.issuesDisabled;
+  if (issuesDisabledNoteEl) issuesDisabledNoteEl.value = systemSettings.issuesDisabledNote || '';
+  if (changelogDisabledEl) changelogDisabledEl.checked = !!systemSettings.changelogDisabled;
+  if (changelogDisabledNoteEl) changelogDisabledNoteEl.value = systemSettings.changelogDisabledNote || '';
+  loadStatusReportSettingsIntoForm();
+  loadChangelogArchiveSettingsIntoForm();
   const allowCustomTagsEl = document.getElementById('cfg-allow-custom-tags');
   if (allowCustomTagsEl) {
     let localAllowCustomTags = null;
@@ -4867,8 +4981,8 @@ function loadSettingsIntoForm() {
     allowCustomTagsEl.checked = persistedValue !== false;
   }
 
-  // Cooldown is persisted in both server settings and localStorage so a page
-  // refresh cannot reset the 30-second rate limit.
+  
+  
   let storedTime = Number(systemSettings.lastSavedAt || 0);
   try { storedTime = Math.max(storedTime, Number(localStorage.getItem('ccms-settings-save-time') || 0)); } catch(e) {}
   lastSettingsSaveTime = storedTime || 0;
@@ -4917,6 +5031,24 @@ function startCooldownTimer(duration) {
   cooldownTimerInterval = setInterval(tick, 1000);
 }
 
+async function purgeStaffChat() {
+  if (userRole !== 'admin') return;
+  showConfirm('Purge Staff Chat', 'Permanently delete all staff chat messages? This cannot be undone.', true, async () => {
+    try {
+      const res = await fetch('/api/staff-chat/purge', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({}) });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Purge failed');
+      systemSettings = { ...systemSettings, staffChatMessages: [] };
+      staffChatLastRenderKey = '';
+      renderStaffChat();
+      updateStaffChatUnreadBadges();
+      showPopup('Chat Purged', 'All staff chat messages were permanently removed.');
+    } catch(e) {
+      showPopup('Purge Failed', e.message);
+    }
+  });
+}
+
 function deleteAllRequests() {
   if (userRole !== 'admin') return;
   showConfirm('Confirm Deletion', 'Are you sure you want to delete all change requests? This cannot be undone.', true, () => {
@@ -4939,10 +5071,6 @@ function deleteAllIssues() {
   });
 }
 
-// A CR closed by the auto-close policy is identifiable precisely: rejected,
-// thread-closed, and its last comment is the system-authored auto-close
-// note. That lets us offer a safe, targeted bulk-restore rather than asking
-// the admin to hunt through 146+ requests individually.
 function isAutoClosedRequest(r) {
   if (r.status !== 'rejected' || !r.threadClosed || !Array.isArray(r.comments) || !r.comments.length) return false;
   const last = r.comments[r.comments.length - 1];
@@ -5027,19 +5155,20 @@ function addComment(id) {
 }
 
 async function openNewCR() {
+  if (systemSettings.requestsDisabled && userRole !== 'admin') { showPopup('Requests Disabled', systemSettings.requestsDisabledNote || 'Request submissions are currently disabled.'); return; }
   if (userRole === 'guest' || userRole === 'disabled') {
     showPopup('Action Restricted', 'Action restricted.');
     return;
   }
 
-  // Check against the server's current settings rather than this tab's
-  // possibly-stale local copy — otherwise this can miss a toggle an admin
-  // flipped after this page loaded.
+  
+  
+  
   try {
     const freshRes = await fetch('/api/data', { cache: 'no-store' });
     const fresh = await freshRes.json();
     if (fresh && fresh.settings) systemSettings = { ...systemSettings, ...fresh.settings };
-  } catch (e) { /* fall back to the in-memory copy if the server is unreachable */ }
+  } catch (e) {  }
 
   if (!isAcceptingRequests()) {
     if (userRole !== 'admin') {
@@ -5126,6 +5255,7 @@ function closeNewIssueModal() {
 }
 
 async function submitNewIssue() {
+  if (systemSettings.issuesDisabled && userRole !== 'admin') { showPopup('Submissions Disabled', systemSettings.issuesDisabledNote || 'Issue submissions are currently disabled.'); return; }
   if (userRole === 'guest' || userRole === 'disabled') {
     showPopup('Action Restricted', 'Action restricted.');
     return;
@@ -5260,10 +5390,10 @@ async function submitEditUser() {
   const existingSession = { activeSessionId: users[uIndex].activeSessionId || null, activeSessionAt: users[uIndex].activeSessionAt || null };
   const updatedUser = { username, name, roleTitle, email, profilePicture, pass, role, ...existingSession };
 
-  // Goes through a dedicated server-side update-by-original-username
-  // endpoint instead of saveUsers()'s generic merge, which matches records
-  // by username and silently duplicates the account instead of renaming it
-  // whenever the username itself is the field being changed.
+  
+  
+  
+  
   try {
     const res = await fetch('/api/users/update', {
       method: 'POST',
@@ -5375,7 +5505,7 @@ function submitMyProfile() {
   u.roleTitle = roleTitle;
   u.profilePicture = profilePicture;
   u.presenceStatus = ['online','idle','dnd'].includes(String(u.presenceStatus||'').toLowerCase()) ? String(u.presenceStatus).toLowerCase() : 'online';
-  // Never drop the active session when saving a presence change.
+  
   u.activeSessionId = sessionStorage.getItem('ccms-session-id') || u.activeSessionId;
   u.activeSessionAt = Date.now();
   u.email = email;
@@ -5427,36 +5557,26 @@ async function submitNewUser() {
 async function submitNewCR() {
   if (userRole === 'guest' || userRole === 'disabled') return;
 
-  // Check against the server's current settings rather than this tab's
-  // possibly-stale local copy — otherwise anyone whose page loaded before
-  // an admin closed submissions can still get through undetected.
+  
+  
+  
   try {
     const freshRes = await fetch('/api/data', { cache: 'no-store' });
     const fresh = await freshRes.json();
     if (fresh && fresh.settings) systemSettings = { ...systemSettings, ...fresh.settings };
-  } catch (e) { /* fall back to the in-memory copy if the server is unreachable */ }
+  } catch (e) {  }
 
   if (userRole !== 'admin') {
     if (!isAcceptingRequests()) {
       showPopup('Responses Are Closed', 'This system is not currently accepting new change requests. Please check back later.');
       return;
     }
-    const rs = systemSettings.requestSettings || {};
-    if (rs.cooldownEnabled) {
-      const windowMs = (Number(rs.cooldownHours) || 24) * 60 * 60 * 1000;
-      const max = Number(rs.cooldownMax) || 3;
-      const recentCount = requests.filter(r => r.author === currentUser && r.createdAt && (Date.now() - new Date(r.createdAt).getTime()) < windowMs).length;
-      if (recentCount >= max) {
-        showPopup('Submission Limit Reached', `You've reached the limit of ${max} request${max !== 1 ? 's' : ''} per ${rs.cooldownHours} hour${Number(rs.cooldownHours) !== 1 ? 's' : ''}. Please try again later.`);
-        return;
-      }
-    }
     await proceedSubmitNewCR();
     return;
   }
 
-  // Admins can still submit while responses are closed, but confirm first
-  // so they don't do it by accident.
+  
+  
   if (!isAcceptingRequests()) {
     showConfirm('Responses Are Closed', 'This system is not currently accepting new change requests. Do you want to override and submit anyway?', false, async () => {
       await proceedSubmitNewCR();
@@ -5492,8 +5612,8 @@ async function proceedSubmitNewCR() {
   };
 
   requests.push(r);
-  // Persist the request (including its tags) before the activity-log write.
-  // This prevents the activity save from restoring an older request snapshot.
+  
+  
   const requestSaved = await saveRequests();
   if (!requestSaved) {
     requests = requests.filter(x => x.id !== r.id);
@@ -5588,13 +5708,11 @@ function showPage(name, el) {
   }
   if (name==='requests') {
     document.getElementById('breadcrumb').innerHTML = 'Requests';
-    document.getElementById('request-settings-section').style.display = (userRole === 'admin') ? 'block' : 'none';
-    loadRequestSettingsIntoForm();
   }
   if (name==='users') { document.getElementById('breadcrumb').innerHTML = 'User Management'; renderUsers(); startUsersPageAutoRefresh(); } else { stopUsersPageAutoRefresh(); }
   if (name==='issues') { document.getElementById('breadcrumb').innerHTML = 'Issues & Fixes Log'; renderIssues(); }
   if (name==='changelog') { document.getElementById('breadcrumb').innerHTML = 'Change Log'; renderServerChangelog(); }
-  if (name==='settings') { document.getElementById('breadcrumb').innerHTML = 'System Notification Settings'; loadSettingsIntoForm(); }
+  if (name==='settings') { document.getElementById('breadcrumb').innerHTML = 'Dashboard Settings'; loadSettingsIntoForm(); loadRequestSettingsIntoForm(); }
   if (name==='data-management') { document.getElementById('breadcrumb').innerHTML = 'Data Management'; renderAutoCloseRestoreSection(); loadBackupScheduleIntoForm(); }
   if (name==='activity') { document.getElementById('breadcrumb').innerHTML = 'Activity Log'; renderActivityLog(); }
   if (name==='archive') { document.getElementById('breadcrumb').innerHTML = 'Archive'; renderArchivePage(); }
@@ -5640,11 +5758,11 @@ async function restoreSession() {
   const savedLoginTime = parseInt(sessionStorage.getItem("ccms-login-time"), 10);
   const savedSessionId = sessionStorage.getItem('ccms-session-id');
 
-  // Chrome can restore a closed tab with its old sessionStorage intact.
-  // A restored/brand-new document is NOT allowed to resurrect the old login.
-  // Normal reloads keep the session; full navigations with a saved session are
-  // treated as a closed-tab restore and the old server session is made
-  // immediately take-over-able by the next login in this browser.
+  
+  
+  
+  
+  
   try {
     const nav = performance.getEntriesByType('navigation')[0];
     const navType = nav ? nav.type : 'navigate';
@@ -5688,9 +5806,9 @@ async function restoreSession() {
 
     const mySessionId = sessionStorage.getItem('ccms-session-id');
     let me = users.find(x => String(x.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase());
-    // Do not trust a stale in-memory users array when restoring a session.
-    // Fetch the live server record and only reject this session if the server
-    // actually has a different, currently-live session owner.
+    
+    
+    
     try {
       const res = await fetch('/api/data', { cache: 'no-store' });
       const data = await res.json();
@@ -5699,33 +5817,10 @@ async function restoreSession() {
         me = users.find(x => String(x.username||'').toLowerCase() === String(currentUsernameHandle||'').toLowerCase());
       }
     } catch (e) {}
-    const otherSessionIsLive = !!(
-      me && me.activeSessionId && mySessionId &&
-      me.activeSessionId !== mySessionId &&
-      me.activeSessionAt &&
-      (Date.now() - me.activeSessionAt) < SESSION_LEASE_MS
-    );
-    const clearedByAdmin = !!(me && !me.activeSessionId);
-    const wasRevoked = !!(me && mySessionId && me.revokedSessionId === mySessionId);
-    if (otherSessionIsLive || clearedByAdmin || wasRevoked) {
-      sessionStorage.removeItem('ccms-user');
-      sessionStorage.removeItem('ccms-role');
-      sessionStorage.removeItem('ccms-handle');
-      sessionStorage.removeItem('ccms-login-time');
-      sessionStorage.removeItem('ccms-session-id');
-      document.getElementById("login-screen").style.display = "flex";
-      let reason = 'Your account was signed in from another location, so this session has been logged out.';
-      if (clearedByAdmin || wasRevoked) {
-        reason = 'An administrator has logged you out.\nNote: ' + (me.revokedReason || 'No note provided.');
-      }
-      showSignedOutOverlay(reason);
-      return;
-    }
-
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("app").style.display = "flex";
     document.getElementById("logged-user-display").innerText = currentUser;
-    renderImpersonationBanner();
+    renderForceLoginBanner();
     applyRoleUIRestrictions();
     setupNav();
     renderDashboard();
@@ -5754,10 +5849,10 @@ async function loadAppData() {
         const res = await fetch('/api/data', { cache: 'no-store' });
         const data = await res.json();
 
-        // Emergency recovery: the previous page-unload implementation could
-        // accidentally POST an empty/stale full database. If the server is now
-        // empty but this browser still has the last good local copy, recover it
-        // before rendering and put it back on the server.
+        
+        
+        
+        
         const localRequests = readLocal('ccms-requests', []);
         const localIssues = readLocal('ccms-issues-list', []);
         const localUsers = readLocal('ccms-users-list', []);
@@ -5807,13 +5902,13 @@ async function loadAppData() {
           activityLog = data.activityLog || [];
           serverChanges = data.serverChanges || [];
           presetTagColors = (data.presetTagColors && typeof data.presetTagColors === 'object') ? data.presetTagColors : localTagColors;
-          // If the server has no preset tags but this browser still has a saved
-          // tag list, restore the local list instead of rendering an empty panel.
+          
+          
           if (Array.isArray(data.presetTags) && data.presetTags.length > 0) {
             presetTags = data.presetTags;
           } else if (Array.isArray(localTags) && localTags.length > 0) {
             presetTags = localTags;
-            // Push recovered tags back to the server without touching other data.
+            
             try {
               const recoveryState = {
                 changeRequests: data.changeRequests || requests,
@@ -5920,14 +6015,13 @@ async function sendRequestDiscordUpdate(r, actionLabel, content, prefix='status'
     return sendDiscordEmbed(buildCrEmbed(r, actionLabel), content, buildCrDiscordComponents(r));
 }
 
-// Decimal ints, not hex strings — that's what Discord's embed API expects for "color".
 function crStatusColor(status) {
     const map = {
-        'pending-review': 0xfbbf24, // amber
-        'in-progress': 0x3b82f6,    // blue
-        'accepted': 0x22c55e,       // green
-        'rejected': 0xef4444,       // red
-        'implemented': 0x10b981     // emerald
+        'pending-review': 0xfbbf24, 
+        'in-progress': 0x3b82f6,    
+        'accepted': 0x22c55e,       
+        'rejected': 0xef4444,       
+        'implemented': 0x10b981     
     };
     return map[status] || 0x2563eb;
 }
@@ -5983,23 +6077,21 @@ function buildIssueDiscordComponents(i) {
     }];
 }
 
-// Decimal ints for Discord's embed "color" field. Severity scale mirrors
-// crStatusColor's role but keyed on issue severity instead of CR status.
 function issueSeverityColor(severity) {
     const map = {
-        'Low': 0x22c55e,      // green
-        'Medium': 0xfbbf24,   // amber
-        'High': 0xf97316,     // orange
-        'Critical': 0xef4444  // red
+        'Low': 0x22c55e,      
+        'Medium': 0xfbbf24,   
+        'High': 0xf97316,     
+        'Critical': 0xef4444  
     };
     return map[severity] || 0x6b7280;
 }
 
 const ISSUE_STATUS_EMBED_COLOR = {
-    Active: 0xf97316,    // needs attention
-    Resolved: 0x22c55e,  // green
-    Closed: 0x3b82f6,    // blue
-    Archived: 0x6b7280   // gray
+    Active: 0xf97316,    
+    Resolved: 0x22c55e,  
+    Closed: 0x3b82f6,    
+    Archived: 0x6b7280   
 };
 
 function getChangelogUrl() {
@@ -6069,8 +6161,6 @@ function buildIssueStatusDiscordEmbed(i, statusLabel, note) {
     };
 }
 
-
-// Notification testing + Server Operations test-mode defaults.
 function ensureOperationalSettings() {
   if (!systemSettings || typeof systemSettings !== 'object') systemSettings = {};
   if (typeof systemSettings.tempDisableAllNotifications !== 'boolean') {
@@ -6079,9 +6169,7 @@ function ensureOperationalSettings() {
   if (!systemSettings.serverOperationsTest || typeof systemSettings.serverOperationsTest !== 'object') {
     systemSettings.serverOperationsTest = { enabled:false, mainServer:false, api:false, notifications:false };
   }
-  if (typeof systemSettings.serverOperationsTest.enabled !== 'boolean') {
-    systemSettings.serverOperationsTest.enabled = false;
-  }
+  if (typeof systemSettings.serverOperationsTest.enabled !== 'boolean') systemSettings.serverOperationsTest.enabled = false;
   for (const k of ['mainServer','api','notifications']) {
     if (typeof systemSettings.serverOperationsTest[k] !== 'boolean') systemSettings.serverOperationsTest[k] = false;
   }
@@ -6093,60 +6181,50 @@ function isAdminUser() {
   return String(me && (me.role || me.title) || '').toLowerCase().includes('admin');
 }
 
-async function updateServerOperationsControl(payload) {
-  const res = await fetch('/api/server-operations', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Server Operations update failed');
-
-  ensureOperationalSettings();
-  systemSettings.tempDisableAllNotifications = !!data.tempDisableAllNotifications;
-  systemSettings.serverOperationsTest = {
-    enabled: !!data.enabled,
-    mainServer: !!data.mainServer,
-    api: !!data.api,
-    notifications: !!data.notifications
-  };
-  serverOperationsHealth.notifications = !data.notificationsDisabled;
-  return data;
-}
-
 async function setTempDisableAllNotifications(checked) {
-  try {
-    await updateServerOperationsControl({ tempDisableAllNotifications: !!checked });
-    await checkServerOperations();
-  } catch (e) {
-    showPopup('Error', 'Could not update notification delivery: ' + e.message);
-    renderStatusPage();
-  }
+  ensureOperationalSettings();
+  systemSettings.tempDisableAllNotifications = !!checked;
+  await saveAppData('settings');
+  renderStatusPage();
 }
 
-async function setServerOperationsTestMode(checked) {
+async function setServerTestMode(enabled) {
   if (!isAdminUser()) return;
-  try {
-    await updateServerOperationsControl({ enabled: !!checked });
-    await checkServerOperations();
-  } catch (e) {
-    showPopup('Error', 'Could not update Test Mode: ' + e.message);
-    renderStatusPage();
+  ensureOperationalSettings();
+  systemSettings.serverOperationsTest.enabled = !!enabled;
+  if (!enabled) {
+    systemSettings.serverOperationsTest.mainServer = false;
+    systemSettings.serverOperationsTest.api = false;
+    systemSettings.serverOperationsTest.notifications = false;
   }
+  try {
+    const res = await fetch('/api/server-operations', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({enabled:!!enabled}) });
+    if (!res.ok) throw new Error('Server Operations update failed');
+    const data = await res.json();
+    systemSettings.serverOperationsTest = { enabled:!!data.enabled, mainServer:!!data.mainServer, api:!!data.api, notifications:!!data.notifications };
+  } catch(e) {
+    await saveAppData('settings');
+  }
+  renderStatusPage();
+  renderDashboard();
 }
 
 async function setServerOperationsTest(service, checked) {
   if (!isAdminUser()) return;
   ensureOperationalSettings();
-  if (!systemSettings.serverOperationsTest.enabled) return;
   if (!['mainServer','api','notifications'].includes(service)) return;
+  systemSettings.serverOperationsTest.enabled = true;
+  systemSettings.serverOperationsTest[service] = !!checked;
   try {
-    await updateServerOperationsControl({ service, checked: !!checked });
-    await checkServerOperations();
-  } catch (e) {
-    showPopup('Error', 'Could not update server control: ' + e.message);
-    renderStatusPage();
+    const res = await fetch('/api/server-operations', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({enabled:true,service,checked:!!checked}) });
+    if (!res.ok) throw new Error('Server Operations update failed');
+    const data = await res.json();
+    systemSettings.serverOperationsTest = { enabled:!!data.enabled, mainServer:!!data.mainServer, api:!!data.api, notifications:!!data.notifications };
+  } catch(e) {
+    await saveAppData('settings');
   }
+  renderStatusPage();
+  renderDashboard();
 }
 
 async function saveAppData(changedField) {
@@ -6155,14 +6233,14 @@ async function saveAppData(changedField) {
     try {
         const freshRes = await fetch('/api/data', { cache: 'no-store' });
         fresh = await freshRes.json();
-    } catch(e) { /* fall back to the in-memory copy if the server is unreachable */ }
+    } catch(e) {  }
 
     const localSessionId = sessionStorage.getItem('ccms-session-id');
     const localHandle = sessionStorage.getItem('ccms-handle') || currentUsernameHandle;
 
-    // User records are special because they contain both account data (including
-    // the password) and volatile session data.  Never let a background save such
-    // as Login -> Activity Log overwrite a session or password with an older copy.
+    
+    
+    
     function mergeUsers(freshUsers, localUsers) {
         if (!Array.isArray(localUsers)) return Array.isArray(freshUsers) ? freshUsers : [];
         if (!Array.isArray(freshUsers)) return localUsers;
@@ -6171,19 +6249,19 @@ async function saveAppData(changedField) {
         const freshByUsername = new Map(freshUsers.map(u => [u.username, u]));
         const merged = [];
 
-        // A profile rename changes the local username key, so a username-only
-        // merge would treat the renamed record as a brand-new account and keep
-        // the old account on the server. Identify the current account by the
-        // session lease + the old session handle and replace that server record
-        // in place instead.
+        
+        
+        
+        
+        
         const currentLocal = localUsers.find(u => localSessionId && u.activeSessionId === localSessionId);
         const renamedFrom = currentLocal && localHandle && currentLocal.username !== localHandle
           ? freshUsers.find(u => u.username === localHandle)
           : null;
         const renamedLocal = renamedFrom && currentLocal ? currentLocal : null;
 
-        // Keep the server's ordering/records, applying deliberate local account
-        // edits on top. This preserves passwords and profile changes.
+        
+        
         for (const serverUser of freshUsers) {
             if (renamedFrom && serverUser.username === renamedFrom.username) {
                 const out = { ...serverUser, ...renamedLocal };
@@ -6199,8 +6277,8 @@ async function saveAppData(changedField) {
                 localSessionId && localUser.activeSessionId === localSessionId;
             const out = { ...serverUser, ...localUser };
 
-            // Session ownership must come from the freshest valid owner, except
-            // when this tab is actively saving its own current session.
+            
+            
             if (!isCurrentTabSession) {
                 out.activeSessionId = serverUser.activeSessionId || null;
                 out.activeSessionAt = serverUser.activeSessionAt || null;
@@ -6208,7 +6286,7 @@ async function saveAppData(changedField) {
             merged.push(out);
         }
 
-        // Preserve genuinely new local users that are not on the server yet.
+        
         for (const localUser of localUsers) {
             if (renamedLocal && localUser === renamedLocal) continue;
             if (!freshByUsername.has(localUser.username)) merged.push(localUser);
@@ -6219,12 +6297,12 @@ async function saveAppData(changedField) {
     const serverUsers = fresh && Array.isArray(fresh.users) ? fresh.users : null;
     let usersToSave;
     if (changedField === 'users') {
-        // The local users array contains the intentional account edit (including
-        // a password change), so merge those fields into the freshest server copy.
+        
+        
         usersToSave = mergeUsers(serverUsers, users);
     } else {
-        // For unrelated saves, NEVER replace the server's user records with a
-        // stale browser copy. Only carry this tab's current session forward.
+        
+        
         usersToSave = serverUsers ? serverUsers.map(u => ({ ...u })) : users;
         const currentLocalUser = users.find(u => u.username === localHandle);
         if (currentLocalUser && localSessionId && currentLocalUser.activeSessionId === localSessionId) {
@@ -6247,8 +6325,8 @@ async function saveAppData(changedField) {
         settings: changedField === 'settings' || !fresh ? systemSettings : (fresh.settings || systemSettings)
     };
 
-    // Keep this tab's in-memory user data synchronized with the exact state we
-    // are about to write, preventing later saves from reintroducing stale data.
+    
+    
     users = appState.users;
     if (changedField !== 'requests') requests = appState.changeRequests;
     if (changedField !== 'issues') issues = appState.issues;
@@ -6259,26 +6337,26 @@ async function saveAppData(changedField) {
     if (changedField !== 'settings') systemSettings = appState.settings;
 
     try {
-        // keepalive was previously set here for 'users' saves so a save could
-        // survive the tab closing right after (e.g. right after logout). But
-        // keepalive fetches are capped at ~64KB by the browser, and this
-        // payload is the ENTIRE app state (currently 146+ change requests plus
-        // issues/activity log), not just the users array — once that crosses
-        // the cap, the browser silently refuses to even send the request. No
-        // network activity, no server log, just a request that never happens.
-        // That's a strictly worse failure mode than the rare interrupted-save
-        // this was protecting against, especially now that callers like
-        // submitSignup() explicitly await and verify the result instead of
-        // firing-and-forgetting it.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         let res = await fetch('/api/data', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(appState)
         });
         if (!res.ok) {
-            // Retry once from a fresh server snapshot. This is important for
-            // transient 5xx/network failures and prevents a UI action from
-            // appearing saved when the server never accepted it.
+            
+            
+            
             const retryRes = await fetch('/api/data', { cache: 'no-store' });
             if (!retryRes.ok) throw new Error(`Save failed with HTTP ${res.status}`);
             const retryData = await retryRes.json();
@@ -6345,12 +6423,12 @@ async function saveBackupSchedule() {
 
   const backupSchedule = { ...(systemSettings.backupSchedule || {}), enabled, frequency, channels: { email, discord } };
 
-  // Goes through the atomic /api/settings endpoint instead of the generic
-  // saveAppData('settings') path — that path reads systemSettings out of a
-  // shared global that another queued background save can reassign in
-  // between fetch and POST, silently writing an older snapshot back over
-  // this one. That's why the schedule wasn't surviving a refresh: it was
-  // never actually landing on the server to begin with.
+  
+  
+  
+  
+  
+  
   try {
     const res = await fetch('/api/settings', {
       method: 'POST',
@@ -6520,25 +6598,7 @@ window.onload = function() {
     }
 };
 
-// While impersonating, keep a lightweight audit trail for UI actions as well as
-// the existing semantic activity entries. This covers actions that do not already
-// call logActivity(), without exposing passwords or form contents.
-document.addEventListener('click', function(e) {
-  const imp = getImpersonationContext();
-  if (!imp) return;
-  const el = e.target.closest('button, a');
-  if (!el) return;
-  if (el.closest('#signed-out-overlay')) return;
-  if (el.classList.contains('user-menu-trigger')) return;
-  const label = (el.innerText || el.getAttribute('aria-label') || el.getAttribute('title') || '').trim().replace(/\s+/g, ' ');
-  if (!label || /^(cancel|close|back to sign in)$/i.test(label)) return;
-  if (el.dataset.auditLogged === '1') return;
-  const contextId = viewingId ? ` [Request ID: ${viewingId}]` : (viewingIssueId ? ` [Issue ID: ${viewingIssueId}]` : '');
-  logActivity('Impersonation Action', `Admin ${imp.adminName || imp.adminUsername} acting as ${currentUser}: ${label}${contextId}`);
-}, true);
 
-// Keyboard shortcuts for modal actions: Enter submits profile edits and
-// activates the primary OK/Save action in whichever modal is currently open.
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'Enter' || e.isComposing) return;
   const profile = document.getElementById('my-profile-overlay');
