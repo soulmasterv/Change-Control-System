@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 
-### 1.13.0 (2026-08-21)
+### 1.13.1 (2026-08-21)
 
 #### Features
 
@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file. See [standa
 - Added an **Archived** tab to view all archived items
 - Added the ability for users to upload profile pictures
 
-### 1.13.1 (2026-08-20)
+### 1.13.0 (2026-08-20)
 
 #### Features
 
